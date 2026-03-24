@@ -1,4 +1,4 @@
-# 📋 ISSUE: Frontend — Shared Components
+# 📋 ISSUE: Frontend — Auth Case (Login, Register, Verify OTP, Update Email)
 
 ## Status
 `open`
@@ -9,578 +9,453 @@
 ## Assignee
 _unassigned_
 
+## Dependency
+- `ISSUE_FRONTEND_SHARED.md` harus selesai terlebih dahulu (shared components tersedia)
+
 ---
 
 ## Background
 
-Sebelum fitur apapun dikerjakan, tim perlu membangun **shared components** terlebih dahulu. Komponen ini akan dipakai di seluruh halaman aplikasi — auth, dashboard, modul, quiz, dll. Konsistensi visual dan API komponen sangat penting agar semua halaman terasa seragam.
+Auth case mencakup semua alur autentikasi user: register, verifikasi OTP, login, logout, dan update email. Semua halaman auth menggunakan `AuthLayout` sebagai wrapper dan shared components dari `@/components/shared`.
 
-Semua shared component berada di:
+--- Baca dokumentasi api lengkap nya di folder backend-pretest-ai/doc/user/swagger.yaml
+---
+
+## Struktur File yang Dikerjakan
+
 ```
-src/components/shared/
+src/
+├── app/
+│   └── (auth)/
+│       ├── layout.tsx              ← pakai AuthLayout
+│       ├── login/
+│       │   └── page.tsx
+│       ├── register/
+│       │   └── page.tsx
+│       └── verify-otp/
+│           └── page.tsx
+│
+├── components/
+│   ├── layouts/
+│   │   └── Auth/
+│   │       ├── Auth.tsx            ← AuthLayout component
+│   │       └── index.ts
+│   └── features/
+│       └── auth/
+│           ├── LoginForm.tsx
+│           ├── RegisterForm.tsx
+│           └── OTPForm.tsx
+│
+├── stores/
+│   └── authStore.ts                ← Zustand: simpan token + user data
+│
+├── services/
+│   └── authService.ts              ← axios call ke backend
+│
+├── queries/
+│   └── useAuthQuery.ts             ← TanStack Query mutations
+│
+└── types/
+    └── auth.types.ts               ← TypeScript interfaces
 ```
 
 ---
 
-## Tech Stack
+## Types (`src/types/auth.types.ts`)
 
-- **Next.js** (App Router) + **TypeScript**
-- **Tailwind CSS** untuk styling
-- Tidak ada UI library eksternal (MUI, shadcn, dll) — semua dibuat dari scratch
-
----
-
-## Design System
-
-Sebelum mulai kode, sepakati design token berikut di `tailwind.config.ts`:
+Buat semua TypeScript interface yang dibutuhkan:
 
 ```ts
-// tailwind.config.ts
-theme: {
-  extend: {
-    colors: {
-      primary: {
-        DEFAULT: '#4F46E5',  // indigo-600
-        hover:   '#4338CA',  // indigo-700
-        light:   '#EEF2FF',  // indigo-50
-      },
-      danger: {
-        DEFAULT: '#EF4444',  // red-500
-        hover:   '#DC2626',  // red-600
-      },
-      success: {
-        DEFAULT: '#22C55E',  // green-500
-      },
-      warning: {
-        DEFAULT: '#F59E0B',  // amber-500
-      },
-    },
-    fontFamily: {
-      sans: ['Inter', 'sans-serif'],
-    },
-  },
+export interface User {
+  id: string
+  name: string
+  email: string
+  role: 'admin' | 'member' | 'guest'
+  is_verified: boolean
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface RegisterRequest {
+  name: string
+  email: string
+  password: string
+}
+
+export interface VerifyOTPRequest {
+  email: string
+  otp: string
+}
+
+export interface UpdateEmailRequest {
+  new_email: string
+}
+
+export interface VerifyUpdateEmailRequest {
+  new_email: string
+  otp: string
+}
+
+export interface LoginResponse {
+  token: string
+  user: User
 }
 ```
 
 ---
 
-## Struktur File
+## Zustand Store (`src/stores/authStore.ts`)
 
-Tiap component punya folder sendiri dengan 2 file:
-
-```
-src/components/shared/
-├── Button/
-│   ├── Button.tsx      ← implementasi component
-│   └── index.ts        ← re-export
-├── Input/
-│   ├── Input.tsx
-│   └── index.ts
-├── Textarea/
-│   ├── Textarea.tsx
-│   └── index.ts
-├── Badge/
-│   ├── Badge.tsx
-│   └── index.ts
-├── Card/
-│   ├── Card.tsx
-│   └── index.ts
-├── Modal/
-│   ├── Modal.tsx
-│   └── index.ts
-├── Spinner/
-│   ├── Spinner.tsx
-│   └── index.ts
-├── Toast/
-│   ├── Toast.tsx
-│   └── index.ts
-└── index.ts            ← re-export semua
-```
-
-Pattern `index.ts`:
 ```ts
-// src/components/shared/Button/index.ts
-export { Button } from './Button'
+interface AuthState {
+  token: string | null
+  user: User | null
+  isAuthenticated: boolean
 
-// src/components/shared/index.ts
-export { Button } from './Button'
-export { Input } from './Input'
-// dst...
+  setAuth: (token: string, user: User) => void
+  clearAuth: () => void
+}
 ```
 
-Sehingga import di seluruh project cukup:
+Gunakan `persist` middleware dari Zustand agar token tidak hilang saat refresh:
+
 ```ts
-import { Button, Input, Spinner } from '@/components/shared'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      token: null,
+      user: null,
+      isAuthenticated: false,
+      setAuth: (token, user) => set({ token, user, isAuthenticated: true }),
+      clearAuth: () => set({ token: null, user: null, isAuthenticated: false }),
+    }),
+    { name: 'auth-storage' }  // key di localStorage
+  )
+)
 ```
 
 ---
 
-## 1. Button
-
-**File:** `src/components/shared/Button/Button.tsx`
-
-### Variant & Default Classes
-
-| Variant | Default Classname |
-|---|---|
-| `primary` | `bg-primary text-white hover:bg-primary-hover` |
-| `secondary` | `bg-white text-primary border border-primary hover:bg-primary-light` |
-| `danger` | `bg-danger text-white hover:bg-danger-hover` |
-| `ghost` | `bg-transparent text-primary hover:bg-primary-light` |
-
-| Size | Default Classname |
-|---|---|
-| `sm` | `px-3 py-1.5 text-sm` |
-| `md` | `px-4 py-2 text-sm` (default) |
-| `lg` | `px-6 py-3 text-base` |
-
-**Base classes (selalu ada):**
-```
-inline-flex items-center justify-center gap-2 rounded-lg font-medium
-transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed
-```
-
-### Props Interface
+## Services (`src/services/authService.ts`)
 
 ```ts
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-  loading?: boolean       // tampilkan Spinner, disable button
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
+// Semua function return Promise<APIResponse<T>>
+// Axios instance sudah include token di header via interceptor (src/services/api.ts)
+
+export const authService = {
+  register: (data: RegisterRequest) =>
+    api.post('/auth/register', data),
+
+  verifyOTP: (data: VerifyOTPRequest) =>
+    api.post('/auth/verify-otp', data),
+
+  login: (data: LoginRequest) =>
+    api.post<LoginResponse>('/auth/login', data),
+
+  logout: () =>
+    api.post('/auth/logout'),
 }
 ```
 
-### Contoh Penggunaan
-
-```tsx
-<Button variant="primary" loading={isLoading}>Login</Button>
-<Button variant="secondary" leftIcon={<UploadIcon />}>Upload PDF</Button>
-<Button variant="danger" size="sm">Hapus</Button>
-<Button variant="ghost">Batal</Button>
-```
-
----
-
-## 2. Input
-
-**File:** `src/components/shared/Input/Input.tsx`
-
-### Default Classes
-
-**Container:** `flex flex-col gap-1`
-
-**Label:** `text-sm font-medium text-gray-700`
-
-**Input field:**
-```
-w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white
-placeholder:text-gray-400
-focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
-disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed
-transition-colors duration-200
-```
-
-**State error:** ganti border menjadi `border-danger focus:ring-danger`
-
-**Error message:** `text-xs text-danger mt-0.5`
-
-**Helper text:** `text-xs text-gray-500 mt-0.5`
-
-### Props Interface
+Buat juga `src/services/api.ts` — Axios instance dengan interceptor:
 
 ```ts
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string
-  error?: string          // pesan error, trigger state error
-  helperText?: string     // teks bantuan di bawah input
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-}
-```
+import axios from 'axios'
+import { useAuthStore } from '@/stores/authStore'
 
-### Contoh Penggunaan
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/v1',
+  headers: { 'Content-Type': 'application/json' },
+})
 
-```tsx
-<Input
-  label="Email"
-  type="email"
-  placeholder="budi@example.com"
-  error={errors.email?.message}
-/>
-<Input
-  label="Password"
-  type="password"
-  rightIcon={<EyeIcon />}
-  helperText="Minimal 8 karakter"
-/>
-```
+// Request interceptor — inject token
+api.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().token
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
 
----
-
-## 3. Textarea
-
-**File:** `src/components/shared/Textarea/Textarea.tsx`
-
-### Default Classes
-
-Sama dengan Input, dengan tambahan:
-
-**Textarea field:**
-```
-w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white
-placeholder:text-gray-400 resize-none
-focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
-disabled:bg-gray-50 disabled:cursor-not-allowed
-transition-colors duration-200
-```
-
-### Props Interface
-
-```ts
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string
-  error?: string
-  helperText?: string
-  rows?: number           // default: 4
-}
-```
-
-### Contoh Penggunaan
-
-```tsx
-<Textarea
-  label="Edit Summary"
-  rows={8}
-  placeholder="Tulis ringkasan modul..."
-  error={errors.summary?.message}
-/>
-```
-
----
-
-## 4. Badge
-
-**File:** `src/components/shared/Badge/Badge.tsx`
-
-### Variant & Default Classes
-
-| Variant | Default Classname |
-|---|---|
-| `success` | `bg-green-100 text-green-700` |
-| `warning` | `bg-amber-100 text-amber-700` |
-| `danger` | `bg-red-100 text-red-700` |
-| `info` | `bg-blue-100 text-blue-700` |
-| `default` | `bg-gray-100 text-gray-600` |
-
-**Base classes:**
-```
-inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium
-```
-
-### Props Interface
-
-```ts
-interface BadgeProps {
-  variant?: 'success' | 'warning' | 'danger' | 'info' | 'default'
-  children: React.ReactNode
-  dot?: boolean           // tampilkan dot indicator di kiri
-}
-```
-
-### Contoh Penggunaan
-
-```tsx
-<Badge variant="success" dot>Verified</Badge>
-<Badge variant="warning">Pending</Badge>
-<Badge variant="danger">Error</Badge>
-<Badge variant="info">80 / 100</Badge>
-```
-
----
-
-## 5. Card
-
-**File:** `src/components/shared/Card/Card.tsx`
-
-### Default Classes
-
-**Card wrapper:**
-```
-bg-white rounded-xl border border-gray-200 shadow-sm
-```
-
-**Sub-components:**
-
-| Sub-component | Default Classname |
-|---|---|
-| `Card.Header` | `px-5 py-4 border-b border-gray-100` |
-| `Card.Body` | `px-5 py-4` |
-| `Card.Footer` | `px-5 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl` |
-
-### Props Interface
-
-```ts
-interface CardProps {
-  children: React.ReactNode
-  className?: string
-  hoverable?: boolean     // tambah hover:shadow-md transition
-}
-
-// Sub-components (compound pattern)
-Card.Header
-Card.Body
-Card.Footer
-```
-
-### Contoh Penggunaan
-
-```tsx
-<Card hoverable>
-  <Card.Header>
-    <h3>Pengantar Hukum Indonesia</h3>
-  </Card.Header>
-  <Card.Body>
-    <p>Ringkasan modul...</p>
-  </Card.Body>
-  <Card.Footer>
-    <Button size="sm">Buka Quiz</Button>
-  </Card.Footer>
-</Card>
-```
-
----
-
-## 6. Modal
-
-**File:** `src/components/shared/Modal/Modal.tsx`
-
-### Default Classes
-
-**Overlay:** `fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4`
-
-**Panel:**
-```
-bg-white rounded-xl shadow-xl w-full max-w-md
-transform transition-all duration-200
-```
-
-| Size | Max Width |
-|---|---|
-| `sm` | `max-w-sm` |
-| `md` | `max-w-md` (default) |
-| `lg` | `max-w-lg` |
-| `xl` | `max-w-xl` |
-
-**Header:** `flex items-center justify-between px-6 py-4 border-b border-gray-100`
-
-**Body:** `px-6 py-4`
-
-**Footer:** `flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100`
-
-### Props Interface
-
-```ts
-interface ModalProps {
-  open: boolean
-  onClose: () => void
-  title?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  children: React.ReactNode
-  footer?: React.ReactNode
-  closeOnOverlayClick?: boolean   // default: true
-}
-```
-
-### Contoh Penggunaan
-
-```tsx
-<Modal
-  open={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Konfirmasi Hapus"
-  footer={
-    <>
-      <Button variant="ghost" onClick={() => setIsOpen(false)}>Batal</Button>
-      <Button variant="danger" loading={isDeleting}>Hapus</Button>
-    </>
+// Response interceptor — handle 401
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      useAuthStore.getState().clearAuth()
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
   }
->
-  <p>Apakah kamu yakin ingin menghapus modul ini?</p>
-</Modal>
+)
+
+export default api
 ```
 
 ---
 
-## 7. Spinner
+## TanStack Query (`src/queries/useAuthQuery.ts`)
 
-**File:** `src/components/shared/Spinner/Spinner.tsx`
+```ts
+export function useLoginMutation() {
+  const { setAuth } = useAuthStore()
+  const { toast } = useToast()
+  const router = useRouter()
 
-### Default Classes
+  return useMutation({
+    mutationFn: authService.login,
+    onSuccess: (res) => {
+      setAuth(res.data.data.token, res.data.data.user)
+      toast.success('Login berhasil!')
+      router.push('/dashboard')
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.error ?? 'Login gagal')
+    },
+  })
+}
+
+export function useRegisterMutation() { ... }
+export function useVerifyOTPMutation() { ... }
+export function useLogoutMutation() { ... }
+```
+
+---
+
+## AuthLayout (`src/components/layouts/Auth/Auth.tsx`)
+
+Layout wrapper untuk semua halaman auth. Tampilan: **split screen** — kiri branding, kanan form.
 
 ```
-animate-spin rounded-full border-2 border-gray-200 border-t-primary
+┌─────────────────────────────────────────┐
+│          │                              │
+│  Branding│         Form Area            │
+│  & Quote │                              │
+│  (hidden │   [Logo]                     │
+│  mobile) │   [Title]                    │
+│          │   [Subtitle]                 │
+│          │                              │
+│          │   {children}                 │
+│          │                              │
+└─────────────────────────────────────────┘
 ```
 
-| Size | Classname |
+```ts
+interface AuthLayoutProps {
+  children: React.ReactNode
+  title: string           // "Selamat Datang Kembali"
+  subtitle: string        // "Masuk ke akun kamu untuk melanjutkan belajar"
+}
+```
+
+**Kiri (hidden di mobile):**
+- Background warna `primary`
+- Logo / nama app "PreTest AI"
+- Quote motivasi belajar
+- Ilustrasi sederhana (opsional)
+
+**Kanan:**
+- Centered, max-width `sm`
+- Logo kecil di atas (mobile only)
+- `title` dan `subtitle`
+- `{children}` — form
+
+---
+
+## Alur & Flow Setiap Halaman
+
+### Alur 1 — Register (`/register`)
+
+```
+User isi form (name, email, password)
+    └── Klik "Daftar"
+            └── useRegisterMutation()
+                    ├── Loading → Button disabled + Spinner
+                    ├── Success → simpan email ke sessionStorage
+                    │            redirect ke /verify-otp
+                    └── Error   → toast.error(pesan dari backend)
+```
+
+**Validasi di form (sebelum hit API):**
+- `name` — wajib, min 2 karakter
+- `email` — wajib, format email valid
+- `password` — wajib, min 8 karakter
+- `confirmPassword` — harus sama dengan password (hanya di frontend, tidak dikirim ke backend)
+
+**Komponen yang dipakai:**
+```tsx
+<AuthLayout title="Buat Akun Baru" subtitle="...">
+  <RegisterForm />
+</AuthLayout>
+```
+
+---
+
+### Alur 2 — Verify OTP (`/verify-otp`)
+
+```
+User tiba dari /register (email tersimpan di sessionStorage)
+    └── Tampilkan form OTP
+            ├── 6 kotak input digit
+            └── Klik "Verifikasi"
+                    └── useVerifyOTPMutation()
+                            ├── Loading → Button disabled
+                            ├── Success → toast.success
+                            │            redirect ke /login
+                            └── Error   → toast.error "OTP salah"
+
+Link "Kirim ulang OTP" → hit register ulang dengan email yang sama
+Jika tidak ada email di sessionStorage → redirect ke /register
+```
+
+**Komponen yang dipakai:**
+```tsx
+<AuthLayout title="Verifikasi Email" subtitle="Masukkan kode OTP yang dikirim ke emailmu">
+  <OTPForm />
+</AuthLayout>
+```
+
+**Catatan OTPForm:**
+- 6 kotak input terpisah, auto-focus ke kotak berikutnya saat angka diisi
+- Auto-submit saat digit ke-6 terisi
+- Paste support — tempel 6 digit langsung mengisi semua kotak
+
+---
+
+### Alur 3 — Login (`/login`)
+
+```
+User isi form (email, password)
+    └── Klik "Masuk"
+            └── useLoginMutation()
+                    ├── Loading → Button disabled + Spinner
+                    ├── Success → setAuth(token, user) ke Zustand
+                    │            redirect ke /dashboard
+                    └── Error 401 → toast.error "Email atau password salah"
+                    └── Error 401 "email belum diverifikasi"
+                                → toast.warning + link ke /verify-otp
+```
+
+**Validasi di form:**
+- `email` — wajib, format email
+- `password` — wajib
+
+**Komponen yang dipakai:**
+```tsx
+<AuthLayout title="Selamat Datang" subtitle="Masuk ke akun kamu untuk melanjutkan belajar">
+  <LoginForm />
+</AuthLayout>
+```
+
+---
+
+### Alur 4 — Logout
+
+Logout tidak punya halaman tersendiri. Dipanggil dari Navbar/Sidebar:
+
+```
+Klik "Logout"
+    └── Modal konfirmasi "Yakin ingin keluar?"
+            └── Konfirmasi → useLogoutMutation()
+                                ├── Hit POST /auth/logout
+                                ├── clearAuth() dari Zustand
+                                └── redirect ke /login
+```
+
+---
+
+### Alur 5 — Update Email (halaman settings, bukan auth page)
+
+Dua langkah — request OTP lalu verify. Ini ada di halaman **settings/profile** (bukan route auth), tapi querynya tetap di `useAuthQuery.ts`:
+
+```
+Step 1: User isi email baru → POST /user/email/request-update
+    └── OTP dikirim ke email baru
+    └── Tampilkan form OTP
+
+Step 2: User isi OTP → POST /user/email/verify-update
+    └── Email terupdate
+    └── Update user di Zustand (email baru)
+    └── toast.success
+```
+
+---
+
+## Shared Components yang Dipakai
+
+Pastikan semua komponen berikut sudah tersedia dari `ISSUE_FRONTEND_SHARED.md`:
+
+| Component | Dipakai di |
 |---|---|
-| `sm` | `w-4 h-4` |
-| `md` | `w-6 h-6` (default) |
-| `lg` | `w-8 h-8` |
+| `Button` | Semua form (submit, loading state) |
+| `Input` | LoginForm, RegisterForm |
+| `Toast` | Semua mutation onSuccess/onError |
+| `Spinner` | Di dalam Button saat loading |
+| `Modal` | Konfirmasi logout |
+| `Badge` | Status verified/unverified (opsional) |
 
-### Props Interface
+---
+
+## Route Protection
+
+Buat middleware Next.js di `src/middleware.ts`:
 
 ```ts
-interface SpinnerProps {
-  size?: 'sm' | 'md' | 'lg'
-  className?: string
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+const PUBLIC_ROUTES = ['/login', '/register', '/verify-otp']
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('token')?.value
+  const isPublic = PUBLIC_ROUTES.some(r => request.nextUrl.pathname.startsWith(r))
+
+  // Belum login, akses halaman protected → redirect login
+  if (!token && !isPublic) {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Sudah login, akses halaman auth → redirect dashboard
+  if (token && isPublic) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: ['/((?!api|_next|favicon.ico).*)'],
 }
 ```
 
-### Contoh Penggunaan
-
-```tsx
-<Spinner />
-<Spinner size="lg" />
-
-{/* Di dalam Button */}
-{loading && <Spinner size="sm" />}
-```
+> **Catatan:** Zustand `persist` menyimpan token di `localStorage`. Untuk middleware Next.js (server-side), token perlu juga disimpan di **cookie** saat login agar middleware bisa membacanya. Tambahkan `document.cookie = \`token=${token}\`` saat `setAuth()` dipanggil.
 
 ---
 
-## 8. Toast
+## Environment Variable
 
-**File:** `src/components/shared/Toast/Toast.tsx`
-
-Gunakan pattern **context + hook** agar bisa dipanggil dari mana saja.
-
-### Default Classes
-
-**Container (fixed):** `fixed bottom-4 right-4 z-50 flex flex-col gap-2`
-
-**Toast item:**
+```env
+# .env.local
+NEXT_PUBLIC_API_URL=http://localhost:8080
 ```
-flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg
-min-w-[280px] max-w-sm text-sm font-medium
-animate-in slide-in-from-right-5 duration-300
-```
-
-| Variant | Classname |
-|---|---|
-| `success` | `bg-green-600 text-white` |
-| `error` | `bg-red-600 text-white` |
-| `warning` | `bg-amber-500 text-white` |
-| `info` | `bg-blue-600 text-white` |
-
-### Interface & Hook
-
-```ts
-interface ToastOptions {
-  message: string
-  variant?: 'success' | 'error' | 'warning' | 'info'
-  duration?: number     // ms, default: 3000
-}
-
-// Hook untuk trigger toast
-const { toast } = useToast()
-
-toast.success('Login berhasil!')
-toast.error('Gagal upload file')
-toast.warning('Summary belum tersedia')
-toast.info('Quiz sedang diproses...')
-```
-
-### Setup di Root Layout
-
-```tsx
-// src/app/layout.tsx
-<ToastProvider>
-  {children}
-</ToastProvider>
-```
-
----
-
-## Utility: `cn()` helper
-
-Buat helper `cn()` di `src/lib/utils.ts` untuk merge Tailwind classes dengan aman:
-
-```ts
-// src/lib/utils.ts
-import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-```
-
-Install dependency:
-```bash
-npm install clsx tailwind-merge
-```
-
-Penggunaan di semua komponen:
-```tsx
-// Contoh di Button
-className={cn(
-  'inline-flex items-center justify-center rounded-lg font-medium',
-  variant === 'primary' && 'bg-primary text-white hover:bg-primary-hover',
-  variant === 'danger'  && 'bg-danger text-white hover:bg-danger-hover',
-  size === 'sm' && 'px-3 py-1.5 text-sm',
-  size === 'lg' && 'px-6 py-3 text-base',
-  className   // allow override dari luar
-)}
-```
-
----
-
-## Dependencies yang Dibutuhkan
-
-```bash
-npm install clsx tailwind-merge
-```
-
-Sudah termasuk di project (tidak perlu install tambahan):
-- `tailwindcss` — styling
-- `typescript` — type safety
-- `react` — hooks (useState, useContext, useRef)
-
----
-
-## Konvensi Penting
-
-- Semua komponen **harus** menerima `className?: string` untuk allow override dari luar
-- Gunakan `cn()` untuk merge classes, jangan string concatenation manual
-- Semua props **extend** HTML element aslinya (misal `ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>`) agar semua HTML attribute tetap bisa dipakai
-- Tidak ada hardcoded warna di luar Tailwind config — semua pakai design token
-- Setiap komponen harus bisa berdiri sendiri — tidak boleh import dari komponen shared lain kecuali `Spinner` boleh dipakai di `Button`
-- jangan ubah/remove existing file/folder yang lain diluar task
-
----
-
-## Urutan Pengerjaan yang Disarankan
-
-1. Setup `tailwind.config.ts` dengan design tokens
-2. Buat `src/lib/utils.ts` dengan `cn()`
-3. `Spinner` — paling simple, tidak ada dependency
-4. `Button` — pakai Spinner di dalamnya
-5. `Input`, `Textarea` — pattern sama
-6. `Badge` — simple
-7. `Card` — compound component pattern
-8. `Modal` — butuh state management
-9. `Toast` — paling complex (context + hook)
-10. Buat `src/components/shared/index.ts` — re-export semua
 
 ---
 
 ## Definition of Done
 
-- [ ] Semua 8 komponen selesai dibuat sesuai spec
-- [ ] `src/components/shared/index.ts` sudah re-export semua
-- [ ] Semua komponen menerima `className` prop untuk override
-- [ ] `cn()` utility dipakai di semua komponen
+- [ ] `AuthLayout` selesai dengan tampilan split screen
+- [ ] `LoginForm` — validasi + mutation + redirect
+- [ ] `RegisterForm` — validasi + mutation + simpan email ke sessionStorage
+- [ ] `OTPForm` — 6 kotak input, auto-focus, auto-submit, paste support
+- [ ] `authStore` — persist token + user ke localStorage
+- [ ] `authService` — semua endpoint auth
+- [ ] `api.ts` — axios instance + request/response interceptor
+- [ ] `useAuthQuery.ts` — semua mutation dengan onSuccess/onError
+- [ ] Route protection via `middleware.ts`
+- [ ] Token disimpan di cookie untuk middleware
 - [ ] Tidak ada error TypeScript (`tsc --noEmit`)
-- [ ] Semua komponen bisa diimport dengan `import { X } from '@/components/shared'`
+- [ ] Semua alur di atas bisa dijalankan end-to-end

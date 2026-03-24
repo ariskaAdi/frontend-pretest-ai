@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { Button } from '../Button'
 
 interface ModalProps {
   open: boolean
@@ -43,7 +42,7 @@ export function Modal({
     >
       <div
         className={cn(
-          'bg-white rounded-xl shadow-xl w-full transform transition-all duration-200 animate-in fade-in zoom-in-95',
+          'bg-white rounded-xl shadow-xl w-full transition-all duration-200',
           sizeClasses[size]
         )}
       >

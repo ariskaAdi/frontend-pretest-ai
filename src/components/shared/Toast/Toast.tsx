@@ -81,7 +81,6 @@ function Toast({ item, onRemove }: { item: ToastItem; onRemove: () => void }) {
     <div
       className={cn(
         'flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg min-w-[280px] max-w-sm text-sm font-medium pointer-events-auto',
-        'animate-in slide-in-from-right-5 duration-300',
         variantClasses[item.variant || 'info']
       )}
     >
