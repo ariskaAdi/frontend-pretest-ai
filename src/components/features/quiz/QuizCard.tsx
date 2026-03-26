@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Link from 'next/link'
+import { Target } from 'lucide-react'
 import { Card } from '@/components/shared/Card'
 import { Badge } from '@/components/shared/Badge'
 import { Button } from '@/components/shared/Button'
@@ -15,8 +16,8 @@ export function QuizCard({ quiz }: QuizCardProps) {
   return (
     <Card className="group overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 rounded-3xl p-5 bg-white flex flex-col h-full animate-in fade-in slide-in-from-bottom-4">
       <div className="flex items-center justify-between mb-4">
-        <div className="w-12 h-12 rounded-2xl bg-warning/10 text-warning flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
-          🎯
+        <div className="w-12 h-12 rounded-2xl bg-warning/10 text-warning flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Target size={24} />
         </div>
         <Badge 
           variant={isCompleted ? 'success' : 'warning'} 

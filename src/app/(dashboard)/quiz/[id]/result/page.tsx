@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
+import { Trophy, RotateCcw } from 'lucide-react'
 import { useQuizResultQuery, useRetryQuizMutation } from '@/queries/useQuizQuery'
 import { QuizResult } from '@/components/features/quiz'
 import { Card } from '@/components/shared/Card'
@@ -77,16 +78,24 @@ export default function QuizResultPage() {
             inline-flex items-center gap-2 px-6 py-2 rounded-2xl font-black text-sm uppercase tracking-wider mb-8
             ${isPassed ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}
           `}>
-             {isPassed ? '🎯 Lulus' : '💪 Coba Lagi'}
+             {isPassed ? (
+               <>
+                 <Trophy size={16} /> Lulus
+               </>
+             ) : (
+               <>
+                 <RotateCcw size={16} /> Coba Lagi
+               </>
+             )}
           </div>
 
           <div className="flex flex-col md:flex-row gap-4">
             <Button 
               onClick={handleRetry} 
-              className="flex-1 rounded-2xl font-bold py-6 text-base shadow-xl shadow-primary/20"
+              className="flex-1 rounded-2xl font-bold py-6 text-base shadow-xl shadow-primary/20 flex items-center justify-center gap-2"
               loading={isRetrying}
             >
-               🔁 Ulangi Quiz
+               <RotateCcw size={20} /> Ulangi Quiz
             </Button>
             <Button 
               variant="ghost" 

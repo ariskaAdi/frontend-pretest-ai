@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { FileText, Trash2, RotateCcw } from 'lucide-react'
 import { Card } from '@/components/shared/Card'
 import { Badge } from '@/components/shared/Badge'
 import { Button } from '@/components/shared/Button'
@@ -49,8 +50,8 @@ export function ModuleCard({ module }: ModuleCardProps) {
     <>
       <Card className="group overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 rounded-3xl p-5 bg-white flex flex-col h-full animate-in fade-in slide-in-from-bottom-4">
         <div className="flex items-start justify-between mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center text-xl font-bold shadow-sm group-hover:scale-110 transition-transform duration-300">
-            📄
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center font-bold shadow-sm group-hover:scale-110 transition-transform duration-300">
+            <FileText size={24} strokeWidth={2.5} />
           </div>
           <Badge 
             variant={module.is_summarized ? 'success' : module.summarize_failed ? 'danger' : 'warning'} 
@@ -89,11 +90,11 @@ export function ModuleCard({ module }: ModuleCardProps) {
             <Button 
               variant="secondary" 
               size="sm" 
-              className="px-3 rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-[10px]"
+              className="px-3 rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-[10px] flex items-center gap-1.5"
               onClick={handleRetry}
               loading={isRetrying}
             >
-              Retry
+              <RotateCcw size={12} /> Retry
             </Button>
           )}
           <button 
@@ -101,7 +102,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
             className="p-2.5 text-gray-400 hover:text-danger hover:bg-danger-light rounded-xl transition-all duration-200"
             aria-label="Hapus modul"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+            <Trash2 size={20} />
           </button>
         </div>
       </Card>

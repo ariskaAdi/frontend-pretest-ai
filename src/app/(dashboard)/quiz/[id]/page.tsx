@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
+import { AlertTriangle } from 'lucide-react'
 import { QuizQuestion } from '@/components/features/quiz'
 import { Button } from '@/components/shared/Button'
 import { Modal } from '@/components/shared/Modal'
@@ -24,13 +25,13 @@ export default function QuizSessionPage() {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = React.useState(false)
   
   const { mutate: submitQuiz, isPending: isSubmitting } = useSubmitQuizMutation()
-
+  
   // Guard: Jika user refresh, data cache hilang (karena tidak ada GET /quiz/:id)
   if (!quiz) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-        <div className="w-20 h-20 rounded-full bg-danger/10 text-danger flex items-center justify-center text-3xl mb-6">
-          ⚠️
+        <div className="w-20 h-20 rounded-full bg-danger/10 text-danger flex items-center justify-center mb-6">
+          <AlertTriangle size={40} />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Sesi Quiz Berakhir</h2>
         <p className="text-gray-500 max-w-md mb-8">

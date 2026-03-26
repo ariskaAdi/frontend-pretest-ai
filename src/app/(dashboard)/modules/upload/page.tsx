@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { Lightbulb } from 'lucide-react'
 import { UploadForm } from '@/components/features/module'
 import { Card } from '@/components/shared/Card'
 
@@ -25,7 +26,9 @@ export default function UploadPage() {
       </Card>
 
       <div className="bg-primary-light/30 border border-primary-light rounded-2xl p-4 flex gap-4">
-        <div className="text-2xl text-primary">💡</div>
+        <div className="text-primary">
+          <Lightbulb size={24} />
+        </div>
         <div className="text-sm text-gray-600 leading-relaxed">
           <span className="font-bold text-primary italic">Tips: </span>
           Pastikan PDF Anda memiliki teks yang dapat dibaca (bukan hasil scan gambar) agar AI dapat memberikan rangkuman yang lebih akurat dan berkualitas.

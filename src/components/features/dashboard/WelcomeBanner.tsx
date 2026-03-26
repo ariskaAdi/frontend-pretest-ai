@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Sparkles } from 'lucide-react'
 import { useGetMeQuery } from '@/queries/useUserQuery'
 
 export function WelcomeBanner() {
@@ -29,8 +30,9 @@ export function WelcomeBanner() {
       
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="max-w-xl">
-          <h2 className="text-3xl font-extrabold text-white mb-2 tracking-tight">
-            {greeting}, {user.name}! <span className="inline-block animate-bounce-slow">👋</span>
+          <h2 className="text-3xl font-extrabold text-white mb-2 tracking-tight flex items-center gap-3">
+            {greeting}, {user.name}! 
+            <Sparkles className="text-warning animate-bounce-slow shrink-0" size={28} />
           </h2>
           <p className="text-primary-light/90 text-lg font-medium leading-relaxed">
             Senang melihatmu kembali. Mari lanjutkan perjalanan belajarmu hari ini dan taklukkan tantangan baru!

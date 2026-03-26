@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import * as React from 'react'
@@ -11,6 +12,15 @@ import { Modal } from '@/components/shared/Modal'
 import { Spinner } from '@/components/shared/Spinner'
 import { useToast } from '@/components/shared/Toast'
 import { cn } from '@/lib/utils'
+import { 
+  FileText, 
+  PenLine, 
+  Target, 
+  Calendar, 
+  Search,
+  AlertTriangle,
+  RotateCcw
+} from 'lucide-react'
 
 export default function ModuleDetailPage() {
   const params = useParams()
@@ -59,7 +69,9 @@ export default function ModuleDetailPage() {
   if (!module) {
     return (
       <div className="flex flex-col items-center justify-center py-40">
-        <div className="text-4xl mb-4">🔍</div>
+        <div className="w-16 h-16 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mb-4">
+          <Search size={32} />
+        </div>
         <h3 className="text-xl font-bold text-gray-900 mb-2">Modul tidak ditemukan</h3>
         <Link href="/modules">
           <Button variant="ghost">Kembali ke Koleksi</Button>
@@ -86,7 +98,7 @@ export default function ModuleDetailPage() {
             </h1>
             <div className="flex flex-wrap items-center gap-4 text-sm">
               <div className="flex items-center gap-2 text-gray-500">
-                <span className="w-5 h-5 rounded-md bg-gray-100 flex items-center justify-center text-[10px]">📅</span>
+                <Calendar size={14} className="text-gray-400" />
                 {new Date(module.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
               </div>
               <Badge 
@@ -102,8 +114,8 @@ export default function ModuleDetailPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="p-6 border-none shadow-sm rounded-3xl bg-white flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
-          <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
-            📄
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold">
+            <FileText size={32} strokeWidth={1.5} />
           </div>
           <h4 className="font-bold text-gray-900 mb-1">Buka PDF</h4>
           <p className="text-xs text-gray-400 mb-4">Lihat dokumen asli materi Anda</p>
@@ -114,10 +126,10 @@ export default function ModuleDetailPage() {
 
         <Card className="p-6 border-none shadow-sm rounded-3xl bg-white flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
           <div className={cn(
-            "w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform",
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
             module.is_summarized ? "bg-amber-50 text-amber-600" : "bg-gray-50 text-gray-400"
           )}>
-            📝
+            <PenLine size={32} strokeWidth={1.5} />
           </div>
           <h4 className="font-bold text-gray-900 mb-1">AI Summary</h4>
           <p className="text-xs text-gray-400 mb-4">
@@ -136,11 +148,11 @@ export default function ModuleDetailPage() {
             {module.summarize_failed && (
               <Button 
                 variant="secondary"
-                className="w-full rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-xs"
+                className="w-full rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-xs flex items-center justify-center gap-2"
                 onClick={handleRetry}
                 loading={isRetrying}
               >
-                🔄 Coba Lagi
+                <RotateCcw size={14} /> Coba Lagi
               </Button>
             )}
           </div>
@@ -148,10 +160,10 @@ export default function ModuleDetailPage() {
 
         <Card className="p-6 border-none shadow-sm rounded-3xl bg-white flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
           <div className={cn(
-            "w-16 h-16 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform",
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
             module.is_summarized ? "bg-success-light text-success" : "bg-gray-50 text-gray-400"
           )}>
-            🎯
+            <Target size={32} strokeWidth={1.5} />
           </div>
           <h4 className="font-bold text-gray-900 mb-1">Generate Quiz</h4>
           <p className="text-xs text-gray-400 mb-4">Uji pemahaman dengan latihan soal</p>
@@ -168,9 +180,14 @@ export default function ModuleDetailPage() {
 
       <div className="pt-8 border-t border-gray-100">
         <div className="flex items-center justify-between p-6 bg-danger-light/20 rounded-3xl border border-danger-light/50">
-          <div>
-            <h4 className="font-bold text-danger mb-1">Zona Bahaya</h4>
-            <p className="text-xs text-gray-500">Hapus modul ini dan semua data terkaitnya secara permanen</p>
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-danger shadow-sm">
+              <AlertTriangle size={24} />
+            </div>
+            <div>
+              <h4 className="font-bold text-danger mb-1">Zona Bahaya</h4>
+              <p className="text-xs text-gray-500">Hapus modul ini dan semua data terkaitnya secara permanen</p>
+            </div>
           </div>
           <Button 
             variant="danger" 
@@ -189,7 +206,7 @@ export default function ModuleDetailPage() {
       >
         <div className="p-1">
           <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-            Apakah Anda yakin ingin menghapus modul <span className="font-bold text-gray-900">"{module.title}"</span>? Semua ringkasan dan riwayat quiz terkait modul ini akan dihapus secara permanen.
+            Apakah Anda yakin ingin menghapus modul <span className="font-bold text-gray-900">&quot;{module.title}&quot;</span>? Semua ringkasan dan riwayat quiz terkait modul ini akan dihapus secara permanen.
           </p>
           <div className="flex gap-3 justify-end">
             <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)} className="px-6">

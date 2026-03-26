@@ -2,14 +2,16 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useModuleDetailQuery } from '@/queries/useModuleQuery'
 import { SummaryEditor } from '@/components/features/module'
 import { Spinner } from '@/components/shared/Spinner'
 import { Button } from '@/components/shared/Button'
+import { Loader2, Target } from 'lucide-react'
 
 export default function ModuleSummaryPage() {
   const params = useParams()
+  const router = useRouter()
   const id = params.id as string
 
   const { data: module, isLoading } = useModuleDetailQuery(id)
@@ -37,8 +39,8 @@ export default function ModuleSummaryPage() {
   if (!module.is_summarized) {
     return (
       <div className="flex flex-col items-center justify-center py-40 max-w-md mx-auto text-center animate-in fade-in slide-in-from-bottom-4">
-        <div className="w-20 h-20 bg-warning/10 text-warning rounded-3xl flex items-center justify-center text-4xl mb-6 animate-bounce">
-          ⏳
+        <div className="w-20 h-20 bg-warning/10 text-warning rounded-3xl flex items-center justify-center mb-6">
+          <Loader2 className="animate-spin" size={40} />
         </div>
         <h3 className="text-xl font-bold text-gray-900 mb-2">AI Sedang Merangkum...</h3>
         <p className="text-gray-500 mb-8 leading-relaxed">
@@ -77,10 +79,12 @@ export default function ModuleSummaryPage() {
       
       <div className="flex justify-center pt-8">
         <div className="text-center space-y-4">
-          <p className="text-sm text-gray-500 italic">"Paham materi adalah kunci sukses mengerjakan quiz."</p>
-          <Button size="lg" className="px-12 rounded-2xl font-bold shadow-md shadow-primary/20">
-            Lanjut Buat Quiz 🎯
-          </Button>
+          <p className="text-sm text-gray-500 italic">&quot;Paham materi adalah kunci sukses mengerjakan quiz.&quot;</p>
+          <Link href={`/quiz?module_id=${id}`}>
+            <Button size="lg" className="px-12 rounded-2xl font-bold shadow-md shadow-primary/20 flex items-center gap-2">
+              Lanjut Buat Quiz <Target size={20} strokeWidth={2.5} />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

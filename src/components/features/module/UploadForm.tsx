@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import { FileText, FolderOpen } from 'lucide-react'
 import { useUploadModuleMutation } from '@/queries/useModuleQuery'
 import { Button } from '@/components/shared/Button'
 import { Input } from '@/components/shared/Input'
@@ -112,10 +113,10 @@ export function UploadForm() {
           />
           
           <div className={cn(
-            "w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4 transition-transform duration-300 group-hover:scale-110",
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110",
             file ? "bg-primary text-white" : "bg-gray-100 text-gray-400 group-hover:bg-primary-light group-hover:text-primary"
           )}>
-            {file ? "📄" : "📁"}
+            {file ? <FileText size={32} strokeWidth={1.5} /> : <FolderOpen size={32} strokeWidth={1.5} />}
           </div>
 
           <div className="text-center">

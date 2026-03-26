@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { PenLine } from 'lucide-react'
 import { Textarea } from '@/components/shared/Textarea'
 import { Button } from '@/components/shared/Button'
 import { useUpdateSummaryMutation } from '@/queries/useModuleQuery'
@@ -46,7 +47,9 @@ export function SummaryEditor({ moduleId, initialSummary }: SummaryEditorProps) 
     <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50 bg-gray-50/30">
         <h3 className="font-bold text-gray-900 flex items-center gap-2">
-          <span className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center text-sm">📝</span>
+          <span className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center">
+            <PenLine size={16} />
+          </span>
           AI Summary
         </h3>
         {!isEditing && (
