@@ -131,7 +131,7 @@ export function OTPForm() {
             className={cn(
               'w-11 h-12 text-center text-lg font-semibold rounded-lg border border-gray-300 bg-white',
               'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
-              'disabled:bg-gray-50 disabled:cursor-not-allowed transition-colors duration-200'
+              'disabled:bg-gray-50 disabled:cursor-not-allowed transition-colors duration-200 text-black'
             )}
           />
         ))}
@@ -141,7 +141,7 @@ export function OTPForm() {
         type="submit"
         variant="primary"
         loading={verifyMutation.isPending}
-        className="w-full"
+        className="w-full text-md"
       >
         Verifikasi
       </Button>

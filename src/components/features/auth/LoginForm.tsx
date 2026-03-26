@@ -69,7 +69,7 @@ export function LoginForm() {
         type="submit"
         variant="primary"
         loading={loginMutation.isPending}
-        className="w-full mt-2"
+        className="w-full mt-2 text-md"
       >
         Masuk
       </Button>

@@ -40,7 +40,7 @@ export function Input({
             'w-full px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white transition-colors duration-200',
             'placeholder:text-gray-400',
             'focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent',
-            'disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed',
+            'disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed text-md text-black',
             leftIcon && 'pl-10',
             rightIcon && 'pr-10',
             error && 'border-danger focus:ring-danger',
