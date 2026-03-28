@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import * as React from 'react'
@@ -8,14 +9,48 @@ import { Button } from '@/components/shared/Button'
 import { Input } from '@/components/shared/Input'
 import { useToast } from '@/components/shared/Toast'
 import { cn } from '@/lib/utils'
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
-export function UploadForm() {
+const uploadSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .min(3, "Title must be at least 3 characters")
+    .max(255, "Title must be at most 255 characters"),
+  file: z
+    .instanceof(File, { message: "PDF file is required" })
+    .refine((f) => f.type === "application/pdf", "Only PDF files are allowed")
+    .refine(
+      (f) => f.size <= 20 * 1024 * 1024,
+      "File size must not exceed 20MB",
+    ),
+});
+
+type UploadFormValues = z.infer<typeof uploadSchema>;
+
+interface UploadFormProps {
+  onSuccess?: () => void
+}
+
+export function UploadForm({ onSuccess }: UploadFormProps) {
   const router = useRouter()
   const { toast } = useToast()
   const { mutate: uploadModule, isPending } = useUploadModuleMutation()
   
-  const [title, setTitle] = React.useState('')
-  const [file, setFile] = React.useState<File | null>(null)
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm<UploadFormValues>({
+    resolver: zodResolver(uploadSchema),
+  });
+
+  const file = watch("file") ?? null;
   const [isDragging, setIsDragging] = React.useState(false)
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -37,9 +72,11 @@ export function UploadForm() {
         toast.error('Maksimum ukuran file adalah 20MB')
         return
       }
-      setFile(droppedFile)
+      setValue("file", droppedFile, { shouldValidate: true })
     } else {
       toast.error('Hanya file PDF yang diperbolehkan')
+      // Let validation fail on the form 
+      setValue("file", droppedFile, { shouldValidate: true })
     }
   }
 
@@ -50,31 +87,30 @@ export function UploadForm() {
         toast.error('Maksimum ukuran file adalah 20MB')
         return
       }
-      setFile(selectedFile)
+      setValue("file", selectedFile, { shouldValidate: true })
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!title || !file) return
-
+  const onSubmit = (values: UploadFormValues) => {
     const formData = new FormData()
-    formData.append('title', title)
-    formData.append('file', file)
+    formData.append('title', values.title)
+    formData.append('file', values.file)
 
     uploadModule(formData, {
       onSuccess: () => {
         toast.success('Modul berhasil diupload dan sedang diproses')
+        reset()
+        onSuccess?.()
         router.push('/modules')
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.message || 'Terjadi kesalahan saat mengupload modul')
+        toast.error(error.response?.data?.error || 'Terjadi kesalahan saat mengupload modul')
       }
     })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2">
         <label htmlFor="title" className="text-sm font-bold text-gray-700 ml-1">
           Judul Modul
@@ -82,11 +118,12 @@ export function UploadForm() {
         <Input
           id="title"
           placeholder="Masukkan judul modul (contoh: Biologi Sel Bab 1)"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
+          {...register("title")}
           className="rounded-2xl h-12"
         />
+        {errors.title && (
+          <p className="text-xs text-danger ml-1 mt-1">{errors.title.message}</p>
+        )}
       </div>
 
       <div className="space-y-2">
@@ -128,7 +165,7 @@ export function UploadForm() {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation()
-                    setFile(null)
+                    setValue("file", undefined as any, { shouldValidate: true })
                   }}
                   className="mt-4 text-xs font-bold text-danger hover:underline"
                 >
@@ -145,6 +182,9 @@ export function UploadForm() {
             )}
           </div>
         </div>
+        {errors.file && (
+          <p className="text-xs text-danger ml-1 mt-1">{errors.file.message}</p>
+        )}
       </div>
 
       <div className="pt-4">
@@ -152,7 +192,7 @@ export function UploadForm() {
           type="submit" 
           size="lg" 
           className="w-full h-12 rounded-2xl shadow-md shadow-primary/20 font-bold"
-          disabled={!title || !file || isPending}
+          disabled={isPending}
           loading={isPending}
         >
           Upload Modul

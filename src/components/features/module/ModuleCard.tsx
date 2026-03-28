@@ -28,7 +28,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
         setIsDeleteModalOpen(false)
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.message || 'Gagal menghapus modul')
+        toast.error(error.response?.data?.error || 'Gagal menghapus modul')
       }
     })
   }
@@ -41,7 +41,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
         toast.success('Proses summarize dimulai ulang')
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.message || 'Gagal memulai ulang proses')
+        toast.error(error.response?.data?.error || 'Gagal memulai ulang proses')
       }
     })
   }

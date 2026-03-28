@@ -32,7 +32,7 @@ export default function QuizResultPage() {
         router.push(`/quiz/${newQuiz.id}`)
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.message || 'Gagal mengulang quiz')
+        toast.error(error.response?.data?.error || 'Gagal mengulang quiz')
       }
     })
   }

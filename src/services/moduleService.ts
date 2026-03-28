@@ -4,9 +4,7 @@ import type { Module, ModuleDetail, UpdateSummaryRequest, SummaryResponse } from
 
 export const moduleService = {
   upload: (data: FormData) =>
-    api.post<APIResponse<Module>>('/modules', data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }),
+    api.post<APIResponse<Module>>('/modules', data),
 
   getAll: () =>
     api.get<APIResponse<Module[]>>('/modules'),

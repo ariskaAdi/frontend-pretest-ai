@@ -70,7 +70,7 @@ export default function QuizSessionPage() {
           router.push(`/quiz/${id}/result`)
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.message || 'Gagal mengirim jawaban')
+          toast.error(error.response?.data?.error || 'Gagal mengirim jawaban')
         }
       }
     )

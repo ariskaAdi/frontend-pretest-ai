@@ -31,7 +31,7 @@ export function GenerateQuizModal({ isOpen, onClose, moduleTitle, moduleId }: Ge
           onClose()
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.message || 'Gagal membuat quiz')
+          toast.error(error.response?.data?.error || 'Gagal membuat quiz')
         },
       }
     )

@@ -1,461 +1,231 @@
-# 📋 ISSUE: Frontend — Auth Case (Login, Register, Verify OTP, Update Email)
+# 📋 ISSUE: Frontend — Zod Validation on UploadForm
 
 ## Status
+
 `open`
 
 ## Priority
-`high`
+
+`medium`
 
 ## Assignee
-_unassigned_
 
-## Dependency
-- `ISSUE_FRONTEND_SHARED.md` harus selesai terlebih dahulu (shared components tersedia)
+_unassigned_
 
 ---
 
 ## Background
 
-Auth case mencakup semua alur autentikasi user: register, verifikasi OTP, login, logout, dan update email. Semua halaman auth menggunakan `AuthLayout` sebagai wrapper dan shared components dari `@/components/shared`.
+`UploadForm` saat ini tidak memiliki validasi di sisi frontend — form langsung mengirim request ke backend, baru mendapat error dari sana. Akibatnya setiap typo di title (misal kurang dari 3 karakter) selalu menghasilkan network request yang sia-sia.
 
---- Baca dokumentasi api lengkap nya di folder backend-pretest-ai/doc/user/swagger.yaml
----
+Tambahkan Zod schema + react-hook-form ke `UploadForm` agar validasi terjadi di client sebelum request dikirim, dan tampilkan error inline di bawah masing-masing field.
 
-## Struktur File yang Dikerjakan
-
-```
-src/
-├── app/
-│   └── (auth)/
-│       ├── layout.tsx              ← pakai AuthLayout
-│       ├── login/
-│       │   └── page.tsx
-│       ├── register/
-│       │   └── page.tsx
-│       └── verify-otp/
-│           └── page.tsx
-│
-├── components/
-│   ├── layouts/
-│   │   └── Auth/
-│   │       ├── Auth.tsx            ← AuthLayout component
-│   │       └── index.ts
-│   └── features/
-│       └── auth/
-│           ├── LoginForm.tsx
-│           ├── RegisterForm.tsx
-│           └── OTPForm.tsx
-│
-├── stores/
-│   └── authStore.ts                ← Zustand: simpan token + user data
-│
-├── services/
-│   └── authService.ts              ← axios call ke backend
-│
-├── queries/
-│   └── useAuthQuery.ts             ← TanStack Query mutations
-│
-└── types/
-    └── auth.types.ts               ← TypeScript interfaces
-```
+**Jangan ubah logic upload, drag-drop, atau mutation yang sudah ada.**
 
 ---
 
-## Types (`src/types/auth.types.ts`)
+## Install Dependencies
 
-Buat semua TypeScript interface yang dibutuhkan:
+```bash
+npm install zod react-hook-form @hookform/resolvers
+```
+
+Tambahkan ke `package.json` dependencies (bukan devDependencies).
+
+---
+
+## Zod Schema
+
+Buat schema di dalam `UploadForm.tsx` (tidak perlu file terpisah karena hanya dipakai di sini):
 
 ```ts
-export interface User {
-  id: string
-  name: string
-  email: string
-  role: 'admin' | 'member' | 'guest'
-  is_verified: boolean
-}
+import { z } from "zod";
 
-export interface LoginRequest {
-  email: string
-  password: string
-}
+const uploadSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .min(3, "Title must be at least 3 characters")
+    .max(255, "Title must be at most 255 characters"),
+  file: z
+    .instanceof(File, { message: "PDF file is required" })
+    .refine((f) => f.type === "application/pdf", "Only PDF files are allowed")
+    .refine(
+      (f) => f.size <= 20 * 1024 * 1024,
+      "File size must not exceed 20MB",
+    ),
+});
 
-export interface RegisterRequest {
-  name: string
-  email: string
-  password: string
-}
-
-export interface VerifyOTPRequest {
-  email: string
-  otp: string
-}
-
-export interface UpdateEmailRequest {
-  new_email: string
-}
-
-export interface VerifyUpdateEmailRequest {
-  new_email: string
-  otp: string
-}
-
-export interface LoginResponse {
-  token: string
-  user: User
-}
+type UploadFormValues = z.infer<typeof uploadSchema>;
 ```
 
 ---
 
-## Zustand Store (`src/stores/authStore.ts`)
+## Implementasi react-hook-form
 
-```ts
-interface AuthState {
-  token: string | null
-  user: User | null
-  isAuthenticated: boolean
+### Setup
 
-  setAuth: (token: string, user: User) => void
-  clearAuth: () => void
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const {
+  register,
+  handleSubmit,
+  setValue,
+  watch,
+  formState: { errors },
+  reset,
+} = useForm<UploadFormValues>({
+  resolver: zodResolver(uploadSchema),
+});
+```
+
+### Hapus useState untuk title dan file
+
+```tsx
+// HAPUS ini:
+const [title, setTitle] = React.useState("");
+const [file, setFile] = React.useState<File | null>(null);
+
+// GANTI dengan:
+const file = watch("file") ?? null; // untuk keperluan UI drag-drop yang sudah ada
+```
+
+### Title field — pakai register
+
+```tsx
+<Input
+  id="title"
+  {...register("title")}
+  placeholder="Masukkan judul modul (contoh: Biologi Sel Bab 1)"
+  className="rounded-2xl h-12"
+/>;
+{
+  errors.title && (
+    <p className="text-xs text-danger ml-1 mt-1">{errors.title.message}</p>
+  );
 }
 ```
 
-Gunakan `persist` middleware dari Zustand agar token tidak hilang saat refresh:
+> Hapus prop `value`, `onChange`, dan `required` yang lama — sudah dihandle oleh `register`.
 
-```ts
-import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+### File field — pakai setValue
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
-      token: null,
-      user: null,
-      isAuthenticated: false,
-      setAuth: (token, user) => set({ token, user, isAuthenticated: true }),
-      clearAuth: () => set({ token: null, user: null, isAuthenticated: false }),
-    }),
-    { name: 'auth-storage' }  // key di localStorage
-  )
-)
+File input menggunakan custom drag-drop UI, sehingga tidak bisa pakai `register` langsung. Gunakan `setValue` setiap kali file dipilih/di-drop:
+
+```tsx
+// Di handleDrop — ganti setFile(droppedFile) dengan:
+setValue("file", droppedFile, { shouldValidate: true });
+
+// Di handleFileChange — ganti setFile(selectedFile) dengan:
+setValue("file", selectedFile, { shouldValidate: true });
+
+// Di tombol "Ganti File" — ganti setFile(null) dengan:
+setValue("file", undefined as any, { shouldValidate: false });
 ```
 
----
+Tampilkan error file di bawah drop zone:
 
-## Services (`src/services/authService.ts`)
-
-```ts
-// Semua function return Promise<APIResponse<T>>
-// Axios instance sudah include token di header via interceptor (src/services/api.ts)
-
-export const authService = {
-  register: (data: RegisterRequest) =>
-    api.post('/auth/register', data),
-
-  verifyOTP: (data: VerifyOTPRequest) =>
-    api.post('/auth/verify-otp', data),
-
-  login: (data: LoginRequest) =>
-    api.post<LoginResponse>('/auth/login', data),
-
-  logout: () =>
-    api.post('/auth/logout'),
+```tsx
+{
+  errors.file && (
+    <p className="text-xs text-danger ml-1 mt-1">{errors.file.message}</p>
+  );
 }
 ```
 
-Buat juga `src/services/api.ts` — Axios instance dengan interceptor:
+### handleSubmit
 
-```ts
-import axios from 'axios'
-import { useAuthStore } from '@/stores/authStore'
+```tsx
+// Ganti:
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault()
+  if (!title || !file) return
+  ...
+}
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL + '/api/v1',
-  headers: { 'Content-Type': 'application/json' },
-})
+// Dengan:
+const onSubmit = (values: UploadFormValues) => {
+  const formData = new FormData()
+  formData.append('title', values.title)
+  formData.append('file', values.file)
 
-// Request interceptor — inject token
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token
-  if (token) config.headers.Authorization = `Bearer ${token}`
-  return config
-})
-
-// Response interceptor — handle 401
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      useAuthStore.getState().clearAuth()
-      window.location.href = '/login'
+  uploadModule(formData, {
+    onSuccess: () => {
+      toast.success('Modul berhasil diupload dan sedang diproses')
+      reset()
+      onSuccess?.()
+      router.push('/modules')
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.error || 'Terjadi kesalahan saat mengupload modul')
     }
-    return Promise.reject(error)
-  }
-)
-
-export default api
-```
-
----
-
-## TanStack Query (`src/queries/useAuthQuery.ts`)
-
-```ts
-export function useLoginMutation() {
-  const { setAuth } = useAuthStore()
-  const { toast } = useToast()
-  const router = useRouter()
-
-  return useMutation({
-    mutationFn: authService.login,
-    onSuccess: (res) => {
-      setAuth(res.data.data.token, res.data.data.user)
-      toast.success('Login berhasil!')
-      router.push('/dashboard')
-    },
-    onError: (err) => {
-      toast.error(err.response?.data?.error ?? 'Login gagal')
-    },
   })
 }
+```
 
-export function useRegisterMutation() { ... }
-export function useVerifyOTPMutation() { ... }
-export function useLogoutMutation() { ... }
+Pada form element, ganti `onSubmit={handleSubmit}` dengan:
+
+```tsx
+<form onSubmit={handleSubmit(onSubmit)} ...>
+```
+
+### Button disabled state
+
+```tsx
+// Ganti:
+disabled={!title || !file || isPending}
+
+// Dengan:
+disabled={isPending}
+// react-hook-form + zod handles validation — tombol boleh diklik, error akan muncul inline
 ```
 
 ---
 
-## AuthLayout (`src/components/layouts/Auth/Auth.tsx`)
-
-Layout wrapper untuk semua halaman auth. Tampilan: **split screen** — kiri branding, kanan form.
+## Hasil Akhir — Tampilan Error Inline
 
 ```
 ┌─────────────────────────────────────────┐
-│          │                              │
-│  Branding│         Form Area            │
-│  & Quote │                              │
-│  (hidden │   [Logo]                     │
-│  mobile) │   [Title]                    │
-│          │   [Subtitle]                 │
-│          │                              │
-│          │   {children}                 │
-│          │                              │
+│ Judul Modul                             │
+│ ┌─────────────────────────────────────┐ │
+│ │ ab                                  │ │
+│ └─────────────────────────────────────┘ │
+│ ⚠ Title must be at least 3 characters  │
+│                                         │
+│ File PDF                                │
+│ ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐ │
+│   Klik atau drop file PDF untuk upload  │
+│ └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘ │
+│ ⚠ PDF file is required                  │
 └─────────────────────────────────────────┘
 ```
 
-```ts
-interface AuthLayoutProps {
-  children: React.ReactNode
-  title: string           // "Selamat Datang Kembali"
-  subtitle: string        // "Masuk ke akun kamu untuk melanjutkan belajar"
-}
-```
-
-**Kiri (hidden di mobile):**
-- Background warna `primary`
-- Logo / nama app "PreTest AI"
-- Quote motivasi belajar
-- Ilustrasi sederhana (opsional)
-
-**Kanan:**
-- Centered, max-width `sm`
-- Logo kecil di atas (mobile only)
-- `title` dan `subtitle`
-- `{children}` — form
+Error muncul inline di bawah field saat submit, bukan sebagai toast. Toast hanya untuk error dari backend (network/server error).
 
 ---
 
-## Alur & Flow Setiap Halaman
-
-### Alur 1 — Register (`/register`)
+## File yang Dikerjakan
 
 ```
-User isi form (name, email, password)
-    └── Klik "Daftar"
-            └── useRegisterMutation()
-                    ├── Loading → Button disabled + Spinner
-                    ├── Success → simpan email ke sessionStorage
-                    │            redirect ke /verify-otp
-                    └── Error   → toast.error(pesan dari backend)
-```
-
-**Validasi di form (sebelum hit API):**
-- `name` — wajib, min 2 karakter
-- `email` — wajib, format email valid
-- `password` — wajib, min 8 karakter
-- `confirmPassword` — harus sama dengan password (hanya di frontend, tidak dikirim ke backend)
-
-**Komponen yang dipakai:**
-```tsx
-<AuthLayout title="Buat Akun Baru" subtitle="...">
-  <RegisterForm />
-</AuthLayout>
-```
-
----
-
-### Alur 2 — Verify OTP (`/verify-otp`)
-
-```
-User tiba dari /register (email tersimpan di sessionStorage)
-    └── Tampilkan form OTP
-            ├── 6 kotak input digit
-            └── Klik "Verifikasi"
-                    └── useVerifyOTPMutation()
-                            ├── Loading → Button disabled
-                            ├── Success → toast.success
-                            │            redirect ke /login
-                            └── Error   → toast.error "OTP salah"
-
-Link "Kirim ulang OTP" → hit register ulang dengan email yang sama
-Jika tidak ada email di sessionStorage → redirect ke /register
-```
-
-**Komponen yang dipakai:**
-```tsx
-<AuthLayout title="Verifikasi Email" subtitle="Masukkan kode OTP yang dikirim ke emailmu">
-  <OTPForm />
-</AuthLayout>
-```
-
-**Catatan OTPForm:**
-- 6 kotak input terpisah, auto-focus ke kotak berikutnya saat angka diisi
-- Auto-submit saat digit ke-6 terisi
-- Paste support — tempel 6 digit langsung mengisi semua kotak
-
----
-
-### Alur 3 — Login (`/login`)
-
-```
-User isi form (email, password)
-    └── Klik "Masuk"
-            └── useLoginMutation()
-                    ├── Loading → Button disabled + Spinner
-                    ├── Success → setAuth(token, user) ke Zustand
-                    │            redirect ke /dashboard
-                    └── Error 401 → toast.error "Email atau password salah"
-                    └── Error 401 "email belum diverifikasi"
-                                → toast.warning + link ke /verify-otp
-```
-
-**Validasi di form:**
-- `email` — wajib, format email
-- `password` — wajib
-
-**Komponen yang dipakai:**
-```tsx
-<AuthLayout title="Selamat Datang" subtitle="Masuk ke akun kamu untuk melanjutkan belajar">
-  <LoginForm />
-</AuthLayout>
-```
-
----
-
-### Alur 4 — Logout
-
-Logout tidak punya halaman tersendiri. Dipanggil dari Navbar/Sidebar:
-
-```
-Klik "Logout"
-    └── Modal konfirmasi "Yakin ingin keluar?"
-            └── Konfirmasi → useLogoutMutation()
-                                ├── Hit POST /auth/logout
-                                ├── clearAuth() dari Zustand
-                                └── redirect ke /login
-```
-
----
-
-### Alur 5 — Update Email (halaman settings, bukan auth page)
-
-Dua langkah — request OTP lalu verify. Ini ada di halaman **settings/profile** (bukan route auth), tapi querynya tetap di `useAuthQuery.ts`:
-
-```
-Step 1: User isi email baru → POST /user/email/request-update
-    └── OTP dikirim ke email baru
-    └── Tampilkan form OTP
-
-Step 2: User isi OTP → POST /user/email/verify-update
-    └── Email terupdate
-    └── Update user di Zustand (email baru)
-    └── toast.success
-```
-
----
-
-## Shared Components yang Dipakai
-
-Pastikan semua komponen berikut sudah tersedia dari `ISSUE_FRONTEND_SHARED.md`:
-
-| Component | Dipakai di |
-|---|---|
-| `Button` | Semua form (submit, loading state) |
-| `Input` | LoginForm, RegisterForm |
-| `Toast` | Semua mutation onSuccess/onError |
-| `Spinner` | Di dalam Button saat loading |
-| `Modal` | Konfirmasi logout |
-| `Badge` | Status verified/unverified (opsional) |
-
----
-
-## Route Protection
-
-Buat middleware Next.js di `src/middleware.ts`:
-
-```ts
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
-
-const PUBLIC_ROUTES = ['/login', '/register', '/verify-otp']
-
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token')?.value
-  const isPublic = PUBLIC_ROUTES.some(r => request.nextUrl.pathname.startsWith(r))
-
-  // Belum login, akses halaman protected → redirect login
-  if (!token && !isPublic) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-
-  // Sudah login, akses halaman auth → redirect dashboard
-  if (token && isPublic) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
-
-  return NextResponse.next()
-}
-
-export const config = {
-  matcher: ['/((?!api|_next|favicon.ico).*)'],
-}
-```
-
-> **Catatan:** Zustand `persist` menyimpan token di `localStorage`. Untuk middleware Next.js (server-side), token perlu juga disimpan di **cookie** saat login agar middleware bisa membacanya. Tambahkan `document.cookie = \`token=${token}\`` saat `setAuth()` dipanggil.
-
----
-
-## Environment Variable
-
-```env
-# .env.local
-NEXT_PUBLIC_API_URL=http://localhost:8080
+frontend-pretest-ai/
+├── package.json                          ← tambah zod, react-hook-form, @hookform/resolvers
+└── src/
+    └── components/
+        └── features/
+            └── module/
+                └── UploadForm.tsx        ← refactor dengan zod + react-hook-form
 ```
 
 ---
 
 ## Definition of Done
 
-- [ ] `AuthLayout` selesai dengan tampilan split screen
-- [ ] `LoginForm` — validasi + mutation + redirect
-- [ ] `RegisterForm` — validasi + mutation + simpan email ke sessionStorage
-- [ ] `OTPForm` — 6 kotak input, auto-focus, auto-submit, paste support
-- [ ] `authStore` — persist token + user ke localStorage
-- [ ] `authService` — semua endpoint auth
-- [ ] `api.ts` — axios instance + request/response interceptor
-- [ ] `useAuthQuery.ts` — semua mutation dengan onSuccess/onError
-- [ ] Route protection via `middleware.ts`
-- [ ] Token disimpan di cookie untuk middleware
+- [ ] `zod`, `react-hook-form`, `@hookform/resolvers` terinstall
+- [ ] Schema Zod mencakup title (min 3, max 255) dan file (PDF, max 20MB)
+- [ ] Error inline muncul di bawah field title dan file
+- [ ] Tidak ada network request terkirim jika form tidak valid
+- [ ] Logic upload, drag-drop, dan mutation tidak berubah
+- [ ] `reset()` dipanggil setelah upload berhasil (form bersih saat modal dibuka ulang)
 - [ ] Tidak ada error TypeScript (`tsc --noEmit`)
-- [ ] Semua alur di atas bisa dijalankan end-to-end
