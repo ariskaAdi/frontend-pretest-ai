@@ -6,6 +6,9 @@ import { useAuthStore } from '@/stores/authStore'
 import { Sidebar } from '../Sidebar/Sidebar'
 import { Navbar } from '../Navbar/Navbar'
 import { MobileMenu } from './MobileMenu'
+import { cn } from '@/lib/utils'
+
+import { useSidebarStore } from '@/stores/sidebarStore'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -14,6 +17,7 @@ interface DashboardLayoutProps {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter()
   const { isAuthenticated } = useAuthStore()
+  const { isCollapsed } = useSidebarStore()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
 
   // Route Protection: Redirect if not authenticated
@@ -28,12 +32,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       {/* Desktop Sidebar */}
       <Sidebar className="hidden lg:flex" />
 
       {/* Main Layout Area */}
-      <div className="lg:pl-60 flex flex-col min-h-screen">
+      <div className={cn(
+        "flex flex-col min-h-screen transition-all duration-300 ease-in-out",
+        isCollapsed ? "lg:pl-16" : "lg:pl-60"
+      )}>
         {/* Navbar */}
         <Navbar 
           onMenuClick={() => setIsMobileMenuOpen(true)} 
@@ -48,7 +55,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Content Area */}
         <main className="flex-1 pt-24 px-4 pb-12 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="mx-auto">
             {children}
           </div>
         </main>

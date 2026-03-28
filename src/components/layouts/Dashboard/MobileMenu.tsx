@@ -48,7 +48,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       />
       
       {/* Menu Drawer */}
-      <aside className="fixed left-0 top-0 h-full w-72 bg-white shadow-xl flex flex-col animate-in slide-in-from-left duration-300 ease-out border-r border-gray-100">
+      <aside className="fixed left-0 top-0 h-full w-72 bg-gray-200 shadow-xl flex flex-col animate-in slide-in-from-left duration-300 ease-out border-r border-gray-100">
         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">

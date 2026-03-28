@@ -8,7 +8,7 @@ interface StatCardProps {
   label: string
   value: string | number
   icon: React.ReactNode
-  variant?: 'default' | 'success' | 'warning' | 'info'
+  variant?: 'default' | 'success' | 'warning' | 'info' | 'danger'
   description?: string
 }
 
@@ -24,6 +24,7 @@ export function StatCard({
     success: 'text-success bg-success/10',
     warning: 'text-warning bg-warning/10',
     info: 'text-blue-600 bg-blue-50',
+    danger: 'text-red-600 bg-red-50',
   }
 
   return (

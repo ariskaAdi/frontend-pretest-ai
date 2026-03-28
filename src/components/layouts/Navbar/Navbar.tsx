@@ -8,6 +8,8 @@ import { Button } from '@/components/shared/Button'
 import { Modal } from '@/components/shared/Modal'
 import { cn } from '@/lib/utils'
 
+import { useSidebarStore } from '@/stores/sidebarStore'
+
 interface NavbarProps {
   onMenuClick?: () => void
   onLogoutSuccess?: () => void
@@ -17,6 +19,7 @@ export function Navbar({ onMenuClick, onLogoutSuccess }: NavbarProps) {
   const router = useRouter()
   const { data: user } = useGetMeQuery()
   const { clearAuth } = useAuthStore()
+  const { isCollapsed } = useSidebarStore()
   
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false)
@@ -43,7 +46,10 @@ export function Navbar({ onMenuClick, onLogoutSuccess }: NavbarProps) {
 
   return (
     <>
-      <header className="fixed top-0 right-0 left-0 lg:left-60 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 z-20">
+      <header className={cn(
+        "fixed top-0 right-0 h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 z-20 transition-all duration-300 ease-in-out",
+        isCollapsed ? "left-0 lg:left-16" : "left-0 lg:left-60"
+      )}>
         {/* Left section: Hamburger (mobile) + Page Title */}
         <div className="flex items-center gap-3">
           <button 

@@ -4,6 +4,8 @@ export interface User {
   email: string
   role: 'admin' | 'member' | 'guest'
   is_verified: boolean
+  quiz_quota: number
+  summarize_quota: number
 }
 
 export interface LoginRequest {

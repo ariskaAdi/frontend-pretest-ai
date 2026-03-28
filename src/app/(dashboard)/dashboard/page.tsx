@@ -14,11 +14,15 @@ import {
   Zap,
   Clock,
   FileText,
-  Target
+  Target,
+  Clipboard,
+  Shield
 } from 'lucide-react'
+import { useGetMeQuery } from '@/queries/useUserQuery'
 import type { Module } from '@/types/module.types'
 
 export default function DashboardPage() {
+  const { data: user } = useGetMeQuery()
   const { data: modules, isLoading: isLoadingModules } = useModulesQuery()
   const { data: quizHistory, isLoading: isLoadingQuiz } = useQuizHistoryQuery()
 
@@ -28,9 +32,8 @@ export default function DashboardPage() {
     const avgScore = quizHistory?.length
       ? Math.round(quizHistory.reduce((acc, q) => acc + (q.score || 0), 0) / quizHistory.length)
       : 0
-    const pendingModules = (modules as Module[] | undefined)?.filter(m => !m.is_summarized).length || 0
-
-    return [
+    
+    const baseStats = [
       {
         label: 'Total Modul',
         value: totalModules,
@@ -51,16 +54,40 @@ export default function DashboardPage() {
         icon: <Zap size={20} />,
         variant: 'warning' as const,
         description: 'Akumulasi skor semua quiz'
-      },
-      {
-        label: 'Modul Pending',
-        value: pendingModules,
-        icon: <Clock size={20} />,
-        variant: 'default' as const,
-        description: 'Ringkasan diselesaikan AI'
       }
     ]
-  }, [modules, quizHistory])
+
+    if (user?.role === 'admin') {
+      return [
+        ...baseStats,
+        {
+          label: 'Admin Access',
+          value: 'Unlimited',
+          icon: <Shield size={20} />,
+          variant: 'default' as const,
+          description: 'No quota restrictions'
+        }
+      ]
+    }
+
+    return [
+      ...baseStats,
+      {
+        label: 'Quiz Tersisa',
+        value: user?.quiz_quota ?? '-',
+        icon: <Clipboard size={20} />,
+        variant: (user?.quiz_quota ?? 1) === 0 ? 'danger' as const : 'success' as const,
+        description: user?.quiz_quota === 0 ? 'Quota habis — beli paket' : 'Generate quiz tersedia'
+      },
+      {
+        label: 'Ringkas Tersisa',
+        value: user?.summarize_quota ?? '-',
+        icon: <FileText size={20} />,
+        variant: (user?.summarize_quota ?? 1) === 0 ? 'danger' as const : 'info' as const,
+        description: user?.summarize_quota === 0 ? 'Quota habis — beli paket' : 'Summarize AI tersedia'
+      }
+    ]
+  }, [modules, quizHistory, user])
 
   if (isLoadingModules || isLoadingQuiz) {
     return (
@@ -76,7 +103,7 @@ export default function DashboardPage() {
       <WelcomeBanner />
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {stats.map((stat, i) => (
           <div key={stat.label} className={`animate-in fade-in slide-in-from-bottom-4`} style={{ animationDelay: `${i * 100}ms` }}>
             <StatCard {...stat} />
