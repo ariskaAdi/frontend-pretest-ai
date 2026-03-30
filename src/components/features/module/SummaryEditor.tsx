@@ -1,11 +1,20 @@
 "use client";
 
 import * as React from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PenLine } from "lucide-react";
 import { Textarea } from "@/components/shared/Textarea";
 import { Button } from "@/components/shared/Button";
 import { useUpdateSummaryMutation } from "@/queries/useModuleQuery";
 import { useToast } from "@/components/shared/Toast";
+
+const summarySchema = z.object({
+  summary: z.string().min(1, "Summary tidak boleh kosong"),
+});
+
+type SummaryFormValues = z.infer<typeof summarySchema>;
 
 interface SummaryEditorProps {
   moduleId: string;
@@ -18,26 +27,31 @@ export function SummaryEditor({
 }: SummaryEditorProps) {
   const [isEditing, setIsEditing] = React.useState(false);
   const [summary, setSummary] = React.useState(initialSummary);
-  const [draft, setDraft] = React.useState(initialSummary);
   const { toast } = useToast();
 
   const { mutate: updateSummary, isPending } =
     useUpdateSummaryMutation(moduleId);
 
-  const handleSave = () => {
-    if (!draft.trim()) {
-      toast.error("Summary tidak boleh kosong");
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+    formState: { errors },
+  } = useForm<SummaryFormValues>({
+    resolver: zodResolver(summarySchema),
+    defaultValues: { summary: initialSummary },
+  });
 
+  const onSubmit = (values: SummaryFormValues) => {
     updateSummary(
-      { summary: draft },
+      { summary: values.summary },
       {
         onSuccess: () => {
-          setSummary(draft);
+          setSummary(values.summary);
           setIsEditing(false);
           toast.success("Summary berhasil diperbarui");
         },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onError: (error: any) => {
           toast.error(
             error.response?.data?.error || "Gagal memperbarui summary",
@@ -48,13 +62,13 @@ export function SummaryEditor({
   };
 
   const handleCancel = () => {
-    setDraft(summary);
+    resetForm({ summary });
     setIsEditing(false);
   };
 
   return (
     <div className="bg-gary-50 rounded-3xl border shadow-md border-gray-100  overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50 bg-gray-100">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50 bg-gray-50">
         <h3 className="font-bold text-gray-900 flex items-center gap-2 ">
           <span className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center">
             <PenLine size={16} />
@@ -63,10 +77,10 @@ export function SummaryEditor({
         </h3>
         {!isEditing && (
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
             onClick={() => setIsEditing(true)}
-            className="text-xs font-bold">
+            className="text-md font-bold">
             Edit Summary
           </Button>
         )}
@@ -74,28 +88,33 @@ export function SummaryEditor({
 
       <div className="p-6">
         {isEditing ? (
-          <div className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <Textarea
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              className="min-h-[400px] leading-relaxed rounded-2xl p-4 focus:ring-primary/20 text-black"
+              {...register("summary")}
+              className="min-h-100 leading-relaxed rounded-2xl p-4 focus:ring-primary/20 text-black"
               placeholder="Tulis summary di sini..."
             />
+            {errors.summary && (
+              <p className="text-xs text-danger ml-1 mt-1">
+                {errors.summary.message}
+              </p>
+            )}
             <div className="flex justify-end gap-3">
               <Button
+                type="button"
                 variant="ghost"
                 onClick={handleCancel}
                 disabled={isPending}>
                 Batal
               </Button>
               <Button
-                onClick={handleSave}
+                type="submit"
                 loading={isPending}
                 className="px-8 shadow-sm shadow-primary/20">
                 Simpan Perubahan
               </Button>
             </div>
-          </div>
+          </form>
         ) : (
           <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
             {summary}

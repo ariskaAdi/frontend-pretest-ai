@@ -153,7 +153,7 @@ export default function ModuleDetailPage() {
           <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold">
             <FileText size={32} strokeWidth={1.5} />
           </div>
-          <h4 className="font-bold text-gray-900 mb-1">Buka PDF</h4>
+          <h4 className="font-bold text-gray-900 mb-1">Buka File PDF</h4>
           <p className="text-xs text-gray-400 mb-4">
             Lihat dokumen asli materi Anda
           </p>
@@ -195,7 +195,7 @@ export default function ModuleDetailPage() {
             </Link>
             {module.summarize_failed && (
               <Button
-                variant="secondary"
+                variant="ghost"
                 className="w-full rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-xs flex items-center justify-center gap-2"
                 onClick={handleRetry}
                 loading={isRetrying}>

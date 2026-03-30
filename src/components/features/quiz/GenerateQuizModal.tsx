@@ -1,41 +1,46 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { useRouter } from 'next/navigation'
-import { Modal } from '@/components/shared/Modal'
-import { Button } from '@/components/shared/Button'
-import { useGenerateQuizMutation } from '@/queries/useQuizQuery'
-import { useToast } from '@/components/shared/Toast'
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { Modal } from "@/components/shared/Modal";
+import { Button } from "@/components/shared/Button";
+import { useGenerateQuizMutation } from "@/queries/useQuizQuery";
+import { useToast } from "@/components/shared/Toast";
 
 interface GenerateQuizModalProps {
-  isOpen: boolean
-  onClose: () => void
-  moduleTitle: string
-  moduleId: string
+  isOpen: boolean;
+  onClose: () => void;
+  moduleTitle: string;
+  moduleId: string;
 }
 
-export function GenerateQuizModal({ isOpen, onClose, moduleTitle, moduleId }: GenerateQuizModalProps) {
-  const [numQuestions, setNumQuestions] = React.useState<5 | 10 | 20>(5)
-  const { mutate: generateQuiz, isPending } = useGenerateQuizMutation()
-  const { toast } = useToast()
-  const router = useRouter()
+export function GenerateQuizModal({
+  isOpen,
+  onClose,
+  moduleTitle,
+  moduleId,
+}: GenerateQuizModalProps) {
+  const [numQuestions, setNumQuestions] = React.useState<5 | 10 | 20>(5);
+  const { mutate: generateQuiz, isPending } = useGenerateQuizMutation();
+  const { toast } = useToast();
+  const router = useRouter();
 
   const handleStart = () => {
     generateQuiz(
       { module_id: moduleId, num_questions: numQuestions },
       {
         onSuccess: (res) => {
-          const quiz = res.data.data
-          toast.success('Quiz berhasil dibuat! Memulai sesi...')
-          router.push(`/quiz/${quiz.id}`)
-          onClose()
+          const quiz = res.data.data;
+          toast.success("Quiz berhasil dibuat! Memulai sesi...");
+          router.push(`/quiz/${quiz.id}`);
+          onClose();
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.error || 'Gagal membuat quiz')
+          toast.error(error.response?.data?.error || "Gagal membuat quiz");
         },
-      }
-    )
-  }
+      },
+    );
+  };
 
   return (
     <Modal open={isOpen} onClose={onClose} title="Buat Quiz Baru">
@@ -54,11 +59,12 @@ export function GenerateQuizModal({ isOpen, onClose, moduleTitle, moduleId }: Ge
                 onClick={() => setNumQuestions(num as any)}
                 className={`
                   py-4 rounded-2xl border-2 transition-all duration-200 font-bold text-lg
-                  ${numQuestions === num 
-                    ? 'border-primary bg-primary-light text-primary shadow-sm' 
-                    : 'border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200 hover:bg-white'}
-                `}
-              >
+                  ${
+                    numQuestions === num
+                      ? "border-primary bg-white text-primary shadow-sm"
+                      : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200 hover:bg-white"
+                  }
+                `}>
                 {num}
               </button>
             ))}
@@ -69,23 +75,20 @@ export function GenerateQuizModal({ isOpen, onClose, moduleTitle, moduleId }: Ge
         </div>
 
         <div className="flex gap-3 pt-4">
-          <Button 
-            variant="ghost" 
-            className="flex-1 rounded-xl"
+          <Button
+            className="flex-1 rounded-xl text-red-600 border-none border-red-600 font-bold bg-white hover:bg-red-50"
             onClick={onClose}
-            disabled={isPending}
-          >
+            disabled={isPending}>
             Batal
           </Button>
-          <Button 
+          <Button
             className="flex-1 rounded-xl font-bold"
             onClick={handleStart}
-            loading={isPending}
-          >
+            loading={isPending}>
             Mulai Quiz
           </Button>
         </div>
       </div>
     </Modal>
-  )
+  );
 }

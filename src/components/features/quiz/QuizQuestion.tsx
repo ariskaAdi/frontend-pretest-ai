@@ -1,39 +1,41 @@
-'use client'
+"use client";
 
-import * as React from 'react'
-import { Card } from '@/components/shared/Card'
-import type { QuizQuestion as IQuizQuestion } from '@/types/quiz.types'
+import * as React from "react";
+import { Card } from "@/components/shared/Card";
+import type { QuizQuestion as IQuizQuestion } from "@/types/quiz.types";
 
 interface QuizQuestionProps {
-  question: IQuizQuestion
-  selectedAnswer?: string
-  onSelect: (answer: 'A' | 'B' | 'C' | 'D') => void
-  questionNumber: number
-  totalQuestions: number
+  question: IQuizQuestion;
+  selectedAnswer?: string;
+  onSelect: (answer: "A" | "B" | "C" | "D") => void;
+  questionNumber: number;
+  totalQuestions: number;
 }
 
-const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const
+const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 
-export function QuizQuestion({ 
-  question, 
-  selectedAnswer, 
-  onSelect, 
-  questionNumber, 
-  totalQuestions 
+export function QuizQuestion({
+  question,
+  selectedAnswer,
+  onSelect,
+  questionNumber,
+  totalQuestions,
 }: QuizQuestionProps) {
-  const progress = (questionNumber / totalQuestions) * 100
+  const progress = (questionNumber / totalQuestions) * 100;
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Progress Section */}
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm font-bold">
-          <span className="text-gray-900 uppercase tracking-wider">Pertanyaan {questionNumber} dari {totalQuestions}</span>
-          <span className="text-primary">{Math.round(progress)}%</span>
+          <span className="text-gray-900 uppercase tracking-wider">
+            Pertanyaan {questionNumber} dari {totalQuestions}
+          </span>
+          <span className="text-secondary">{Math.round(progress)}%</span>
         </div>
         <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-primary transition-all duration-500 ease-out"
+          <div
+            className="h-full bg-secondary transition-all duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -47,8 +49,8 @@ export function QuizQuestion({
 
         <div className="space-y-4">
           {question.options.map((option, index) => {
-            const label = OPTION_LABELS[index]
-            const isSelected = selectedAnswer === label
+            const label = OPTION_LABELS[index];
+            const isSelected = selectedAnswer === label;
 
             return (
               <button
@@ -56,28 +58,31 @@ export function QuizQuestion({
                 onClick={() => onSelect(label)}
                 className={`
                   w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 flex items-start gap-4 group
-                  ${isSelected 
-                    ? 'border-primary bg-primary-light ring-4 ring-primary/5' 
-                    : 'border-gray-50 bg-gray-50 hover:border-gray-200 hover:bg-white'}
-                `}
-              >
-                <div className={`
+                  ${
+                    isSelected
+                      ? "border-secondary bg-primary-light ring-4 ring-secondary/5"
+                      : "border-gray-50 bg-gray-50 hover:border-gray-200 hover:bg-white"
+                  }
+                `}>
+                <div
+                  className={`
                   w-8 h-8 rounded-xl flex items-center justify-center font-black flex-shrink-0 transition-colors
-                  ${isSelected ? 'bg-primary text-white' : 'bg-white text-gray-400 border border-gray-100 group-hover:text-primary group-hover:border-primary'}
+                  ${isSelected ? "bg-secondary text-white" : "bg-white text-gray-400 border border-gray-100 group-hover:text-secondary group-hover:border-secondary"}
                 `}>
                   {label}
                 </div>
-                <span className={`
+                <span
+                  className={`
                   font-bold leading-relaxed pt-0.5 transition-colors
-                  ${isSelected ? 'text-primary' : 'text-gray-600 group-hover:text-gray-900'}
+                  ${isSelected ? "text-secondary" : "text-gray-600 group-hover:text-gray-900"}
                 `}>
-                  {option.replace(/^[A-D]\.\s*/, '')}
+                  {option.replace(/^[A-D]\.\s*/, "")}
                 </span>
               </button>
-            )
+            );
           })}
         </div>
       </Card>
     </div>
-  )
+  );
 }

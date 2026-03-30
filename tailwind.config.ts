@@ -10,23 +10,29 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#4F46E5',  // indigo-600
-          hover:   '#4338CA',  // indigo-700
-          light:   '#EEF2FF',  // indigo-50
+          DEFAULT: "#AAFF00", // indigo-600
+          hover: "#52C400", // indigo-700
+          light: "#EEF2FF",
+        },
+        secondary: {
+          DEFAULT: "#86CC00",
+          hover: "#669900",
+          deepest: "#3D6600",
         },
         danger: {
-          DEFAULT: '#EF4444',  // red-500
-          hover:   '#DC2626',  // red-600
+          DEFAULT: "#EF4444", // red-500
+          hover: "#DC2626", // red-600
         },
         success: {
-          DEFAULT: '#22C55E',  // green-500
+          DEFAULT: "#22C55E", // green-500
         },
         warning: {
-          DEFAULT: '#F59E0B',  // amber-500
+          DEFAULT: "#F59E0B", // amber-500
         },
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ["Inter", "sans-serif"],
+        heading: ["Sora", "sans-serif"],
       },
     },
   },

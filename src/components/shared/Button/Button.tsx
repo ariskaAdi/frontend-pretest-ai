@@ -1,18 +1,18 @@
-import * as React from 'react'
-import { cn } from '@/lib/utils'
-import { Spinner } from '../Spinner'
+import * as React from "react";
+import { cn } from "@/lib/utils";
+import { Spinner } from "../Spinner";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-  loading?: boolean
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
+  variant?: "primary" | "secondary" | "danger" | "ghost";
+  size?: "sm" | "md" | "lg";
+  loading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 export function Button({
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   loading = false,
   leftIcon,
   rightIcon,
@@ -22,33 +22,35 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variantClasses = {
-    primary: 'bg-primary text-white hover:bg-primary-hover',
-    secondary: 'bg-white text-primary border border-primary hover:bg-primary-light',
-    danger: 'bg-danger text-white hover:bg-danger-hover',
-    ghost: 'bg-transparent text-primary hover:bg-primary-light',
-  }
+    primary:
+      "bg-primary text-black border border-1 border-dashed font-bold  hover:bg-primary-hover hover:text-white",
+    secondary:
+      "bg-black text-white font-bold hover:border hover:border-primary hover:bg-primary-light hover:text-primary",
+    danger: "bg-danger text-white hover:bg-danger-hover",
+    ghost:
+      "bg-transparent boder border-1 border-dashed text-secondary hover:bg-primary-light",
+  };
 
   const sizeClasses = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base',
-  }
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
+  };
 
   return (
     <button
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer',
+        "inline-flex items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer",
         variantClasses[variant],
         sizeClasses[size],
-        className
+        className,
       )}
       disabled={disabled || loading}
-      {...props}
-    >
+      {...props}>
       {loading && <Spinner size="sm" className="border-t-current" />}
       {!loading && leftIcon && <span>{leftIcon}</span>}
       {children}
       {!loading && rightIcon && <span>{rightIcon}</span>}
     </button>
-  )
+  );
 }

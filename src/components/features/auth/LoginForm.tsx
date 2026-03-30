@@ -2,50 +2,57 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Input, Button } from '@/components/shared'
 import { useLoginMutation } from '@/queries/useAuthQuery'
 
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, 'Email wajib diisi')
+    .email('Format email tidak valid'),
+  password: z
+    .string()
+    .min(1, 'Password wajib diisi'),
+})
+
+type LoginFormValues = z.infer<typeof loginSchema>
+
 export function LoginForm() {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
   const [showPassword, setShowPassword] = React.useState(false)
-  const [errors, setErrors] = React.useState<{ email?: string; password?: string }>({})
 
   const loginMutation = useLoginMutation()
 
-  const validate = () => {
-    const errs: typeof errors = {}
-    if (!email) errs.email = 'Email wajib diisi'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errs.email = 'Format email tidak valid'
-    if (!password) errs.password = 'Password wajib diisi'
-    setErrors(errs)
-    return Object.keys(errs).length === 0
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  })
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!validate()) return
-    loginMutation.mutate({ email, password })
+  const onSubmit = (values: LoginFormValues) => {
+    loginMutation.mutate({ email: values.email, password: values.password })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Input
         label="Email"
         type="email"
         placeholder="budi@example.com"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        error={errors.email}
+        {...register('email')}
+        error={errors.email?.message}
         autoComplete="email"
       />
       <Input
         label="Password"
         type={showPassword ? 'text' : 'password'}
         placeholder="Masukkan password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        error={errors.password}
+        {...register('password')}
+        error={errors.password?.message}
         autoComplete="current-password"
         rightIcon={
           <button type="button" onClick={() => setShowPassword(!showPassword)} tabIndex={-1}>

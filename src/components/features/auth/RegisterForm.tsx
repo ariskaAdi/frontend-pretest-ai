@@ -2,84 +2,97 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Input, Button } from '@/components/shared'
 import { useRegisterMutation } from '@/queries/useAuthQuery'
 
+const registerSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, 'Nama wajib diisi')
+      .min(2, 'Nama minimal 2 karakter')
+      .transform((v) => v.trim()),
+    email: z
+      .string()
+      .min(1, 'Email wajib diisi')
+      .email('Format email tidak valid'),
+    password: z
+      .string()
+      .min(1, 'Password wajib diisi')
+      .min(8, 'Password minimal 8 karakter'),
+    confirmPassword: z
+      .string()
+      .min(1, 'Konfirmasi password wajib diisi'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Password tidak cocok',
+    path: ['confirmPassword'],
+  })
+
+type RegisterFormValues = z.infer<typeof registerSchema>
+
 const EyeIcon = ({ visible, setShowPassword }: { visible: boolean, setShowPassword: React.Dispatch<React.SetStateAction<boolean>> }) => (
-    <button type="button" onClick={() => setShowPassword(!visible)} tabIndex={-1}>
-      {visible ? (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-        </svg>
-      ) : (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-        </svg>
-      )}
-    </button>
-  )
+  <button type="button" onClick={() => setShowPassword(!visible)} tabIndex={-1}>
+    {visible ? (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+      </svg>
+    ) : (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    )}
+  </button>
+)
 
 export function RegisterForm() {
-  const [form, setForm] = React.useState({ name: '', email: '', password: '', confirmPassword: '' })
-  const [errors, setErrors] = React.useState<Partial<typeof form>>({})
   const [showPassword, setShowPassword] = React.useState(false)
 
   const registerMutation = useRegisterMutation()
 
-  const set = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }))
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+  })
 
-  const validate = () => {
-    const errs: Partial<typeof form> = {}
-    if (!form.name || form.name.trim().length < 2) errs.name = 'Nama minimal 2 karakter'
-    if (!form.email) errs.email = 'Email wajib diisi'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Format email tidak valid'
-    if (!form.password || form.password.length < 8) errs.password = 'Password minimal 8 karakter'
-    if (!form.confirmPassword) errs.confirmPassword = 'Konfirmasi password wajib diisi'
-    else if (form.confirmPassword !== form.password) errs.confirmPassword = 'Password tidak cocok'
-    setErrors(errs)
-    return Object.keys(errs).length === 0
+  const onSubmit = (values: RegisterFormValues) => {
+    registerMutation.mutate({ name: values.name, email: values.email, password: values.password })
   }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!validate()) return
-    registerMutation.mutate({ name: form.name.trim(), email: form.email, password: form.password })
-  }
-
-  
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Input
         label="Nama Lengkap"
         type="text"
         placeholder="Budi Santoso"
-        value={form.name}
-        onChange={set('name')}
-        error={errors.name}
+        {...register('name')}
+        error={errors.name?.message}
         autoComplete="name"
       />
       <Input
         label="Email"
         type="email"
         placeholder="budi@example.com"
-        value={form.email}
-        onChange={set('email')}
-        error={errors.email}
+        {...register('email')}
+        error={errors.email?.message}
         autoComplete="email"
       />
       <Input
         label="Password"
         type={showPassword ? 'text' : 'password'}
         placeholder="Minimal 8 karakter"
-        value={form.password}
-        onChange={set('password')}
-        error={errors.password}
+        {...register('password')}
+        error={errors.password?.message}
         helperText={!errors.password ? 'Minimal 8 karakter' : undefined}
         autoComplete="new-password"
         rightIcon={<EyeIcon visible={showPassword} setShowPassword={setShowPassword}/>}
@@ -88,9 +101,8 @@ export function RegisterForm() {
         label="Konfirmasi Password"
         type={showPassword ? 'text' : 'password'}
         placeholder="Ulangi password"
-        value={form.confirmPassword}
-        onChange={set('confirmPassword')}
-        error={errors.confirmPassword}
+        {...register('confirmPassword')}
+        error={errors.confirmPassword?.message}
         autoComplete="new-password"
       />
       <Button

@@ -18,6 +18,9 @@ export const quizService = {
   submit: (quizId: string, data: SubmitQuizRequest) =>
     api.post<APIResponse<QuizResultResponse>>(`/quiz/${quizId}/submit`, data),
 
+  cancel: (quizId: string) =>
+    api.delete<APIResponse<null>>(`/quiz/${quizId}`),
+
   retry: (quizId: string) =>
     api.post<APIResponse<QuizResponse>>(`/quiz/${quizId}/retry`),
 

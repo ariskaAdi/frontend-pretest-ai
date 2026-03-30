@@ -62,6 +62,7 @@ export function useGenerateQuizMutation() {
       const quiz = res.data.data
       queryClient.setQueryData(QUIZ_KEYS.session(quiz.id), quiz)
       queryClient.invalidateQueries({ queryKey: QUIZ_KEYS.history })
+      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
     },
   })
 }
@@ -75,6 +76,17 @@ export function useSubmitQuizMutation() {
       const result = res.data.data
       queryClient.setQueryData(QUIZ_KEYS.result(quizId), result)
       queryClient.invalidateQueries({ queryKey: QUIZ_KEYS.history })
+    },
+  })
+}
+
+export function useCancelQuizMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (quizId: string) => quizService.cancel(quizId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUIZ_KEYS.history })
+      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
     },
   })
 }

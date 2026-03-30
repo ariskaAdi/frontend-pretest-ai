@@ -7,27 +7,66 @@ import { AlertTriangle } from 'lucide-react'
 import { QuizQuestion } from '@/components/features/quiz'
 import { Button } from '@/components/shared/Button'
 import { Modal } from '@/components/shared/Modal'
-import { useSubmitQuizMutation } from '@/queries/useQuizQuery'
+import { useSubmitQuizMutation, useCancelQuizMutation } from '@/queries/useQuizQuery'
 import { useToast } from '@/components/shared/Toast'
 import type { QuizResponse, SubmitAnswer } from '@/types/quiz.types'
+
+const quizSessionKey = (id: string) => `quiz-session-${id}`
 
 export default function QuizSessionPage() {
   const { id } = useParams() as { id: string }
   const router = useRouter()
   const queryClient = useQueryClient()
   const { toast } = useToast()
-  
-  // Ambil data dari cache (setQueryData di useGenerateQuizMutation)
-  const quiz = queryClient.getQueryData(['quiz', 'session', id]) as QuizResponse | undefined
-  
+
+  // Ambil dari cache (setQueryData di useGenerateQuizMutation), fallback ke sessionStorage
+  const cached = queryClient.getQueryData(['quiz', 'session', id]) as QuizResponse | undefined
+  const [quiz, setQuiz] = React.useState<QuizResponse | null>(() => {
+    if (cached) return cached
+    try {
+      const stored = sessionStorage.getItem(quizSessionKey(id))
+      return stored ? (JSON.parse(stored) as QuizResponse) : null
+    } catch {
+      return null
+    }
+  })
+
+  // Simpan ke sessionStorage setiap kali quiz tersedia dari cache
+  React.useEffect(() => {
+    if (cached) {
+      try {
+        sessionStorage.setItem(quizSessionKey(id), JSON.stringify(cached))
+      } catch {
+        // sessionStorage penuh atau tidak tersedia — abaikan
+      }
+      setQuiz(cached)
+    }
+  }, [cached, id])
+
   const [currentPage, setCurrentPage] = React.useState(0)
   const [answers, setAnswers] = React.useState<Record<string, 'A' | 'B' | 'C' | 'D'>>({})
   const [isSubmitModalOpen, setIsSubmitModalOpen] = React.useState(false)
-  
+
   const { mutate: submitQuiz, isPending: isSubmitting } = useSubmitQuizMutation()
-  
-  // Guard: Jika user refresh, data cache hilang (karena tidak ada GET /quiz/:id)
+  const { mutate: cancelQuiz, isPending: isCancelling } = useCancelQuizMutation()
+
+  // Guard: quiz tidak ditemukan di cache maupun sessionStorage
   if (!quiz) {
+    const handleCancel = () => {
+      cancelQuiz(id, {
+        onSuccess: () => {
+          toast.success('Quiz dibatalkan dan kuota dikembalikan')
+          router.push('/quiz')
+        },
+        onError: (error: any) => {
+          const msg = error.response?.data?.error
+          // Jika quiz sudah selesai/dibatalkan sebelumnya, tetap arahkan ke riwayat
+          toast.error(msg || 'Gagal membatalkan quiz')
+          router.push('/quiz')
+        },
+      })
+    }
+
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <div className="w-20 h-20 rounded-full bg-danger/10 text-danger flex items-center justify-center mb-6">
@@ -35,12 +74,25 @@ export default function QuizSessionPage() {
         </div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Sesi Quiz Berakhir</h2>
         <p className="text-gray-500 max-w-md mb-8">
-          Maaf, sesi quiz tidak ditemukan atau telah kedaluwarsa karena halaman di-refresh. 
-          Silakan buat quiz baru dari halaman modul.
+          Sesi quiz tidak ditemukan karena halaman di-refresh atau sesi telah berakhir.
+          Batalkan quiz ini untuk mengembalikan kuota kamu.
         </p>
-        <Button onClick={() => router.push('/quiz')} className="rounded-xl px-8">
-          Kembali ke Riwayat
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            variant="ghost"
+            onClick={() => router.push('/quiz')}
+            className="rounded-xl px-6"
+          >
+            Kembali ke Riwayat
+          </Button>
+          <Button
+            onClick={handleCancel}
+            loading={isCancelling}
+            className="rounded-xl px-6"
+          >
+            Batalkan & Kembalikan Kuota
+          </Button>
+        </div>
       </div>
     )
   }
@@ -66,6 +118,7 @@ export default function QuizSessionPage() {
       { quizId: id, data: { answers: formattedAnswers } },
       {
         onSuccess: () => {
+          try { sessionStorage.removeItem(quizSessionKey(id)) } catch { /* abaikan */ }
           toast.success('Quiz berhasil dikirim!')
           router.push(`/quiz/${id}/result`)
         },
@@ -82,9 +135,9 @@ export default function QuizSessionPage() {
         <h2 className="text-xl font-black text-gray-900 line-clamp-1 flex-1 mr-4">
           {quiz.module_title}
         </h2>
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <Button
+          variant="ghost"
+          size="sm"
           className="text-danger hover:bg-danger/5 font-bold"
           onClick={() => router.push('/quiz')}
         >
@@ -132,8 +185,8 @@ export default function QuizSessionPage() {
       </div>
 
       {/* Submit Confirmation Modal */}
-      <Modal 
-        open={isSubmitModalOpen} 
+      <Modal
+        open={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         title="Kirim Jawaban?"
       >
@@ -142,14 +195,14 @@ export default function QuizSessionPage() {
             Apakah Anda yakin ingin mengirim jawaban sekarang? Anda tidak dapat mengubah jawaban setelah dikirim.
           </p>
           <div className="flex gap-3">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               className="flex-1 rounded-xl"
               onClick={() => setIsSubmitModalOpen(false)}
             >
               Batal
             </Button>
-            <Button 
+            <Button
               className="flex-1 rounded-xl font-bold"
               onClick={handleSubmit}
               loading={isSubmitting}

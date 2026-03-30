@@ -53,6 +53,7 @@ export function useUploadModuleMutation() {
     mutationFn: (data: FormData) => moduleService.upload(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: MODULE_KEYS.all })
+      queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
     },
   })
 }
