@@ -43,11 +43,11 @@ export default function ModuleDetailPage() {
   const handleDelete = () => {
     deleteModule(id, {
       onSuccess: () => {
-        toast.success("Modul berhasil dihapus");
+        toast.success("Module deleted successfully");
         router.push("/modules");
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || "Gagal menghapus modul");
+        toast.error(error.response?.data?.error || "Failed to delete module");
       },
     });
   };
@@ -55,11 +55,11 @@ export default function ModuleDetailPage() {
   const handleRetry = () => {
     retrySummarize(id, {
       onSuccess: () => {
-        toast.success("Proses summarize dimulai ulang");
+        toast.success("Summarize process restarted");
       },
       onError: (error: any) => {
         toast.error(
-          error.response?.data?.error || "Gagal memulai ulang proses",
+          error.response?.data?.error || "Failed to restart process",
         );
       },
     });
@@ -70,7 +70,7 @@ export default function ModuleDetailPage() {
       <div className="flex flex-col items-center justify-center py-40">
         <Spinner size="lg" className="mb-4" />
         <p className="text-gray-500 font-medium animate-pulse">
-          Memuat detail modul...
+          Loading module details...
         </p>
       </div>
     );
@@ -83,10 +83,10 @@ export default function ModuleDetailPage() {
           <Search size={32} />
         </div>
         <h3 className="text-xl font-bold text-gray-900 mb-2">
-          Modul tidak ditemukan
+          Module not found
         </h3>
         <Link href="/modules">
-          <Button variant="ghost">Kembali ke Koleksi</Button>
+          <Button variant="ghost">Back to Collection</Button>
         </Link>
       </div>
     );
@@ -111,7 +111,7 @@ export default function ModuleDetailPage() {
             className="transition-transform group-hover:-translate-x-1">
             <path d="m15 18-6-6 6-6" />
           </svg>
-          Kembali ke Koleksi
+          Back to Collection
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -122,7 +122,7 @@ export default function ModuleDetailPage() {
             <div className="flex flex-wrap items-center gap-4 text-sm">
               <div className="flex items-center gap-2 text-gray-500">
                 <Calendar size={14} className="text-gray-400" />
-                {new Date(module.created_at).toLocaleDateString("id-ID", {
+                {new Date(module.created_at).toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -138,10 +138,10 @@ export default function ModuleDetailPage() {
                 }
                 className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold">
                 {module.is_summarized
-                  ? "Ringkasan Tersedia"
+                  ? "Summary Available"
                   : module.summarize_failed
-                    ? "Gagal Merangkum"
-                    : "Sedang Diproses AI"}
+                    ? "Summarization Failed"
+                    : "Processing by AI"}
               </Badge>
             </div>
           </div>
@@ -153,9 +153,9 @@ export default function ModuleDetailPage() {
           <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold">
             <FileText size={32} strokeWidth={1.5} />
           </div>
-          <h4 className="font-bold text-gray-900 mb-1">Buka File PDF</h4>
+          <h4 className="font-bold text-gray-900 mb-1">Open PDF File</h4>
           <p className="text-xs text-gray-400 mb-4">
-            Lihat dokumen asli materi Anda
+            View the original document
           </p>
           <a
             href={module.file_url}
@@ -163,7 +163,7 @@ export default function ModuleDetailPage() {
             rel="noopener noreferrer"
             className="w-full">
             <Button variant="ghost" className="w-full rounded-xl">
-              Buka Link
+              Open Link
             </Button>
           </a>
         </Card>
@@ -181,8 +181,8 @@ export default function ModuleDetailPage() {
           <h4 className="font-bold text-gray-900 mb-1">AI Summary</h4>
           <p className="text-xs text-gray-400 mb-4">
             {module.summarize_failed
-              ? "Terjadi kesalahan saat merangkum materi."
-              : "Lihat rangkuman cerdas dari AI"}
+              ? "An error occurred while summarizing the material."
+              : "View the AI-generated smart summary"}
           </p>
           <div className="w-full space-y-2">
             <Link href={`/modules/${module.id}/summary`} className="w-full">
@@ -190,7 +190,7 @@ export default function ModuleDetailPage() {
                 variant="ghost"
                 className="w-full rounded-xl"
                 disabled={!module.is_summarized}>
-                Lihat Rangkuman
+                View Summary
               </Button>
             </Link>
             {module.summarize_failed && (
@@ -199,7 +199,7 @@ export default function ModuleDetailPage() {
                 className="w-full rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-xs flex items-center justify-center gap-2"
                 onClick={handleRetry}
                 loading={isRetrying}>
-                <RotateCcw size={14} /> Coba Lagi
+                <RotateCcw size={14} /> Try Again
               </Button>
             )}
           </div>
@@ -217,13 +217,13 @@ export default function ModuleDetailPage() {
           </div>
           <h4 className="font-bold text-gray-900 mb-1">Generate Quiz</h4>
           <p className="text-xs text-gray-400 mb-4">
-            Uji pemahaman dengan latihan soal
+            Test your understanding with practice questions
           </p>
           <Link href={`/quiz?module_id=${module.id}`} className="w-full">
             <Button
               className="w-full rounded-xl font-bold"
               disabled={!module.is_summarized}>
-              Buat Quiz
+              Create Quiz
             </Button>
           </Link>
         </Card>
@@ -236,9 +236,9 @@ export default function ModuleDetailPage() {
               <AlertTriangle size={24} />
             </div>
             <div>
-              <h4 className="font-bold text-danger mb-1">Zona Bahaya</h4>
+              <h4 className="font-bold text-danger mb-1">Danger Zone</h4>
               <p className="text-xs text-gray-500">
-                Hapus modul ini dan semua data terkaitnya secara permanen
+                Permanently delete this module and all its related data
               </p>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function ModuleDetailPage() {
             variant="danger"
             className="px-8 rounded-2xl font-bold shadow-sm shadow-danger/10"
             onClick={() => setIsDeleteModalOpen(true)}>
-            Hapus Modul
+            Delete Module
           </Button>
         </div>
       </div>
@@ -254,29 +254,28 @@ export default function ModuleDetailPage() {
       <Modal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Hapus Modul Secara Permanen">
+        title="Permanently Delete Module">
         <div className="p-1">
           <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-            Apakah Anda yakin ingin menghapus modul{" "}
+            Are you sure you want to delete the module{" "}
             <span className="font-bold text-gray-900">
               &quot;{module.title}&quot;
             </span>
-            ? Semua ringkasan dan riwayat quiz terkait modul ini akan dihapus
-            secara permanen.
+            ? All summaries and quiz history related to this module will be permanently deleted.
           </p>
           <div className="flex gap-3 justify-end">
             <Button
               variant="ghost"
               onClick={() => setIsDeleteModalOpen(false)}
               className="px-6">
-              Batal
+              Cancel
             </Button>
             <Button
               variant="danger"
               onClick={handleDelete}
               loading={isDeleting}
               className="px-6 shadow-sm shadow-danger/20">
-              Ya, Hapus Sekarang
+              Yes, Delete Now
             </Button>
           </div>
         </div>

@@ -26,7 +26,7 @@ export function WelcomeBanner() {
   if (!user) return null;
 
   return (
-    <div className="relative overflow-hidden bg-black rounded-3xl p-8 mb-8 shadow-lg shadow-primary/20 group">
+    <div className="relative overflow-hidden bg-primary rounded-3xl p-8 mb-8 shadow-lg shadow-primary/20 group">
       {/* Pattern decoration */}
       <div className="absolute top-0 right-0 p-8 opacity-10 transform translate-x-12 -translate-y-8 group-hover:translate-x-8 group-hover:-translate-y-4 transition-transform duration-700 pointer-events-none">
         <svg
@@ -114,7 +114,7 @@ export function WelcomeBanner() {
                 Beli Quota
               </a>
             )}
-          <button className="bg-primary text-black border-2 border-white  font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+          <button className="bg-white text-primary border-2 border-white  font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
             Mulai Belajar
           </button>
         </div>

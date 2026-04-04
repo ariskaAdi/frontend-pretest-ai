@@ -23,12 +23,12 @@ export function Button({
 }: ButtonProps) {
   const variantClasses = {
     primary:
-      "bg-primary text-black border border-1 border-dashed font-bold  hover:bg-primary-hover hover:text-white",
+      "bg-primary text-white  font-bold  hover:bg-primary-hover hover:text-white",
     secondary:
-      "bg-black text-white font-bold hover:border hover:border-primary hover:bg-primary-light hover:text-primary",
+      "bg-primary-white text-primary border border-primary border-dashed hover:bg-primary-hover hover:text-primary",
     danger: "bg-danger text-white hover:bg-danger-hover",
     ghost:
-      "bg-transparent boder border-1 border-dashed text-secondary hover:bg-primary-light",
+      "bg-transparent  text-primary hover:bg-primary-light border-1 border-primary/30 hover:text-primary hover:border-primary hover:bg-primary-light",
   };
 
   const sizeClasses = {

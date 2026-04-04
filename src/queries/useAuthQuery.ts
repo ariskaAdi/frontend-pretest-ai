@@ -23,15 +23,17 @@ export function useLoginMutation() {
     mutationFn: (data: LoginRequest) => authService.login(data),
     onSuccess: (res) => {
       setAuth(res.data.data.token, res.data.data.user)
-      toast.success('Login berhasil!')
+      toast.success('Login successful!')
       router.push('/dashboard')
     },
-    onError: (err: any) => {
+    onError: (err: any, variables) => {
       const message: string = err.response?.data?.error ?? ''
-      if (message.toLowerCase().includes('belum diverifikasi') || message.toLowerCase().includes('not verified')) {
-        toast.warning('Email belum diverifikasi. Silakan verifikasi email kamu.')
+      if (message.toLowerCase().includes('not verified')) {
+        sessionStorage.setItem('pending_email', variables.email)
+        toast.warning('Please verify your email before signing in.')
+        router.push('/verify-otp')
       } else {
-        toast.error(message || 'Email atau password salah')
+        toast.error(message || 'Incorrect email or password')
       }
     },
   })
@@ -46,11 +48,11 @@ export function useRegisterMutation() {
     onSuccess: (_, variables) => {
       sessionStorage.setItem('pending_email', variables.email)
       sessionStorage.setItem('pending_registration', JSON.stringify(variables))
-      toast.success('Registrasi berhasil! Cek email kamu untuk kode OTP.')
+      toast.success('Registration successful! Check your email for the OTP code.')
       router.push('/verify-otp')
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error ?? 'Registrasi gagal')
+      toast.error(err.response?.data?.error ?? 'Registration failed')
     },
   })
 }
@@ -64,11 +66,11 @@ export function useVerifyOTPMutation() {
     onSuccess: () => {
       sessionStorage.removeItem('pending_email')
       sessionStorage.removeItem('pending_registration')
-      toast.success('Email berhasil diverifikasi!')
+      toast.success('Email verified successfully!')
       router.push('/login')
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error ?? 'OTP salah atau kadaluarsa')
+      toast.error(err.response?.data?.error ?? 'Invalid or expired OTP')
     },
   })
 }
@@ -96,10 +98,10 @@ export function useRequestUpdateEmailMutation() {
   return useMutation({
     mutationFn: (data: UpdateEmailRequest) => authService.requestUpdateEmail(data),
     onSuccess: () => {
-      toast.success('Kode OTP telah dikirim ke email baru kamu.')
+      toast.success('OTP code sent to your new email.')
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error ?? 'Gagal mengirim OTP')
+      toast.error(err.response?.data?.error ?? 'Failed to send OTP')
     },
   })
 }
@@ -114,10 +116,10 @@ export function useVerifyUpdateEmailMutation() {
       if (token && user) {
         setAuth(token, { ...user, email: variables.new_email })
       }
-      toast.success('Email berhasil diperbarui!')
+      toast.success('Email updated successfully!')
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error ?? 'Gagal memperbarui email')
+      toast.error(err.response?.data?.error ?? 'Failed to update email')
     },
   })
 }

@@ -4,8 +4,8 @@ import { LoginForm } from '@/components/features/auth/LoginForm'
 export default function LoginPage() {
   return (
     <AuthLayout
-      title="Selamat Datang"
-      subtitle="Masuk ke akun kamu untuk melanjutkan belajar"
+      title="Welcome Back"
+      subtitle="Sign in to your account to continue learning"
     >
       <LoginForm />
     </AuthLayout>

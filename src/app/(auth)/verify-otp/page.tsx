@@ -4,8 +4,8 @@ import { OTPForm } from '@/components/features/auth/OTPForm'
 export default function VerifyOTPPage() {
   return (
     <AuthLayout
-      title="Verifikasi Email"
-      subtitle="Masukkan kode OTP yang dikirim ke emailmu"
+      title="Verify Your Email"
+      subtitle="Enter the OTP code sent to your email"
     >
       <OTPForm />
     </AuthLayout>

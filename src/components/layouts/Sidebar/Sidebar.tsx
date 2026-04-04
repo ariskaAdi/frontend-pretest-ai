@@ -66,6 +66,69 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    label: "Profile",
+    href: "/profile",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-clipboard">
+        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      </svg>
+    ),
+    
+  },
+   {
+    label: "Info",
+    href: "/profile",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-clipboard">
+        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      </svg>
+    ),
+    
+  },
+  {
+    label: "Review",
+    href: "/profile",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="lucide lucide-clipboard">
+        <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+      </svg>
+    ),
+    
+  },
 ];
 
 import { useSidebarStore } from "@/stores/sidebarStore";
@@ -123,11 +186,11 @@ export function Sidebar({ className }: { className?: string }) {
               href={item.href}
               title={isCollapsed ? item.label : undefined} // tooltip saat collapsed
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 cursor-pointer",
+                "flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-colors duration-150 cursor-pointer",
                 isCollapsed && "justify-center px-0",
                 isActive
-                  ? "bg-black text-white font-black"
-                  : "text-black font-bold hover:bg-gray-100 hover:text-gray-900",
+                  ? "bg-primary text-white font-black hover:bg-primary-hover"
+                  : "text-black font-bold hover:bg-blue-50 hover:text-gray-900",
               )}>
               <div
                 className={cn(isCollapsed && "scale-110 transition-transform")}>

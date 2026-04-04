@@ -21,22 +21,22 @@ export default function ModulesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-            Koleksi Modul
+            Module Collection
           </h1>
           <p className="text-gray-500">
-            Kelola semua materi belajar Anda di sini
+            Manage all your learning materials here
           </p>
         </div>
         <Button
           onClick={() => setIsUploadOpen(true)}
           className="rounded-2xl px-6 shadow-md shadow-primary/20 font-bold">
-          + Upload Modul
+          + Upload Module
         </Button>
         <Modal
           size="xl"
           open={isUploadOpen}
           onClose={() => setIsUploadOpen(false)}
-          title="Upload Modul Baru">
+          title="Upload New Module">
           <div className="space-y-6">
             <UploadForm onSuccess={() => setIsUploadOpen(false)} />
 
@@ -46,9 +46,8 @@ export default function ModulesPage() {
               </div>
               <div className="text-sm text-gray-600 leading-relaxed">
                 <span className="font-bold text-primary italic">Tips: </span>
-                Pastikan PDF Anda memiliki teks yang dapat dibaca (bukan hasil
-                scan gambar) agar AI dapat memberikan rangkuman yang lebih
-                akurat dan berkualitas.
+                Make sure your PDF has readable text (not scanned images) so
+                that AI can provide a more accurate and high-quality summary.
               </div>
             </div>
           </div>
@@ -59,7 +58,7 @@ export default function ModulesPage() {
         <div className="flex flex-col items-center justify-center py-40">
           <Spinner size="lg" className="mb-4" />
           <p className="text-gray-500 font-medium animate-pulse">
-            Memuat daftar modul...
+            Loading module list...
           </p>
         </div>
       ) : !modules || modules.length === 0 ? (

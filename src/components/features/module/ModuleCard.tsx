@@ -97,7 +97,9 @@ export function ModuleCard({ module }: ModuleCardProps) {
 
         <div className="flex items-center gap-2 mt-auto">
           <Link href={`/modules/${module.id}`} className="flex-1">
-            <Button className="w-full text-sm font-bold rounded-xl py-2.5">
+            <Button
+              className="w-full text-sm font-bold rounded-xl py-2.5"
+              variant="ghost">
               Detail
             </Button>
           </Link>

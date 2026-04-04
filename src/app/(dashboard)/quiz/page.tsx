@@ -43,7 +43,7 @@ export default function QuizPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
-        <p className="text-gray-500 font-medium animate-pulse">Memuat riwayat quiz...</p>
+        <p className="text-gray-500 font-medium animate-pulse">Loading quiz history...</p>
       </div>
     )
   }
@@ -52,13 +52,13 @@ export default function QuizPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Riwayat Quiz</h1>
-          <p className="text-gray-500 font-medium">Latih pemahaman Anda dengan soal-soal bertenaga AI.</p>
+          <h1 className="text-3xl font-black text-gray-900 tracking-tight mb-2">Quiz History</h1>
+          <p className="text-gray-500 font-medium">Train your understanding with AI-powered questions.</p>
         </div>
         {!quizzes || quizzes.length === 0 ? null : (
           <Link href="/modules">
             <Button className="rounded-2xl font-bold shadow-lg shadow-primary/20 hover:shadow-xl transition-all">
-               + Buat Quiz Baru
+               + Create New Quiz From Module
             </Button>
           </Link>
         )}

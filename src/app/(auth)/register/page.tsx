@@ -4,8 +4,8 @@ import { RegisterForm } from '@/components/features/auth/RegisterForm'
 export default function RegisterPage() {
   return (
     <AuthLayout
-      title="Buat Akun Baru"
-      subtitle="Daftar dan mulai belajar bersama PreTest AI"
+      title="Create an Account"
+      subtitle="Sign up and start learning with Pretest AI"
     >
       <RegisterForm />
     </AuthLayout>

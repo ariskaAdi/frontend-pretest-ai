@@ -12,23 +12,23 @@ const registerSchema = z
   .object({
     name: z
       .string()
-      .min(1, 'Nama wajib diisi')
-      .min(2, 'Nama minimal 2 karakter')
+      .min(1, 'Name is required')
+      .min(2, 'Name must be at least 2 characters')
       .transform((v) => v.trim()),
     email: z
       .string()
-      .min(1, 'Email wajib diisi')
-      .email('Format email tidak valid'),
+      .min(1, 'Email is required')
+      .email('Invalid email format'),
     password: z
       .string()
-      .min(1, 'Password wajib diisi')
-      .min(8, 'Password minimal 8 karakter'),
+      .min(1, 'Password is required')
+      .min(8, 'Password must be at least 8 characters'),
     confirmPassword: z
       .string()
-      .min(1, 'Konfirmasi password wajib diisi'),
+      .min(1, 'Please confirm your password'),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Password tidak cocok',
+    message: 'Passwords do not match',
     path: ['confirmPassword'],
   })
 
@@ -72,9 +72,9 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Input
-        label="Nama Lengkap"
+        label="Full Name"
         type="text"
-        placeholder="Budi Santoso"
+        placeholder="John Doe"
         {...register('name')}
         error={errors.name?.message}
         autoComplete="name"
@@ -90,17 +90,17 @@ export function RegisterForm() {
       <Input
         label="Password"
         type={showPassword ? 'text' : 'password'}
-        placeholder="Minimal 8 karakter"
+        placeholder="At least 8 characters"
         {...register('password')}
         error={errors.password?.message}
-        helperText={!errors.password ? 'Minimal 8 karakter' : undefined}
+        helperText={!errors.password ? 'At least 8 characters' : undefined}
         autoComplete="new-password"
         rightIcon={<EyeIcon visible={showPassword} setShowPassword={setShowPassword}/>}
       />
       <Input
-        label="Konfirmasi Password"
+        label="Confirm Password"
         type={showPassword ? 'text' : 'password'}
-        placeholder="Ulangi password"
+        placeholder="Repeat your password"
         {...register('confirmPassword')}
         error={errors.confirmPassword?.message}
         autoComplete="new-password"
@@ -111,12 +111,12 @@ export function RegisterForm() {
         loading={registerMutation.isPending}
         className="w-full mt-2 text-md "
       >
-        Daftar
+        Sign Up
       </Button>
       <p className="text-center text-sm text-gray-600">
-        Sudah punya akun?{' '}
+        Already have an account?{' '}
         <Link href="/login" className="text-primary font-medium hover:underline">
-          Masuk sekarang
+          Sign in now
         </Link>
       </p>
     </form>

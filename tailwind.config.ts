@@ -10,9 +10,9 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#AAFF00", // indigo-600
-          hover: "#52C400", // indigo-700
-          light: "#EEF2FF",
+          DEFAULT: "#4F46E5", // indigo-600
+          hover: "#4338CA", // indigo-700
+          light: "#EEF2FF", // indigo-50
         },
         secondary: {
           DEFAULT: "#86CC00",

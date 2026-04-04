@@ -12,10 +12,8 @@ import {
   BookOpen,
   CheckCircle2,
   Zap,
-  Clock,
   FileText,
   Target,
-  Clipboard,
   Shield,
 } from "lucide-react";
 import { useGetMeQuery } from "@/queries/useUserQuery";
@@ -39,25 +37,25 @@ export default function DashboardPage() {
 
     const baseStats = [
       {
-        label: "Total Modul",
+        label: "Total Modules",
         value: totalModules,
         icon: <BookOpen size={20} />,
         variant: "info" as const,
-        description: "Modul materi yang diupload",
+        description: "Uploaded learning materials",
       },
       {
-        label: "Quiz Selesai",
+        label: "Completed Quizzes",
         value: finishedQuizzes,
         icon: <CheckCircle2 size={20} />,
         variant: "success" as const,
-        description: "Latihan soal dikerjakan",
+        description: "Practice quizzes completed",
       },
       {
-        label: "Rata-rata Skor",
+        label: "Average Score",
         value: `${avgScore}%`,
         icon: <Zap size={20} />,
         variant: "warning" as const,
-        description: "Akumulasi skor semua quiz",
+        description: "Cumulative score across all quizzes",
       },
     ];
 
@@ -98,7 +96,7 @@ export default function DashboardPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
         <p className="text-gray-500 font-medium animate-pulse text-sm">
-          Menyiapkan dashboard Anda...
+          Preparing your dashboard...
         </p>
       </div>
     );
@@ -125,10 +123,10 @@ export default function DashboardPage() {
         {/* Modul Terbaru */}
         <Card className="p-6 border-none shadow-sm flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Modul Terbaru</h3>
+            <h3 className="text-lg font-bold text-gray-900">Recent Modules</h3>
             <Link href="/modules">
-              <button className="text-sm font-semibold text-secondary hover:underline cursor-pointer">
-                Lihat Semua
+              <button className="text-sm font-semibold text-primary hover:underline cursor-pointer">
+                View All
               </button>
             </Link>
           </div>
@@ -137,7 +135,7 @@ export default function DashboardPage() {
             {!modules || modules.length === 0 ? (
               <div className="h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-2xl">
                 <p className="text-gray-400 text-sm">
-                  Belum ada modul yang diupload
+                  No modules uploaded yet
                 </p>
               </div>
             ) : (
@@ -146,7 +144,7 @@ export default function DashboardPage() {
                   key={module.id}
                   className="flex items-center justify-between p-4 rounded-2xl hover:bg-gray-50 transition-colors border border-transparent hover:border-gray-100 group">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-primary-light text-secondary flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-primary-light text-primary flex items-center justify-center">
                       <FileText size={18} strokeWidth={2.5} />
                     </div>
                     <div>
@@ -155,7 +153,7 @@ export default function DashboardPage() {
                       </h4>
                       <p className="text-xs text-gray-400">
                         {new Date(module.created_at).toLocaleDateString(
-                          "id-ID",
+                          "en-US",
                           { day: "numeric", month: "short", year: "numeric" },
                         )}
                       </p>
@@ -164,7 +162,7 @@ export default function DashboardPage() {
                   <Badge
                     variant={module.is_summarized ? "success" : "warning"}
                     className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold">
-                    {module.is_summarized ? "Ringkas" : "Proses"}
+                    {module.is_summarized ? "Ready" : "Processing"}
                   </Badge>
                 </div>
               ))
@@ -175,10 +173,10 @@ export default function DashboardPage() {
         {/* Quiz Terakhir */}
         <Card className="p-6 border-none shadow-sm flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Quiz Terakhir</h3>
+            <h3 className="text-lg font-bold text-gray-900">Recent Quizzes</h3>
             <Link href="/quiz">
-              <button className="text-sm font-semibold text-secondary hover:underline cursor-pointer">
-                Lihat Semua
+              <button className="text-sm font-semibold text-primary hover:underline cursor-pointer">
+                View All
               </button>
             </Link>
           </div>
@@ -186,7 +184,7 @@ export default function DashboardPage() {
           <div className="space-y-4 flex-1">
             {!quizHistory || quizHistory.length === 0 ? (
               <div className="h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-2xl">
-                <p className="text-gray-400 text-sm">Belum ada history quiz</p>
+                <p className="text-gray-400 text-sm">No quiz history yet</p>
               </div>
             ) : (
               quizHistory.slice(0, 3).map((quiz) => (
@@ -202,7 +200,7 @@ export default function DashboardPage() {
                         {quiz.module_title}
                       </h4>
                       <p className="text-xs text-gray-400">
-                        {quiz.num_questions} Pertanyaan
+                        {quiz.num_questions} Questions
                       </p>
                     </div>
                   </div>
@@ -211,7 +209,7 @@ export default function DashboardPage() {
                       {quiz.score ?? "-"}
                       {quiz.score !== null ? "%" : ""}
                     </p>
-                    <p className="text-[10px] text-gray-400">Skor</p>
+                    <p className="text-[10px] text-gray-400">Score</p>
                   </div>
                 </div>
               ))

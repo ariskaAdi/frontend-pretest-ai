@@ -55,13 +55,13 @@ export default function QuizSessionPage() {
     const handleCancel = () => {
       cancelQuiz(id, {
         onSuccess: () => {
-          toast.success('Quiz dibatalkan dan kuota dikembalikan')
+          toast.success('Quiz cancelled and quota returned')
           router.push('/quiz')
         },
         onError: (error: any) => {
           const msg = error.response?.data?.error
           // Jika quiz sudah selesai/dibatalkan sebelumnya, tetap arahkan ke riwayat
-          toast.error(msg || 'Gagal membatalkan quiz')
+          toast.error(msg || 'Failed to cancel quiz')
           router.push('/quiz')
         },
       })
@@ -72,10 +72,10 @@ export default function QuizSessionPage() {
         <div className="w-20 h-20 rounded-full bg-danger/10 text-danger flex items-center justify-center mb-6">
           <AlertTriangle size={40} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Sesi Quiz Berakhir</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">Quiz Session Ended</h2>
         <p className="text-gray-500 max-w-md mb-8">
-          Sesi quiz tidak ditemukan karena halaman di-refresh atau sesi telah berakhir.
-          Batalkan quiz ini untuk mengembalikan kuota kamu.
+          Quiz session not found because the page was refreshed or the session has ended.
+          Cancel this quiz to return your quota.
         </p>
         <div className="flex gap-3">
           <Button
@@ -83,14 +83,14 @@ export default function QuizSessionPage() {
             onClick={() => router.push('/quiz')}
             className="rounded-xl px-6"
           >
-            Kembali ke Riwayat
+            Back to History
           </Button>
           <Button
             onClick={handleCancel}
             loading={isCancelling}
             className="rounded-xl px-6"
           >
-            Batalkan & Kembalikan Kuota
+            Cancel & Return Quota
           </Button>
         </div>
       </div>
@@ -119,11 +119,11 @@ export default function QuizSessionPage() {
       {
         onSuccess: () => {
           try { sessionStorage.removeItem(quizSessionKey(id)) } catch { /* abaikan */ }
-          toast.success('Quiz berhasil dikirim!')
+          toast.success('Quiz submitted successfully!')
           router.push(`/quiz/${id}/result`)
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.error || 'Gagal mengirim jawaban')
+          toast.error(error.response?.data?.error || 'Failed to submit answers')
         }
       }
     )
@@ -141,7 +141,7 @@ export default function QuizSessionPage() {
           className="text-danger hover:bg-danger/5 font-bold"
           onClick={() => router.push('/quiz')}
         >
-          Keluar
+          Exit
         </Button>
       </div>
 
@@ -162,7 +162,7 @@ export default function QuizSessionPage() {
             onClick={() => setCurrentPage(prev => prev - 1)}
             className="rounded-xl px-6 font-bold"
           >
-            ← Sebelumnya
+            ← Previous
           </Button>
 
           {isLastQuestion ? (
@@ -178,7 +178,7 @@ export default function QuizSessionPage() {
               className="rounded-xl px-8 font-bold"
               onClick={() => setCurrentPage(prev => prev + 1)}
             >
-              Berikutnya →
+              Next →
             </Button>
           )}
         </div>
@@ -188,11 +188,11 @@ export default function QuizSessionPage() {
       <Modal
         open={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
-        title="Kirim Jawaban?"
+        title="Submit Answers?"
       >
         <div className="space-y-6 pt-2">
           <p className="text-gray-500 leading-relaxed">
-            Apakah Anda yakin ingin mengirim jawaban sekarang? Anda tidak dapat mengubah jawaban setelah dikirim.
+            Are you sure you want to submit your answers now? You cannot change your answers after submission.
           </p>
           <div className="flex gap-3">
             <Button
@@ -200,14 +200,14 @@ export default function QuizSessionPage() {
               className="flex-1 rounded-xl"
               onClick={() => setIsSubmitModalOpen(false)}
             >
-              Batal
+              Cancel
             </Button>
             <Button
               className="flex-1 rounded-xl font-bold"
               onClick={handleSubmit}
               loading={isSubmitting}
             >
-              Ya, Kirim
+              Yes, Submit
             </Button>
           </div>
         </div>

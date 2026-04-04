@@ -32,11 +32,11 @@ export default function QuizResultPage() {
     retryQuiz(id, {
       onSuccess: (res) => {
         const newQuiz = res.data.data;
-        toast.success("Memulai ulang quiz...");
+        toast.success("Restarting quiz...");
         router.push(`/quiz/${newQuiz.id}`);
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || "Gagal mengulang quiz");
+        toast.error(error.response?.data?.error || "Failed to retry quiz");
       },
     });
   };
@@ -46,7 +46,7 @@ export default function QuizResultPage() {
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
         <p className="text-gray-500 font-medium animate-pulse">
-          Memuat hasil quiz...
+          Loading quiz results...
         </p>
       </div>
     );
@@ -55,9 +55,9 @@ export default function QuizResultPage() {
   if (!displayData) {
     return (
       <div className="text-center py-20">
-        <p className="text-gray-500">Hasil quiz tidak ditemukan.</p>
+        <p className="text-gray-500">Quiz results not found.</p>
         <Button onClick={() => router.push("/quiz")} className="mt-4">
-          Kembali
+          Back
         </Button>
       </div>
     );
@@ -66,7 +66,7 @@ export default function QuizResultPage() {
   const isPassed = (displayData as any).score >= 70;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
+    <div className="max-w-full mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
       {/* Score Header */}
       <Card className="p-10 border-none shadow-lg shadow-primary/5 rounded-[40px] bg-white text-center relative overflow-hidden">
         {/* Decorative elements */}
@@ -75,14 +75,14 @@ export default function QuizResultPage() {
 
         <div className="relative z-10">
           <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-4">
-            Skor Akhir Anda
+            Your Final Score
           </p>
           <div className="flex flex-col items-center justify-center mb-6">
             <span
               className={`text-8xl font-black ${(displayData as any).score >= 70 ? "text-success" : "text-danger"}`}>
               {(displayData as any).score}
             </span>
-            <span className="text-gray-300 font-bold">dari 100</span>
+            <span className="text-gray-300 font-bold">out of 100</span>
           </div>
 
           <div
@@ -92,11 +92,11 @@ export default function QuizResultPage() {
           `}>
             {isPassed ? (
               <>
-                <Trophy size={16} /> Lulus
+                <Trophy size={16} /> Passed
               </>
             ) : (
               <>
-                <RotateCcw size={16} /> Coba Lagi
+                <RotateCcw size={16} /> Try Again
               </>
             )}
           </div>
@@ -106,13 +106,13 @@ export default function QuizResultPage() {
               onClick={handleRetry}
               className="flex-1 rounded-2xl font-bold py-6 text-base shadow-xl shadow-primary/20 flex items-center justify-center gap-2"
               loading={isRetrying}>
-              <RotateCcw size={20} /> Ulangi Quiz
+              <RotateCcw size={20} /> Retry Quiz
             </Button>
             <Button
               variant="ghost"
               onClick={() => router.push("/modules")}
               className="flex-1 rounded-2xl font-bold py-6 text-base">
-              ← Kembali ke Modul
+              ← Back to Modules
             </Button>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function QuizResultPage() {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center">
           <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">
-            Total Soal
+            Total Questions
           </p>
           <p className="text-2xl font-black text-gray-900">
             {(displayData as any).num_questions}
@@ -130,7 +130,7 @@ export default function QuizResultPage() {
         </div>
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center">
           <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">
-            Benar
+            Correct
           </p>
           <p className="text-2xl font-black text-success">
             {
@@ -141,7 +141,7 @@ export default function QuizResultPage() {
         </div>
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center col-span-2 md:col-span-1">
           <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">
-            Salah
+            Incorrect
           </p>
           <p className="text-2xl font-black text-danger">
             {

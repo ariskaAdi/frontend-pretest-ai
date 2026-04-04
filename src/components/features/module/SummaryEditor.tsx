@@ -67,8 +67,8 @@ export function SummaryEditor({
   };
 
   return (
-    <div className="bg-gary-50 rounded-3xl border shadow-md border-gray-100  overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50 bg-gray-50">
+    <div className="bg-white rounded-3xl border shadow-md border-gray-100  overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50 bg-gray-200">
         <h3 className="font-bold text-gray-900 flex items-center gap-2 ">
           <span className="w-8 h-8 rounded-lg bg-primary-light text-primary flex items-center justify-center">
             <PenLine size={16} />
@@ -77,7 +77,7 @@ export function SummaryEditor({
         </h3>
         {!isEditing && (
           <Button
-            variant="secondary"
+            variant="ghost"
             size="sm"
             onClick={() => setIsEditing(true)}
             className="text-md font-bold">

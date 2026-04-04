@@ -8,27 +8,27 @@ interface AuthLayoutProps {
 
 export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-lime-600 via-lime-300/800  to-transparent  p-4 sm:p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-300 p-4 sm:p-8">
       <div className="flex w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl shadow-white">
         {/* Left — Branding (hidden on mobile) */}
         <div className="hidden lg:flex lg:w-[42%] bg-[#0d0d0d] relative overflow-hidden flex-col justify-start p-8 min-h-130">
           {/* Flame pillars */}
           <div className="absolute bottom-0 left-0 right-0 h-[58%] flex items-end justify-center gap-3 px-6">
-            <div className="w-10 h-[55%] rounded-t-full bg-linear-to-t from-lime-500 via-lime-400/70 to-transparent blur-[2px] opacity-90" />
-            <div className="w-14 h-[85%] rounded-t-full bg-linear-to-t from-lime-400 via-lime-300/60 to-transparent blur-[2px] opacity-80" />
-            <div className="w-10 h-[65%] rounded-t-full bg-linear-to-t from-lime-500 via-lime-400/70 to-transparent blur-[2px] opacity-90" />
+            <div className="w-10 h-[55%] rounded-t-full bg-linear-to-t from-indigo-500 via-indigo-400/70 to-transparent blur-[2px] opacity-90" />
+            <div className="w-14 h-[85%] rounded-t-full bg-linear-to-t from-indigo-400 via-indigo-300/60 to-transparent blur-[2px] opacity-80" />
+            <div className="w-10 h-[65%] rounded-t-full bg-linear-to-t from-indigo-500 via-indigo-400/70 to-transparent blur-[2px] opacity-90" />
           </div>
           {/* Bottom glow */}
-          <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-lime-600/40 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-indigo-600/40 to-transparent" />
 
           {/* Text */}
           <div className="relative z-10">
             <h1 className="text-3xl font-bold text-white leading-snug">
-              Ubah PDF menjadi
+              Turn PDFs into
               <br />
-              soal quiz
+              engaging quiz
               <br />
-              yang menarik
+              questions
             </h1>
           </div>
         </div>

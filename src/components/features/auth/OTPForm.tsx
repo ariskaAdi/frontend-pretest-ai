@@ -75,11 +75,11 @@ export function OTPForm() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     const otp = digits.join('')
     if (otp.length < 6) {
-      toast.warning('Masukkan 6 digit OTP')
+      toast.warning('Please enter the 6-digit OTP')
       return
     }
     submitOTP(otp)
@@ -88,7 +88,7 @@ export function OTPForm() {
   const handleResend = async () => {
     const stored = sessionStorage.getItem('pending_registration')
     if (!stored) {
-      toast.error('Data registrasi tidak ditemukan. Silakan daftar ulang.')
+      toast.error('Registration data not found. Please register again.')
       router.push('/register')
       return
     }
@@ -96,11 +96,11 @@ export function OTPForm() {
       setResending(true)
       const data = JSON.parse(stored)
       await authService.register(data)
-      toast.success('OTP baru telah dikirim ke email kamu.')
+      toast.success('A new OTP has been sent to your email.')
       setDigits(Array(6).fill(''))
       inputRefs.current[0]?.focus()
     } catch {
-      toast.error('Gagal mengirim ulang OTP')
+      toast.error('Failed to resend OTP')
     } finally {
       setResending(false)
     }
@@ -110,7 +110,7 @@ export function OTPForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       {email && (
         <p className="text-sm text-gray-600">
-          Kode OTP dikirim ke:{' '}
+          OTP code sent to:{' '}
           <span className="font-medium text-gray-900">{email}</span>
         </p>
       )}
@@ -143,18 +143,18 @@ export function OTPForm() {
         loading={verifyMutation.isPending}
         className="w-full text-md"
       >
-        Verifikasi
+        Verify
       </Button>
 
       <p className="text-center text-sm text-gray-600">
-        Tidak menerima kode?{' '}
+        Didn&apos;t receive the code?{' '}
         <button
           type="button"
           onClick={handleResend}
           disabled={resending || verifyMutation.isPending}
           className="text-primary font-medium hover:underline disabled:opacity-50"
         >
-          {resending ? 'Mengirim...' : 'Kirim ulang OTP'}
+          {resending ? 'Sending...' : 'Resend OTP'}
         </button>
       </p>
     </form>

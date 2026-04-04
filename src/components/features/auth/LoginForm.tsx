@@ -11,11 +11,11 @@ import { useLoginMutation } from '@/queries/useAuthQuery'
 const loginSchema = z.object({
   email: z
     .string()
-    .min(1, 'Email wajib diisi')
-    .email('Format email tidak valid'),
+    .min(1, 'Email is required')
+    .email('Invalid email format'),
   password: z
     .string()
-    .min(1, 'Password wajib diisi'),
+    .min(1, 'Password is required'),
 })
 
 type LoginFormValues = z.infer<typeof loginSchema>
@@ -50,7 +50,7 @@ export function LoginForm() {
       <Input
         label="Password"
         type={showPassword ? 'text' : 'password'}
-        placeholder="Masukkan password"
+        placeholder="Enter your password"
         {...register('password')}
         error={errors.password?.message}
         autoComplete="current-password"
@@ -78,12 +78,12 @@ export function LoginForm() {
         loading={loginMutation.isPending}
         className="w-full mt-2 text-md"
       >
-        Masuk
+        Sign In
       </Button>
       <p className="text-center text-sm text-gray-600">
-        Belum punya akun?{' '}
+        Don&apos;t have an account?{' '}
         <Link href="/register" className="text-primary font-medium hover:underline">
-          Daftar sekarang
+          Register now
         </Link>
       </p>
     </form>

@@ -1,156 +1,102 @@
+import Image from "next/image";
 import Link from "next/link";
+import { Bot, FileText, Brain, ClipboardList, BarChart3, Sparkles, ArrowUpRight } from "lucide-react";
+import { LandingNavbar } from "@/components/layouts/LandingNavbar";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-100 font-sans">
-      {/* ─── NAVBAR ─────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <span className="text-xl font-bold text-gray-900">
-            Pretest
-            <span className="text-[#AAFF00] bg-[#0D0D0D] px-1 rounded ml-0.5">
-              AI
-            </span>
-          </span>
-
-          {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-black">
-            <a href="#fitur" className="hover:text-gray-900 transition-colors">
-              Fitur
-            </a>
-            <a
-              href="#cara-kerja"
-              className="hover:text-gray-900 transition-colors">
-              Cara Kerja
-            </a>
-            <a
-              href="#tentang"
-              className="hover:text-gray-900 transition-colors">
-              Tentang
-            </a>
-          </nav>
-
-          {/* CTAs */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-4 py-2">
-              Masuk
-            </Link>
-            <Link
-              href="/register"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0D0D0D] text-white text-sm font-medium px-4 py-2 hover:bg-[#222] transition-colors">
-              Mulai Gratis
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 font-sans">
+      <LandingNavbar />
 
       {/* ─── HERO ───────────────────────────────────────────────────── */}
-      <section className="max-w-7xl mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center gap-12">
-        {/* Text */}
-        <div className="flex-1 max-w-2xl">
-          <span className="inline-flex items-center gap-2 bg-primary text-black text-xs font-bold px-3 py-1.5 rounded-full mb-6">
-            ✦ Platform Belajar Berbasis AI
-          </span>
-
-          <h1 className="text-5xl md:text-7xl font-black text-gray-900 leading-tight tracking-tight">
-            Belajar Lebih
+      <section id="hero" className="max-w-7xl mx-auto px-6 pt-14 pb-12">
+        {/* Top row: headline + CTA button */}
+        <div className="flex items-start justify-between gap-8 mb-5">
+          <h1 className="text-6xl md:text-8xl font-black text-gray-900 leading-none tracking-tighter uppercase">
+            Smarter Prep,
             <br />
-            <span className="text-[#0D0D0D]">Cerdas dengan</span>
-            <br />
-            <span className="bg-[#0D0D0D] text-[#AAFF00] px-2 rounded-xl">
-              Kekuatan AI
-            </span>
+            Better Results.
           </h1>
-
-          <p className="text-gray-500 text-lg leading-relaxed mt-6 max-w-md">
-            Upload modul PDF-mu, dapatkan ringkasan otomatis dan quiz yang
-            dipersonalisasi. Persiapkan ujianmu dengan lebih efisien.
-          </p>
-
-          <div className="inline-flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2 mt-6 text-sm">
-            <span className="text-yellow-400">★★★★★</span>
-            <span className="text-gray-700 font-medium">
-              95% Tingkat Kelulusan
-            </span>
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">10K+ Siswa Aktif</span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 mt-8">
+          <div className="flex flex-col items-end gap-3 shrink-0 pt-3">
+            <p className="text-gray-400 text-sm text-right max-w-40 leading-snug">
+              AI-Powered Exam Preparation Platform
+            </p>
             <Link
               href="/register"
-              className="inline-flex items-center justify-center rounded-xl bg-[#0D0D0D] text-white font-semibold text-base px-7 py-3.5 hover:bg-[#222] transition-colors">
-              Coba Gratis Sekarang
+              className="inline-flex items-center justify-center rounded-full bg-[#0D0D0D] text-white text-sm font-semibold px-6 py-3 hover:bg-[#222] transition-colors">
+              Learn More
             </Link>
-            <a
-              href="#fitur"
-              className="inline-flex items-center justify-center rounded-xl border border-gray-300 text-gray-700 font-semibold text-base px-7 py-3.5 hover:border-gray-500 hover:bg-gray-50 transition-colors">
-              Pelajari Fitur
-            </a>
           </div>
         </div>
 
-        {/* Visual */}
-        <div className="flex-1 w-full max-w-lg relative">
-          <div className="w-full aspect-[4/5] bg-[#0D0D0D] rounded-3xl overflow-hidden relative">
-            {/* Decorative pattern */}
-            <div className="absolute inset-0 opacity-10">
-              {Array.from({ length: 8 }).map((_, row) => (
-                <div key={row} className="flex gap-6 mb-6 px-6 pt-6">
-                  {Array.from({ length: 6 }).map((_, col) => (
-                    <div key={col} className="w-2 h-2 rounded-full bg-white" />
-                  ))}
-                </div>
-              ))}
-            </div>
+        {/* Hero image card */}
+        <div className="relative w-full rounded-3xl overflow-hidden bg-gray-900 h-[420px] md:h-[500px]">
+          <Image
+            src="/test.jpg"
+            alt="Students studying with Pretest AI"
+            fill
+            sizes="(max-width: 768px) 100vw, 1280px"
+            className="object-cover"
+            priority
+          />
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/45" />
 
-            {/* Center content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-8">
-              <div className="w-20 h-20 rounded-2xl bg-primary flex items-center justify-center text-4xl">
-                🤖
-              </div>
-              <div className="text-center">
-                <p className="text-white font-bold text-xl">
-                  AI-Powered Learning
-                </p>
-                <p className="text-gray-400 text-sm mt-1">
-                  Upload → Ringkas → Quiz
-                </p>
-              </div>
-              {/* Mini progress bars */}
-              <div className="w-full space-y-3 mt-4">
-                {[
-                  { label: "Ringkasan AI", pct: "90%" },
-                  { label: "Generate Quiz", pct: "75%" },
-                  { label: "Analisis Skor", pct: "60%" },
-                ].map((item) => (
-                  <div key={item.label}>
-                    <div className="flex justify-between text-xs text-gray-400 mb-1">
-                      <span>{item.label}</span>
-                      <span className="text-[#AAFF00]">{item.pct}</span>
-                    </div>
-                    <div className="h-1.5 bg-white/10 rounded-full">
-                      <div
-                        className="h-full bg-primary rounded-full"
-                        style={{ width: item.pct }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+          {/* Bottom overlay card + arrow */}
+          <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-4 max-w-sm">
+              <span className="inline-flex items-center bg-[#AAFF00] text-black text-xs font-black px-2.5 py-0.5 rounded-full mb-2">
+                NEW
+              </span>
+              <p className="text-white font-bold text-lg leading-snug">
+                Leaders in AI-powered learning
+              </p>
+              <p className="text-white/60 text-sm mt-1">
+                Upload PDFs, get instant summaries, and generate personalized quizzes.
+              </p>
+            </div>
+            <Link
+              href="/register"
+              className="w-12 h-12 rounded-full bg-[#AAFF00] flex items-center justify-center hover:bg-white transition-colors shrink-0">
+              <ArrowUpRight className="w-5 h-5 text-black" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+          {/* Stat 1 */}
+          <div className="bg-white rounded-3xl px-7 py-6 flex items-center justify-between border border-gray-100">
+            <div>
+              <p className="text-4xl font-black text-gray-900">10K+</p>
+              <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mt-1.5">
+                Active Students
+              </p>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-[#0D0D0D] flex items-center justify-center">
+              <ArrowUpRight className="w-4 h-4 text-white" />
             </div>
           </div>
 
-          {/* Floating badge */}
-          <div className="absolute -bottom-4 left-6 bg-white shadow-xl rounded-2xl px-4 py-3 flex items-center gap-3 border border-gray-100">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-sm font-medium text-gray-800">
-              🤖 AI Summary aktif
+          {/* Stat 2 */}
+          <div className="bg-white rounded-3xl px-7 py-6 flex items-center justify-between border border-gray-100">
+            <div>
+              <p className="text-4xl font-black text-gray-900">50K+</p>
+              <p className="text-gray-400 text-xs font-semibold uppercase tracking-widest mt-1.5">
+                Quizzes Generated
+              </p>
+            </div>
+            <span className="inline-flex items-center border border-gray-300 text-gray-500 text-xs font-bold px-3 py-1.5 rounded-full">
+              AI POWERED
             </span>
-            <span className="text-xs text-gray-400">2.3 detik</span>
+          </div>
+
+          {/* Stat 3 — dark card */}
+          <div className="bg-[#0D0D0D] rounded-3xl px-7 py-6">
+            <p className="text-4xl font-black text-white">95%</p>
+            <p className="text-gray-500 text-xs font-semibold uppercase tracking-widest mt-1.5">
+              Student Pass Rate
+            </p>
           </div>
         </div>
       </section>
@@ -159,10 +105,10 @@ export default function Home() {
       <section className="bg-[#0D0D0D]">
         <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4">
           {[
-            { value: "10.000+", label: "Siswa Aktif" },
-            { value: "5.000+", label: "Modul Diupload" },
-            { value: "50.000+", label: "Quiz Diselesaikan" },
-            { value: "95%", label: "Tingkat Kelulusan" },
+            { value: "10,000+", label: "Active Students" },
+            { value: "5,000+", label: "Modules Uploaded" },
+            { value: "50,000+", label: "Quizzes Completed" },
+            { value: "95%", label: "Pass Rate" },
           ].map((stat, i) => (
             <div
               key={stat.label}
@@ -182,23 +128,22 @@ export default function Home() {
           {/* Text */}
           <div className="flex-1 max-w-lg">
             <span className="inline-flex items-center border border-[#AAFF00] text-[#AAFF00] text-xs font-bold px-3 py-1.5 rounded-full mb-6">
-              PLATFORM AI BELAJAR
+              AI LEARNING PLATFORM
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">
-              Ubah Cara Belajarmu
+              Transform the Way You Learn
               <br />
-              Menjadi Lebih Efisien
+              More Efficiently
             </h2>
             <p className="text-gray-400 text-base leading-relaxed mt-5 max-w-md">
-              Kami tidak sekadar menyediakan ringkasan. Dengan teknologi AI,
-              setiap modul yang kamu upload dianalisis mendalam untuk
-              menghasilkan ringkasan kontekstual dan quiz yang benar-benar
-              relevan.
+              We don&apos;t just provide summaries. With AI technology, every
+              module you upload is deeply analyzed to generate contextual
+              summaries and truly relevant quizzes.
             </p>
             <Link
               href="/register"
               className="inline-flex items-center gap-2 mt-8 text-[#AAFF00] font-semibold text-sm hover:opacity-80 transition-opacity">
-              Mulai sekarang →
+              Start now →
             </Link>
           </div>
 
@@ -216,11 +161,11 @@ export default function Home() {
                 PRETEST AI PLATFORM
               </span>
             </div>
-            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center text-4xl">
-              📄
+            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center">
+              <FileText className="w-10 h-10 text-white" />
             </div>
-            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center text-4xl">
-              🧠
+            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center">
+              <Brain className="w-10 h-10 text-white" />
             </div>
           </div>
         </div>
@@ -232,13 +177,13 @@ export default function Home() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-white">
-              Fitur{" "}
-              <span className="bg-primary text-black px-2 rounded-lg">
-                Unggulan
+              Core{" "}
+              <span className="bg-[#AAFF00] text-black px-2 rounded-lg">
+                Features
               </span>
             </h2>
             <p className="text-gray-400 max-w-xs text-sm leading-relaxed">
-              Semua yang kamu butuhkan untuk belajar lebih cerdas ada di sini.
+              Everything you need to learn smarter is right here.
             </p>
           </div>
 
@@ -247,27 +192,27 @@ export default function Home() {
             {[
               {
                 no: "01",
-                name: "Upload PDF Modul",
-                desc: "Drag & drop PDF hingga 20MB, langsung diproses AI",
-                icon: "📄",
+                name: "Upload PDF Modules",
+                desc: "Drag & drop PDFs up to 20MB, processed instantly by AI",
+                icon: <FileText className="w-6 h-6 text-white" />,
               },
               {
                 no: "02",
-                name: "Ringkasan AI Otomatis",
-                desc: "Ringkasan kontekstual dihasilkan dalam hitungan detik",
-                icon: "🤖",
+                name: "Automated AI Summaries",
+                desc: "Contextual summaries generated in seconds",
+                icon: <Bot className="w-6 h-6 text-white" />,
               },
               {
                 no: "03",
-                name: "Generate Quiz Cerdas",
-                desc: "Quiz pilihan ganda dipersonalisasi dari isi modulmu",
-                icon: "📝",
+                name: "Smart Quiz Generation",
+                desc: "Personalized multiple-choice quizzes based on your modules",
+                icon: <ClipboardList className="w-6 h-6 text-white" />,
               },
               {
                 no: "04",
-                name: "Pantau Progressmu",
-                desc: "Riwayat quiz, skor, dan statistik belajarmu",
-                icon: "📊",
+                name: "Track Your Progress",
+                desc: "Quiz history, scores, and your learning statistics",
+                icon: <BarChart3 className="w-6 h-6 text-white" />,
               },
             ].map((feat) => (
               <div
@@ -276,7 +221,7 @@ export default function Home() {
                 <span className="text-[#AAFF00] font-mono text-sm w-8 shrink-0">
                   {feat.no}
                 </span>
-                <span className="text-2xl w-8 shrink-0">{feat.icon}</span>
+                <span className="w-8 shrink-0 flex items-center">{feat.icon}</span>
                 <span className="text-white font-bold text-lg flex-1">
                   {feat.name}
                 </span>
@@ -297,17 +242,17 @@ export default function Home() {
             <span key={n} className="flex shrink-0">
               {[
                 "Upload PDF",
-                "Ringkasan AI",
+                "AI Summary",
                 "Generate Quiz",
-                "Analisis Skor",
-                "Belajar Efisien",
+                "Score Analysis",
+                "Efficient Learning",
                 "Progress Tracking",
               ].map((text) => (
                 <span key={text} className="flex items-center gap-4 mr-8">
                   <span className="text-white/40 font-medium text-sm tracking-widest uppercase">
                     {text}
                   </span>
-                  <span className="text-[#AAFF00] text-lg">✦</span>
+                  <Sparkles className="w-4 h-4 text-[#AAFF00]" />
                 </span>
               ))}
             </span>
@@ -319,47 +264,46 @@ export default function Home() {
       <section id="cara-kerja" className="bg-[#0D0D0D] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-24">
           <h2 className="text-4xl font-black text-white">
-            Kata Mereka yang{" "}
-            <span className="text-[#AAFF00]">Sudah Merasakan</span>
+            What Our <span className="text-[#AAFF00]">Users Say</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
             {[
               {
                 name: "Rina Amalia",
-                role: "Mahasiswi Kedokteran",
+                role: "Medical Student",
                 quote:
-                  "Ringkasan AI-nya akurat banget. Materi 50 halaman jadi poin penting dalam 2 menit.",
+                  "The AI summaries are incredibly accurate. 50 pages of material become key points in 2 minutes.",
               },
               {
                 name: "Budi Santoso",
-                role: "Siswa SMA",
+                role: "High School Student",
                 quote:
-                  "Quiz-nya betul-betul dari isi modul. Nilai ujian naik drastis setelah pakai Pretest AI.",
+                  "The quizzes are truly based on the module's content. My exam scores soared after using Pretest AI.",
               },
               {
                 name: "Siti Rahayu",
-                role: "Mahasiswi Hukum",
+                role: "Law Student",
                 quote:
-                  "Upload sekali, bisa buat quiz berkali-kali. Hemat waktu banget buat persiapan ujian.",
+                  "Upload once, generate quizzes multiple times. A massive time-saver for exam prep.",
               },
               {
                 name: "Dimas Pratama",
-                role: "Guru SMA",
+                role: "High School Teacher",
                 quote:
-                  "Saya kasih ke murid-murid. Mereka lebih aktif belajar mandiri dengan fitur quiznya.",
+                  "I introduced this to my students. They are much more active in independent learning thanks to the quiz feature.",
               },
               {
                 name: "Ayu Lestari",
-                role: "Peserta CPNS",
+                role: "Civil Service Exam Candidate",
                 quote:
-                  "Bantu banget buat belajar materi TWK dan TIU. Ringkasannya tepat sasaran.",
+                  "Super helpful for studying TWK and TIU materials. The summaries hit exactly what's needed.",
               },
               {
                 name: "Fahri Ramadhan",
-                role: "Mahasiswa Teknik",
+                role: "Engineering Student",
                 quote:
-                  "Fitur generate quiz 20 soal langsung dari PDF kuliah? Game changer.",
+                  "A feature to generate 20-question quizzes directly from lecture PDFs? Truly a game changer.",
               },
             ].map((t) => (
               <div key={t.name} className="bg-zinc-900 rounded-3xl p-6">
@@ -392,35 +336,35 @@ export default function Home() {
       <section className="bg-[#0D0D0D] border-t border-white/10">
         <div className="max-w-2xl mx-auto px-6 py-24 text-center">
           <h2 className="text-5xl font-black text-white leading-tight">
-            Siap Mulai Belajar
+            Ready to Start Learning
             <br />
-            <span className="text-[#AAFF00]">Lebih Cerdas?</span>
+            <span className="text-[#AAFF00]">Smarter?</span>
           </h2>
           <p className="text-gray-400 mt-5 text-base">
-            Bergabung dengan ribuan siswa yang sudah meningkatkan nilainya
-            bersama Pretest AI.
+            Join thousands of students who have already improved their grades
+            with Pretest AI.
           </p>
 
           <div className="flex gap-3 mt-8 max-w-md mx-auto">
             <input
               type="email"
-              placeholder="Masukkan emailmu..."
+              placeholder="Enter your email..."
               className="flex-1 bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-[#AAFF00] transition-colors text-sm"
             />
             <Link
               href="/register"
-              className="inline-flex items-center justify-center rounded-xl bg-primary text-black font-bold text-sm px-5 py-3 hover:bg-[#99ee00] transition-colors shrink-0">
-              Daftar Sekarang
+              className="inline-flex items-center justify-center rounded-xl bg-[#AAFF00] text-black font-bold text-sm px-5 py-3 hover:bg-[#99ee00] transition-colors shrink-0">
+              Sign Up Now
             </Link>
           </div>
           <p className="text-gray-500 text-xs mt-3">
-            Gratis. Tidak perlu kartu kredit.
+            Free. No credit card required.
           </p>
         </div>
       </section>
 
       {/* ─── FOOTER ─────────────────────────────────────────────────── */}
-      <footer className="bg-[#080808] border-t border-white/5">
+      <footer id="contacts" className="bg-[#080808] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
@@ -431,27 +375,27 @@ export default function Home() {
                 </span>
               </span>
               <p className="text-gray-500 text-sm mt-1">
-                Platform belajar berbasis AI.
+                AI-powered learning platform.
               </p>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-gray-400">
               <a href="#fitur" className="hover:text-white transition-colors">
-                Fitur
+                Features
               </a>
               <a
                 href="#cara-kerja"
                 className="hover:text-white transition-colors">
-                Cara Kerja
+                How It Works
               </a>
               <Link
                 href="/login"
                 className="hover:text-white transition-colors">
-                Login
+                Log In
               </Link>
               <Link
                 href="/register"
                 className="hover:text-white transition-colors">
-                Daftar
+                Sign Up
               </Link>
             </div>
           </div>
