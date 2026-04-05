@@ -44,8 +44,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         )}>
         {/* Navbar */}
         <Navbar
-          onMenuClick={() => setIsMobileMenuOpen(true)}
+          onMenuClick={() => setIsMobileMenuOpen((prev) => !prev)}
           onLogoutSuccess={() => setIsMobileMenuOpen(false)}
+          isMobileMenuOpen={isMobileMenuOpen}
         />
 
         {/* Mobile Menu Drawer */}

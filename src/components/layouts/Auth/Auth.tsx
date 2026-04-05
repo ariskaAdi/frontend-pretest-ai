@@ -9,7 +9,7 @@ interface AuthLayoutProps {
 export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-300 p-4 sm:p-8">
-      <div className="flex w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl shadow-white">
+      <div className="flex w-full max-w-6xl rounded-3xl overflow-hidden shadow-2xl shadow-white">
         {/* Left — Branding (hidden on mobile) */}
         <div className="hidden lg:flex lg:w-[42%] bg-[#0d0d0d] relative overflow-hidden flex-col justify-start p-8 min-h-130">
           {/* Flame pillars */}

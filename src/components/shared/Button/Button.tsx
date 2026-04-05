@@ -29,6 +29,7 @@ export function Button({
     danger: "bg-danger text-white hover:bg-danger-hover",
     ghost:
       "bg-transparent  text-primary hover:bg-primary-light border-1 border-primary/30 hover:text-primary hover:border-primary hover:bg-primary-light",
+    cancel: "bg-red-500 text-gray-white hover:bg-white hover:text-red-500 border border-red-500 hover:border-red-500",
   };
 
   const sizeClasses = {

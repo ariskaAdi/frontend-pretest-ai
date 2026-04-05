@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Bot, FileText, Brain, ClipboardList, BarChart3, Sparkles, ArrowUpRight } from "lucide-react";
+import { Bot, FileText, ClipboardList, BarChart3, Sparkles, ArrowUpRight, FileUp, PenLine, ClipboardCheck, GraduationCap, BookOpen } from "lucide-react";
 import { LandingNavbar } from "@/components/layouts/LandingNavbar";
+import picture from "../../public/pretest-ai.webp";
 
 export default function Home() {
   return (
@@ -17,7 +18,7 @@ export default function Home() {
             <br />
             Better Results.
           </h1>
-          <div className="flex flex-col items-end gap-3 shrink-0 pt-3">
+          <div className="md:flex-col items-end gap-3 shrink-0 pt-3 hidden md:flex">
             <p className="text-gray-400 text-sm text-right max-w-40 leading-snug">
               AI-Powered Exam Preparation Platform
             </p>
@@ -32,7 +33,7 @@ export default function Home() {
         {/* Hero image card */}
         <div className="relative w-full rounded-3xl overflow-hidden bg-gray-900 h-[420px] md:h-[500px]">
           <Image
-            src="/test.jpg"
+            src={picture}
             alt="Students studying with Pretest AI"
             fill
             sizes="(max-width: 768px) 100vw, 1280px"
@@ -124,50 +125,149 @@ export default function Home() {
 
       {/* ─── ABOUT / MISSION ────────────────────────────────────────── */}
       <section id="tentang" className="bg-[#0D0D0D] border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center gap-16">
-          {/* Text */}
-          <div className="flex-1 max-w-lg">
-            <span className="inline-flex items-center border border-[#AAFF00] text-[#AAFF00] text-xs font-bold px-3 py-1.5 rounded-full mb-6">
+        <div className="max-w-7xl mx-auto px-6 py-24 space-y-20">
+
+          {/* Headline */}
+          <div className="text-center space-y-4">
+            <span className="inline-flex items-center border border-[#AAFF00] text-[#AAFF00] text-xs font-bold px-3 py-1.5 rounded-full">
               AI LEARNING PLATFORM
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-white leading-tight">
               Transform the Way You Learn
-              <br />
-              More Efficiently
             </h2>
-            <p className="text-gray-400 text-base leading-relaxed mt-5 max-w-md">
-              We don&apos;t just provide summaries. With AI technology, every
-              module you upload is deeply analyzed to generate contextual
-              summaries and truly relevant quizzes.
+            <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed">
+              Upload any PDF module and let AI do the heavy lifting — instant
+              summaries, relevant quizzes, and progress tracking, all in one
+              place.
             </p>
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-2 mt-8 text-[#AAFF00] font-semibold text-sm hover:opacity-80 transition-opacity">
-              Start now →
-            </Link>
           </div>
 
-          {/* Visual grid */}
-          <div className="flex-1 w-full max-w-md grid grid-cols-2 gap-3">
-            <div className="col-span-2 h-48 bg-zinc-900 rounded-3xl flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#AAFF00]/10 to-transparent" />
-              <div className="text-center relative z-10">
-                <p className="text-5xl font-black text-white">PDF</p>
-                <p className="text-gray-400 text-sm mt-1">
-                  → AI Summary → Quiz
-                </p>
-              </div>
-              <span className="absolute bottom-3 left-3 bg-primary text-black text-xs font-bold px-3 py-1 rounded-full">
-                PRETEST AI PLATFORM
-              </span>
-            </div>
-            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center">
-              <FileText className="w-10 h-10 text-white" />
-            </div>
-            <div className="h-36 bg-zinc-900 rounded-3xl flex items-center justify-center">
-              <Brain className="w-10 h-10 text-white" />
+          {/* How It Works */}
+          <div className="space-y-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-500 text-center">
+              How It Works
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              {[
+                {
+                  step: 1,
+                  icon: FileUp,
+                  title: "Upload PDF Module",
+                  desc: "Upload your textbook, lecture slides, or any curriculum document.",
+                },
+                {
+                  step: 2,
+                  icon: Bot,
+                  title: "AI Generates Content",
+                  desc: "AI reads the document and produces a concise summary and quiz questions.",
+                },
+                {
+                  step: 3,
+                  icon: PenLine,
+                  title: "Review & Edit",
+                  desc: "Freely edit any generated content before starting your session.",
+                },
+                {
+                  step: 4,
+                  icon: ClipboardCheck,
+                  title: "Take the Quiz",
+                  desc: "Answer questions interactively with instant feedback.",
+                },
+                {
+                  step: 5,
+                  icon: BarChart3,
+                  title: "Track Progress",
+                  desc: "Review scores and improvement over time from your dashboard.",
+                },
+              ].map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={item.step}
+                    className="bg-zinc-900 rounded-3xl p-5 flex flex-col gap-4 border border-white/5 hover:border-[#AAFF00]/30 transition-colors duration-200">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-[#AAFF00]/10 flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-[#AAFF00]" />
+                      </div>
+                      <span className="text-xs font-bold text-gray-600 uppercase tracking-widest">
+                        {String(item.step).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-sm mb-1">
+                        {item.title}
+                      </p>
+                      <p className="text-gray-500 text-xs leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
+
+          {/* Who Is This For */}
+          <div className="space-y-6">
+            <p className="text-xs font-bold uppercase tracking-widest text-gray-500 text-center">
+              Who Is This For
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {[
+                {
+                  icon: GraduationCap,
+                  audience: "Students & Learners",
+                  problem:
+                    "Curriculum changes frequently, leaving students with new modules and a limited bank of practice questions to prepare from.",
+                  solution:
+                    "Upload any PDF module and instantly get a tailored quiz to self-test and reinforce new material — no matter how recent the curriculum.",
+                },
+                {
+                  icon: BookOpen,
+                  audience: "Teachers & Educators",
+                  problem:
+                    "Creating quality quiz questions for every learning unit is time-consuming and repetitive for busy educators.",
+                  solution:
+                    "Generate a full set of questions from a module in seconds, then edit them to fit your class needs before distributing to students.",
+                },
+              ].map((uc) => {
+                const Icon = uc.icon;
+                return (
+                  <div
+                    key={uc.audience}
+                    className="bg-zinc-900 rounded-3xl p-8 border border-white/5 hover:border-[#AAFF00]/30 transition-colors duration-200">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 rounded-xl bg-[#AAFF00]/10 flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-[#AAFF00]" />
+                      </div>
+                      <h3 className="text-white font-extrabold text-base">
+                        {uc.audience}
+                      </h3>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">
+                          The Challenge
+                        </p>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          {uc.problem}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-[#AAFF00] uppercase tracking-wider mb-1">
+                          How Pretest AI Helps
+                        </p>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          {uc.solution}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -261,7 +361,7 @@ export default function Home() {
       </section>
 
       {/* ─── TESTIMONIALS ───────────────────────────────────────────── */}
-      <section id="cara-kerja" className="bg-[#0D0D0D] border-t border-white/5">
+       <section id="cara-kerja" className="bg-[#0D0D0D] border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-24">
           <h2 className="text-4xl font-black text-white">
             What Our <span className="text-[#AAFF00]">Users Say</span>
@@ -331,6 +431,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
 
       {/* ─── CTA ────────────────────────────────────────────────────── */}
       <section className="bg-[#0D0D0D] border-t border-white/10">
