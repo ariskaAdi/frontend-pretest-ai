@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import {
   ModuleList,
   ModuleEmpty,
@@ -13,6 +14,7 @@ import { Modal } from "@/components/shared/Modal";
 import { Lightbulb } from "lucide-react";
 
 export default function ModulesPage() {
+  const t = useTranslations("ModulesPage");
   const { data: modules, isLoading } = useModulesQuery();
   const [isUploadOpen, setIsUploadOpen] = React.useState(false);
 
@@ -21,22 +23,20 @@ export default function ModulesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
-            Module Collection
+            {t("title")}
           </h1>
-          <p className="text-gray-500">
-            Manage all your learning materials here
-          </p>
+          <p className="text-gray-500">{t("subtitle")}</p>
         </div>
         <Button
           onClick={() => setIsUploadOpen(true)}
           className="rounded-2xl px-6 shadow-md shadow-primary/20 font-bold">
-          + Upload Module
+          {t("uploadButton")}
         </Button>
         <Modal
           size="xl"
           open={isUploadOpen}
           onClose={() => setIsUploadOpen(false)}
-          title="Upload New Module">
+          title={t("uploadModalTitle")}>
           <div className="space-y-6">
             <UploadForm onSuccess={() => setIsUploadOpen(false)} />
 
@@ -45,9 +45,8 @@ export default function ModulesPage() {
                 <Lightbulb size={24} />
               </div>
               <div className="text-sm text-gray-600 leading-relaxed">
-                <span className="font-bold text-primary italic">Tips: </span>
-                Make sure your PDF has readable text (not scanned images) so
-                that AI can provide a more accurate and high-quality summary.
+                <span className="font-bold text-primary italic">{t("uploadTipsLabel")} </span>
+                {t("uploadTips")}
               </div>
             </div>
           </div>
@@ -58,7 +57,7 @@ export default function ModulesPage() {
         <div className="flex flex-col items-center justify-center py-40">
           <Spinner size="lg" className="mb-4" />
           <p className="text-gray-500 font-medium animate-pulse">
-            Loading module list...
+            {t("loading")}
           </p>
         </div>
       ) : !modules || modules.length === 0 ? (

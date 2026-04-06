@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { BookOpen, Lightbulb } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/shared/Button";
 import { Modal } from "@/components/shared";
 import { UploadForm } from "./UploadForm";
 
 export function ModuleEmpty() {
+  const t = useTranslations("ModuleEmpty");
   const [isUploadOpen, setIsUploadOpen] = React.useState(false);
 
   return (
@@ -15,23 +16,18 @@ export function ModuleEmpty() {
       <div className="w-20 h-20 bg-primary-light rounded-2xl flex items-center justify-center text-primary mb-6 shadow-sm">
         <BookOpen size={40} />
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-2">
-        Belum ada modul diupload
-      </h3>
-      <p className="text-gray-500 max-w-sm mb-8">
-        Upload materi belajar Anda dalam format PDF untuk dirangkum secara
-        otomatis oleh AI dan generate quiz latihan.
-      </p>
+      <h3 className="text-xl font-bold text-gray-900 mb-2">{t("title")}</h3>
+      <p className="text-gray-500 max-w-sm mb-8">{t("desc")}</p>
       <Button
         onClick={() => setIsUploadOpen(true)}
         className="rounded-2xl px-6 shadow-md shadow-primary/20 font-bold">
-        + Upload Modul
+        {t("uploadButton")}
       </Button>
       <Modal
         size="xl"
         open={isUploadOpen}
         onClose={() => setIsUploadOpen(false)}
-        title="Upload Modul Baru">
+        title={t("uploadModalTitle")}>
         <div className="space-y-6">
           <UploadForm onSuccess={() => setIsUploadOpen(false)} />
 
@@ -40,10 +36,8 @@ export function ModuleEmpty() {
               <Lightbulb size={24} />
             </div>
             <div className="text-sm text-gray-600 leading-relaxed">
-              <span className="font-bold text-primary italic">Tips: </span>
-              Pastikan PDF Anda memiliki teks yang dapat dibaca (bukan hasil
-              scan gambar) agar AI dapat memberikan rangkuman yang lebih akurat
-              dan berkualitas.
+              <span className="font-bold text-primary italic">{t("tipsLabel")} </span>
+              {t("tips")}
             </div>
           </div>
         </div>

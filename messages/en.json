@@ -1,0 +1,517 @@
+{
+  "LandingNavbar": {
+    "home": "Home",
+    "features": "Features",
+    "about": "About",
+    "howItWorks": "How It Works",
+    "contact": "Contact",
+    "login": "Log In",
+    "startFree": "Start for Free"
+  },
+  "Navbar": {
+    "title": "Dashboard",
+    "profile": "Profile",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "logoutTitle": "Confirm Logout",
+    "logoutMessage": "Are you sure you want to log out? Your current session will be ended."
+  },
+  "LandingPage": {
+    "hero": {
+      "headline1": "Smarter Prep,",
+      "headline2": "Better Results.",
+      "aiPowered": "AI-Powered Exam Preparation Platform",
+      "learnMore": "Learn More",
+      "badge": "NEW",
+      "cardTitle": "Leaders in AI-powered learning",
+      "cardDesc": "Upload PDFs, get instant summaries, and generate personalized quizzes.",
+      "stat1Label": "Active Students",
+      "stat2Label": "Quizzes Generated",
+      "stat3Label": "Student Pass Rate"
+    },
+    "statsBar": {
+      "activeStudents": "Active Students",
+      "modulesUploaded": "Modules Uploaded",
+      "quizzesCompleted": "Quizzes Completed",
+      "passRate": "Pass Rate"
+    },
+    "about": {
+      "badge": "AI LEARNING PLATFORM",
+      "title": "Transform the Way You Learn",
+      "desc": "Upload any PDF module and let AI do the heavy lifting — instant summaries, relevant quizzes, and progress tracking, all in one place.",
+      "howItWorksLabel": "How It Works",
+      "whoForLabel": "Who Is This For",
+      "challengeLabel": "The Challenge",
+      "howHelpsLabel": "How Pretest AI Helps",
+      "steps": [
+        {
+          "title": "Upload PDF Module",
+          "desc": "Upload your textbook, lecture slides, or any curriculum document."
+        },
+        {
+          "title": "AI Generates Content",
+          "desc": "AI reads the document and produces a concise summary and quiz questions."
+        },
+        {
+          "title": "Review & Edit",
+          "desc": "Freely edit any generated content before starting your session."
+        },
+        {
+          "title": "Take the Quiz",
+          "desc": "Answer questions interactively with instant feedback."
+        },
+        {
+          "title": "Track Progress",
+          "desc": "Review scores and improvement over time from your dashboard."
+        }
+      ],
+      "audiences": [
+        {
+          "name": "Students & Learners",
+          "problem": "Curriculum changes frequently, leaving students with new modules and a limited bank of practice questions to prepare from.",
+          "solution": "Upload any PDF module and instantly get a tailored quiz to self-test and reinforce new material — no matter how recent the curriculum."
+        },
+        {
+          "name": "Teachers & Educators",
+          "problem": "Creating quality quiz questions for every learning unit is time-consuming and repetitive for busy educators.",
+          "solution": "Generate a full set of questions from a module in seconds, then edit them to fit your class needs before distributing to students."
+        }
+      ]
+    },
+    "features": {
+      "title1": "Core",
+      "title2": "Features",
+      "desc": "Everything you need to learn smarter is right here.",
+      "items": [
+        {
+          "name": "Upload PDF Modules",
+          "desc": "Drag & drop PDFs up to 20MB, processed instantly by AI"
+        },
+        {
+          "name": "Automated AI Summaries",
+          "desc": "Contextual summaries generated in seconds"
+        },
+        {
+          "name": "Smart Quiz Generation",
+          "desc": "Personalized multiple-choice quizzes based on your modules"
+        },
+        {
+          "name": "Track Your Progress",
+          "desc": "Quiz history, scores, and your learning statistics"
+        }
+      ]
+    },
+    "marquee": ["Upload PDF", "AI Summary", "Generate Quiz", "Score Analysis", "Efficient Learning", "Progress Tracking"],
+    "testimonials": {
+      "title1": "What Our",
+      "title2": "Users Say",
+      "items": [
+        {
+          "name": "Rina Amalia",
+          "role": "Medical Student",
+          "quote": "The AI summaries are incredibly accurate. 50 pages of material become key points in 2 minutes."
+        },
+        {
+          "name": "Budi Santoso",
+          "role": "High School Student",
+          "quote": "The quizzes are truly based on the module's content. My exam scores soared after using Pretest AI."
+        },
+        {
+          "name": "Siti Rahayu",
+          "role": "Law Student",
+          "quote": "Upload once, generate quizzes multiple times. A massive time-saver for exam prep."
+        },
+        {
+          "name": "Dimas Pratama",
+          "role": "High School Teacher",
+          "quote": "I introduced this to my students. They are much more active in independent learning thanks to the quiz feature."
+        },
+        {
+          "name": "Ayu Lestari",
+          "role": "Civil Service Exam Candidate",
+          "quote": "Super helpful for studying TWK and TIU materials. The summaries hit exactly what's needed."
+        },
+        {
+          "name": "Fahri Ramadhan",
+          "role": "Engineering Student",
+          "quote": "A feature to generate 20-question quizzes directly from lecture PDFs? Truly a game changer."
+        }
+      ]
+    },
+    "cta": {
+      "title1": "Ready to Start Learning",
+      "title2": "Smarter?",
+      "desc": "Join thousands of students who have already improved their grades with Pretest AI.",
+      "emailPlaceholder": "Enter your email...",
+      "signUp": "Sign Up Now",
+      "freeNote": "Free. No credit card required."
+    },
+    "footer": {
+      "tagline": "AI-powered learning platform.",
+      "features": "Features",
+      "howItWorks": "How It Works",
+      "login": "Log In",
+      "signUp": "Sign Up",
+      "copyright": "© 2025 Pretest AI. All rights reserved."
+    }
+  },
+  "DashboardPage": {
+    "loading": "Preparing your dashboard...",
+    "statTotalModules": "Total Modules",
+    "statTotalModulesDesc": "Uploaded learning materials",
+    "statCompletedQuizzes": "Completed Quizzes",
+    "statCompletedQuizzesDesc": "Practice quizzes completed",
+    "statAvgScore": "Average Score",
+    "statAvgScoreDesc": "Cumulative score across all quizzes",
+    "statAdminAccess": "Admin Access",
+    "statAdminAccessValue": "Unlimited",
+    "statAdminAccessDesc": "No quota restrictions",
+    "recentModules": "Recent Modules",
+    "recentQuizzes": "Recent Quizzes",
+    "viewAll": "View All",
+    "noModules": "No modules uploaded yet",
+    "noQuizzes": "No quiz history yet",
+    "moduleReady": "Ready",
+    "moduleProcessing": "Processing",
+    "quizQuestions": "Questions",
+    "score": "Score"
+  },
+  "ModulesPage": {
+    "title": "Module Collection",
+    "subtitle": "Manage all your learning materials here",
+    "uploadButton": "+ Upload Module",
+    "uploadModalTitle": "Upload New Module",
+    "uploadTips": "Make sure your PDF has readable text (not scanned images) so that AI can provide a more accurate and high-quality summary.",
+    "uploadTipsLabel": "Tips:",
+    "loading": "Loading module list..."
+  },
+  "ModuleDetail": {
+    "backToCollection": "Back to Collection",
+    "loading": "Loading module details...",
+    "notFound": "Module not found",
+    "backButton": "Back to Collection",
+    "statusReady": "Summary Available",
+    "statusFailed": "Summarization Failed",
+    "statusProcessing": "Processing by AI",
+    "openPdf": "Open PDF File",
+    "openPdfDesc": "View the original document",
+    "openLink": "Open Link",
+    "aiSummary": "AI Summary",
+    "aiSummaryDesc": "View the AI-generated smart summary",
+    "aiSummaryError": "An error occurred while summarizing the material.",
+    "viewSummary": "View Summary",
+    "tryAgain": "Try Again",
+    "generateQuiz": "Generate Quiz",
+    "generateQuizDesc": "Test your understanding with practice questions",
+    "createQuiz": "Create Quiz",
+    "dangerZone": "Danger Zone",
+    "dangerZoneDesc": "Permanently delete this module and all its related data",
+    "deleteModule": "Delete Module",
+    "deleteModalTitle": "Permanently Delete Module",
+    "deleteConfirm": "Are you sure you want to delete the module",
+    "deleteConfirm2": "? All summaries and quiz history related to this module will be permanently deleted.",
+    "cancel": "Cancel",
+    "deleteNow": "Yes, Delete Now",
+    "toastDeleted": "Module deleted successfully",
+    "toastDeleteFailed": "Failed to delete module",
+    "toastRetryStarted": "Summarize process restarted",
+    "toastRetryFailed": "Failed to restart process"
+  },
+  "ModuleSummaryPage": {
+    "loading": "Loading summary...",
+    "notFound": "Module not found",
+    "backToCollection": "Back to Collection",
+    "backToDetail": "Back to Module Details",
+    "aiProcessing": "AI is Summarizing...",
+    "aiProcessingDesc": "Please wait! Our AI is analyzing your module to create the best summary. This page will update automatically when done.",
+    "cancelBack": "Cancel & Back to Details",
+    "summaryPrefix": "Summary:",
+    "summaryDesc": "Smart summary generated by AI from your PDF document.",
+    "quoteText": "\"Understanding the material is the key to quiz success.\"",
+    "continueQuiz": "Continue to Create Quiz"
+  },
+  "QuizPage": {
+    "loading": "Loading quiz history...",
+    "title": "Quiz History",
+    "subtitle": "Train your understanding with AI-powered questions.",
+    "createNewQuiz": "+ Create New Quiz From Module"
+  },
+  "QuizSession": {
+    "notFoundTitle": "Quiz Session Ended",
+    "notFoundDesc": "Quiz session not found because the page was refreshed or the session has ended. Cancel this quiz to return your quota.",
+    "backToHistory": "Back to History",
+    "cancelReturnQuota": "Cancel & Return Quota",
+    "exit": "Exit",
+    "previous": "← Previous",
+    "next": "Next →",
+    "submitQuiz": "Submit Quiz",
+    "submitModalTitle": "Submit Answers?",
+    "submitModalDesc": "Are you sure you want to submit your answers now? You cannot change your answers after submission.",
+    "cancel": "Cancel",
+    "yesSubmit": "Yes, Submit",
+    "toastCancelled": "Quiz cancelled and quota returned",
+    "toastCancelFailed": "Failed to cancel quiz",
+    "toastSubmitted": "Quiz submitted successfully!",
+    "toastSubmitFailed": "Failed to submit answers"
+  },
+  "QuizResultPage": {
+    "loading": "Loading quiz results...",
+    "notFound": "Quiz results not found.",
+    "back": "Back",
+    "finalScore": "Your Final Score",
+    "outOf": "out of 100",
+    "passed": "Passed",
+    "tryAgain": "Try Again",
+    "retryQuiz": "Retry Quiz",
+    "downloadQuiz": "Download Quiz",
+    "backToModules": "Back to Modules",
+    "totalQuestions": "Total Questions",
+    "correct": "Correct",
+    "incorrect": "Incorrect",
+    "exportModalTitle": "Download Quiz",
+    "editQuiz": "Edit Quiz",
+    "editQuizDesc": "Edit content before downloading",
+    "downloadPdf": "Download as PDF",
+    "downloadPdfDesc": "Generate and download immediately",
+    "cancel": "Cancel",
+    "toastRetrying": "Restarting quiz...",
+    "toastRetryFailed": "Failed to retry quiz",
+    "toastNoQuestions": "No questions found."
+  },
+  "QuizEdit": {
+    "title": "Edit Quiz",
+    "subtitle": "Edit the content below, then download as PDF.",
+    "downloadPdf": "Download as PDF",
+    "documentTitle": "Document Title",
+    "titlePlaceholder": "Quiz title...",
+    "formatGuide": "Markdown Format Guide",
+    "formatQuestion": "— question number and text",
+    "formatOption": "— answer options (A–E)",
+    "cancel": "Cancel"
+  },
+  "ProfilePage": {
+    "title": "Profile",
+    "subtitle": "Manage your account information.",
+    "accountInfo": "Account Info",
+    "nameLabel": "Name",
+    "emailLabel": "Current Email",
+    "roleLabel": "Role",
+    "verified": "Verified",
+    "updateEmail": "Update Email",
+    "updateEmailDesc": "An OTP will be sent to your new email address for verification.",
+    "newEmailLabel": "New Email Address",
+    "sendOtp": "Send OTP",
+    "otpSentTo": "OTP sent to",
+    "enterOtp": "Enter the 6-digit OTP",
+    "verifyUpdate": "Verify & Update Email",
+    "changeEmail": "Change email address",
+    "resendOtp": "Resend OTP",
+    "sending": "Sending...",
+    "errorEmailRequired": "New email is required.",
+    "errorEmailInvalid": "Please enter a valid email address.",
+    "errorEmailSame": "New email must be different from your current email.",
+    "toastOtpSent": "OTP sent to",
+    "toastOtpResent": "OTP resent to",
+    "toastEmailUpdated": "Email updated successfully.",
+    "toastOtpFailed": "Failed to send OTP. Please try again.",
+    "toastOtpInvalid": "Invalid or expired OTP.",
+    "toastResendFailed": "Failed to resend OTP.",
+    "toastOtpIncomplete": "Please enter the full 6-digit OTP."
+  },
+  "ReviewPage": {
+    "title": "Reviews",
+    "subtitle": "Share your experience and read what others say about Pretest AI",
+    "yourReview": "Your Review",
+    "allReviews": "All Reviews"
+  },
+  "InfoPage": {
+    "heroBadge": "AI-Powered Learning",
+    "heroTitle1": "Turn Any PDF Into a",
+    "heroTitle2": "Complete Study Set",
+    "heroDesc": "Pretest AI reads your learning material and instantly generates a summary and quiz. Study smarter, track your progress, and never run out of practice questions.",
+    "getQuota": "Get Quota Now",
+    "goToDashboard": "Go to Dashboard",
+    "aiModelsBadge": "Powered by Multiple AI Models",
+    "aiModelsDesc": "We use the best available models so your summaries and quizzes are always accurate and insightful.",
+    "howItWorksBadge": "How It Works",
+    "howItWorksTitle": "From PDF to Quiz in Minutes",
+    "howItWorksDesc": "A simple five-step workflow designed for both learners and educators.",
+    "stepLabel": "Step",
+    "whoForBadge": "Who Is This For",
+    "whoForTitle": "Built for Learners and Educators",
+    "challengeLabel": "The Challenge",
+    "howHelpsLabel": "How Pretest AI Helps",
+    "pricingBadge": "Pricing",
+    "pricingTitle": "Simple, Token-Based Pricing",
+    "pricingDesc": "Pay only for what you use. Each quota covers one AI quiz generation and one summarization.",
+    "mostPopular": "Most Popular",
+    "buyPlan": "Buy",
+    "ctaTitle": "Ready to study smarter?",
+    "ctaDesc": "Get your quota and start generating quizzes from your own learning materials in under a minute.",
+    "steps": [
+      {
+        "title": "Upload PDF Module",
+        "description": "Upload your learning material in PDF format. Supports textbooks, lecture slides, curriculum documents, and more."
+      },
+      {
+        "title": "AI Generates Summary & Quiz",
+        "description": "Our AI reads and understands your document, then automatically produces a concise summary and a set of quiz questions."
+      },
+      {
+        "title": "Review & Edit Content",
+        "description": "Not happy with a question or summary? You can freely edit any generated content before starting your session."
+      },
+      {
+        "title": "Take the Interactive Quiz",
+        "description": "Answer questions in an interactive session with immediate feedback after each response."
+      },
+      {
+        "title": "Track Your Progress",
+        "description": "Review your quiz history, scores, and improvement over time from your personal dashboard."
+      }
+    ],
+    "audiences": [
+      {
+        "name": "Students & Learners",
+        "problem": "Curriculum changes frequently, leaving students with new modules and limited practice questions to prepare from.",
+        "solution": "Upload any PDF module and instantly get a tailored quiz to self-test and reinforce new material — no matter how recent."
+      },
+      {
+        "name": "Teachers & Educators",
+        "problem": "Creating quality quiz questions for every learning unit is time-consuming and repetitive.",
+        "solution": "Generate a full set of questions from a module in seconds, then edit them to fit your class needs before distributing."
+      }
+    ],
+    "pricing": [
+      {
+        "name": "Starter",
+        "price": "Rp 10.000",
+        "description": "Ideal for students exploring a new subject or module.",
+        "features": [
+          "4x AI Quiz Generation",
+          "4x AI Summarization",
+          "Interactive quiz session",
+          "Progress tracking",
+          "Edit generated content"
+        ]
+      },
+      {
+        "name": "Standard",
+        "price": "Rp 20.000",
+        "description": "Best for teachers or power users with multiple materials.",
+        "features": [
+          "10x AI Quiz Generation",
+          "10x AI Summarization",
+          "Interactive quiz session",
+          "Progress tracking",
+          "Edit generated content"
+        ]
+      }
+    ]
+  },
+  "WelcomeBanner": {
+    "greetingMorning": "Good morning",
+    "greetingMidday": "Good afternoon",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "subtitle": "Good to see you back. Let's continue your learning journey today and conquer new challenges!",
+    "statusActive": "Status: Active",
+    "adminUnlimited": "Admin — Unlimited Access",
+    "quizRemaining": "Quiz: {count} remaining",
+    "summarizeRemaining": "Summary: {count} remaining",
+    "buyQuota": "Buy Quota",
+    "startLearning": "Start Learning"
+  },
+  "ModuleCard": {
+    "statusReady": "Ready",
+    "statusFailed": "Failed",
+    "statusProcessing": "Processing",
+    "failedMessage": "Summarization failed. Please try again.",
+    "detail": "Detail",
+    "retry": "Retry",
+    "deleteModalTitle": "Delete Module",
+    "deleteConfirm": "Are you sure you want to delete the module",
+    "deleteConfirm2": "? This action cannot be undone.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "toastDeleted": "Module deleted successfully",
+    "toastDeleteFailed": "Failed to delete module",
+    "toastRetryStarted": "Summarize process restarted",
+    "toastRetryFailed": "Failed to restart process"
+  },
+  "ModuleEmpty": {
+    "title": "No modules uploaded yet",
+    "desc": "Upload your learning material in PDF format to be automatically summarized by AI and generate practice quizzes.",
+    "uploadButton": "+ Upload Module",
+    "uploadModalTitle": "Upload New Module",
+    "tips": "Make sure your PDF has readable text (not scanned images) so that AI can provide a more accurate and high-quality summary.",
+    "tipsLabel": "Tips:"
+  },
+  "UploadForm": {
+    "titleLabel": "Module Title",
+    "titlePlaceholder": "Enter module title (e.g. Cell Biology Chapter 1)",
+    "fileLabel": "PDF File",
+    "dropzoneText": "Click or drop PDF file to upload",
+    "dropzoneSubtext": "Format: PDF | Max: 20MB",
+    "changeFile": "Change File",
+    "uploadButton": "Upload Module",
+    "toastFileSizeError": "Maximum file size is 20MB",
+    "toastFileTypeError": "Only PDF files are allowed",
+    "toastUploadSuccess": "Module uploaded successfully and is being processed",
+    "toastUploadError": "An error occurred while uploading the module"
+  },
+  "QuizEmpty": {
+    "title": "No Quiz History Yet",
+    "desc": "You haven't taken any quizzes yet. Select one of your modules and start testing your understanding now!",
+    "selectModule": "Select Module"
+  },
+  "GenerateQuizModal": {
+    "title": "Create New Quiz",
+    "selectedModule": "Selected Module",
+    "selectQuestions": "Select Number of Questions",
+    "aiNote": "* AI will generate questions based on your material summary.",
+    "cancel": "Cancel",
+    "start": "Start Quiz",
+    "toastSuccess": "Quiz created successfully! Starting session...",
+    "toastError": "Failed to create quiz"
+  },
+  "QuizCard": {
+    "statusCompleted": "Completed",
+    "statusPending": "Pending",
+    "questions": "Questions",
+    "score": "Score",
+    "result": "Result",
+    "continue": "Continue"
+  },
+  "QuizQuestion": {
+    "progress": "Question {current} of {total}"
+  },
+  "QuizResultComponent": {
+    "reviewTitle": "Review Answers",
+    "yourAnswer": "(Your Answer)",
+    "correct": "(Correct)"
+  },
+  "ReviewForm": {
+    "title": "Customer Review",
+    "subtitle": "Customer reviews are evaluations and opinions shared by users regarding their experiences with our platform.",
+    "positionLabel": "Your Position (Required)",
+    "positionPlaceholder": "e.g. Software Engineer, Student, Teacher",
+    "ratingLabel": "Your Rating",
+    "reviewLabel": "Do you have any thoughts you'd like to share?",
+    "reviewPlaceholder": "Your feedback (Required)",
+    "submit": "Submit",
+    "update": "Update Review",
+    "toastCreated": "Thank you for your review!",
+    "toastUpdated": "Review updated successfully!",
+    "toastCreateFailed": "Failed to submit review. Please try again.",
+    "toastUpdateFailed": "Failed to update review. Please try again."
+  },
+  "ReviewCard": {
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleting": "Deleting…",
+    "deleteConfirm": "Are you sure you want to delete this review?",
+    "toastDeleted": "Review deleted.",
+    "toastDeleteFailed": "Failed to delete review."
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { WelcomeBanner } from "@/components/features/dashboard/WelcomeBanner";
 import { StatCard } from "@/components/features/dashboard/StatCard";
 import { useModulesQuery } from "@/queries/useModuleQuery";
@@ -21,6 +22,7 @@ import type { Module } from "@/types/module.types";
 import Link from "next/link";
 
 export default function DashboardPage() {
+  const t = useTranslations("DashboardPage");
   const { data: user } = useGetMeQuery();
   const { data: modules, isLoading: isLoadingModules } = useModulesQuery();
   const { data: quizHistory, isLoading: isLoadingQuiz } = useQuizHistoryQuery();
@@ -37,25 +39,25 @@ export default function DashboardPage() {
 
     const baseStats = [
       {
-        label: "Total Modules",
+        label: t("statTotalModules"),
         value: totalModules,
         icon: <BookOpen size={20} />,
         variant: "info" as const,
-        description: "Uploaded learning materials",
+        description: t("statTotalModulesDesc"),
       },
       {
-        label: "Completed Quizzes",
+        label: t("statCompletedQuizzes"),
         value: finishedQuizzes,
         icon: <CheckCircle2 size={20} />,
         variant: "success" as const,
-        description: "Practice quizzes completed",
+        description: t("statCompletedQuizzesDesc"),
       },
       {
-        label: "Average Score",
+        label: t("statAvgScore"),
         value: `${avgScore}%`,
         icon: <Zap size={20} />,
         variant: "warning" as const,
-        description: "Cumulative score across all quizzes",
+        description: t("statAvgScoreDesc"),
       },
     ];
 
@@ -63,40 +65,24 @@ export default function DashboardPage() {
       return [
         ...baseStats,
         {
-          label: "Admin Access",
-          value: "Unlimited",
+          label: t("statAdminAccess"),
+          value: t("statAdminAccessValue"),
           icon: <Shield size={20} />,
           variant: "default" as const,
-          description: "No quota restrictions",
+          description: t("statAdminAccessDesc"),
         },
       ];
     }
 
-    return [
-      ...baseStats,
-      // {
-      //   label: 'Quiz Tersisa',
-      //   value: user?.quiz_quota ?? '-',
-      //   icon: <Clipboard size={20} />,
-      //   variant: (user?.quiz_quota ?? 1) === 0 ? 'danger' as const : 'success' as const,
-      //   description: user?.quiz_quota === 0 ? 'Quota habis — beli paket' : 'Generate quiz tersedia'
-      // },
-      // {
-      //   label: 'Ringkas Tersisa',
-      //   value: user?.summarize_quota ?? '-',
-      //   icon: <FileText size={20} />,
-      //   variant: (user?.summarize_quota ?? 1) === 0 ? 'danger' as const : 'info' as const,
-      //   description: user?.summarize_quota === 0 ? 'Quota habis — beli paket' : 'Summarize AI tersedia'
-      // }
-    ];
-  }, [modules, quizHistory, user]);
+    return baseStats;
+  }, [modules, quizHistory, user, t]);
 
   if (isLoadingModules || isLoadingQuiz) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
         <p className="text-gray-500 font-medium animate-pulse text-sm">
-          Preparing your dashboard...
+          {t("loading")}
         </p>
       </div>
     );
@@ -111,7 +97,7 @@ export default function DashboardPage() {
         {stats.map((stat, i) => (
           <div
             key={stat.label}
-            className={`animate-in fade-in slide-in-from-bottom-4`}
+            className="animate-in fade-in slide-in-from-bottom-4"
             style={{ animationDelay: `${i * 100}ms` }}>
             <StatCard {...stat} />
           </div>
@@ -120,13 +106,13 @@ export default function DashboardPage() {
 
       {/* Two Column Layout for Lists */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Modul Terbaru */}
+        {/* Recent Modules */}
         <Card className="p-6 border-none shadow-sm flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Recent Modules</h3>
+            <h3 className="text-lg font-bold text-gray-900">{t("recentModules")}</h3>
             <Link href="/modules">
               <button className="text-sm font-semibold text-primary hover:underline cursor-pointer">
-                View All
+                {t("viewAll")}
               </button>
             </Link>
           </div>
@@ -134,9 +120,7 @@ export default function DashboardPage() {
           <div className="space-y-4 flex-1">
             {!modules || modules.length === 0 ? (
               <div className="h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-2xl">
-                <p className="text-gray-400 text-sm">
-                  No modules uploaded yet
-                </p>
+                <p className="text-gray-400 text-sm">{t("noModules")}</p>
               </div>
             ) : (
               (modules as Module[]).slice(0, 3).map((module) => (
@@ -162,7 +146,7 @@ export default function DashboardPage() {
                   <Badge
                     variant={module.is_summarized ? "success" : "warning"}
                     className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold">
-                    {module.is_summarized ? "Ready" : "Processing"}
+                    {module.is_summarized ? t("moduleReady") : t("moduleProcessing")}
                   </Badge>
                 </div>
               ))
@@ -170,13 +154,13 @@ export default function DashboardPage() {
           </div>
         </Card>
 
-        {/* Quiz Terakhir */}
+        {/* Recent Quizzes */}
         <Card className="p-6 border-none shadow-sm flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Recent Quizzes</h3>
+            <h3 className="text-lg font-bold text-gray-900">{t("recentQuizzes")}</h3>
             <Link href="/quiz">
               <button className="text-sm font-semibold text-primary hover:underline cursor-pointer">
-                View All
+                {t("viewAll")}
               </button>
             </Link>
           </div>
@@ -184,7 +168,7 @@ export default function DashboardPage() {
           <div className="space-y-4 flex-1">
             {!quizHistory || quizHistory.length === 0 ? (
               <div className="h-40 flex flex-col items-center justify-center border-2 border-dashed border-gray-100 rounded-2xl">
-                <p className="text-gray-400 text-sm">No quiz history yet</p>
+                <p className="text-gray-400 text-sm">{t("noQuizzes")}</p>
               </div>
             ) : (
               quizHistory.slice(0, 3).map((quiz) => (
@@ -200,7 +184,7 @@ export default function DashboardPage() {
                         {quiz.module_title}
                       </h4>
                       <p className="text-xs text-gray-400">
-                        {quiz.num_questions} Questions
+                        {quiz.num_questions} {t("quizQuestions")}
                       </p>
                     </div>
                   </div>
@@ -209,7 +193,7 @@ export default function DashboardPage() {
                       {quiz.score ?? "-"}
                       {quiz.score !== null ? "%" : ""}
                     </p>
-                    <p className="text-[10px] text-gray-400">Score</p>
+                    <p className="text-[10px] text-gray-400">{t("score")}</p>
                   </div>
                 </div>
               ))

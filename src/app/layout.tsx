@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/components/shared";
 import { ReactQueryProvider } from "@/lib/Providers";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,22 +16,27 @@ export const metadata: Metadata = {
   description: "AI-powered study platform",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html
-      lang="id"
+      lang={locale}
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="font-sans min-h-full flex flex-col">
-        <ReactQueryProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </ReactQueryProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <ReactQueryProvider>
+            <ToastProvider>
+              {children}
+            </ToastProvider>
+          </ReactQueryProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

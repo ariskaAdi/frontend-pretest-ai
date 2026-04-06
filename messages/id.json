@@ -1,0 +1,523 @@
+{
+  "LandingNavbar": {
+    "home": "Beranda",
+    "features": "Fitur",
+    "about": "Tentang",
+    "howItWorks": "Cara Kerja",
+    "contact": "Kontak",
+    "login": "Masuk",
+    "startFree": "Mulai Gratis"
+  },
+  "Navbar": {
+    "title": "Dashboard",
+    "profile": "Profil",
+    "logout": "Keluar",
+    "cancel": "Batal",
+    "logoutTitle": "Konfirmasi Keluar",
+    "logoutMessage": "Apakah Anda yakin ingin keluar? Sesi Anda saat ini akan diakhiri."
+  },
+  "LandingPage": {
+    "hero": {
+      "headline1": "Persiapan Lebih Cerdas,",
+      "headline2": "Hasil Lebih Baik.",
+      "aiPowered": "Platform Persiapan Ujian Berbasis AI",
+      "learnMore": "Pelajari Lebih Lanjut",
+      "badge": "BARU",
+      "cardTitle": "Terdepan dalam pembelajaran berbasis AI",
+      "cardDesc": "Upload PDF, dapatkan ringkasan instan, dan buat kuis yang dipersonalisasi.",
+      "stat1Label": "Siswa Aktif",
+      "stat2Label": "Quiz Dibuat",
+      "stat3Label": "Tingkat Kelulusan"
+    },
+    "statsBar": {
+      "activeStudents": "Siswa Aktif",
+      "modulesUploaded": "Modul Diupload",
+      "quizzesCompleted": "Quiz Diselesaikan",
+      "passRate": "Tingkat Kelulusan"
+    },
+    "about": {
+      "badge": "PLATFORM BELAJAR AI",
+      "title": "Ubah Cara Anda Belajar",
+      "desc": "Upload modul PDF apa saja dan biarkan AI bekerja keras — ringkasan instan, kuis relevan, dan pelacakan kemajuan, semuanya dalam satu tempat.",
+      "howItWorksLabel": "Cara Kerja",
+      "whoForLabel": "Untuk Siapa",
+      "challengeLabel": "Tantangan",
+      "howHelpsLabel": "Bagaimana Pretest AI Membantu",
+      "steps": [
+        {
+          "title": "Upload Modul PDF",
+          "desc": "Upload buku teks, slide kuliah, atau dokumen kurikulum apa pun."
+        },
+        {
+          "title": "AI Membuat Konten",
+          "desc": "AI membaca dokumen dan menghasilkan ringkasan singkat dan soal kuis."
+        },
+        {
+          "title": "Tinjau & Edit",
+          "desc": "Edit konten yang dihasilkan sebelum memulai sesi belajar Anda."
+        },
+        {
+          "title": "Kerjakan Quiz",
+          "desc": "Jawab pertanyaan secara interaktif dengan umpan balik instan."
+        },
+        {
+          "title": "Lacak Kemajuan",
+          "desc": "Tinjau skor dan peningkatan dari waktu ke waktu di dashboard Anda."
+        }
+      ],
+      "audiences": [
+        {
+          "name": "Siswa & Pelajar",
+          "problem": "Kurikulum sering berubah, meninggalkan siswa dengan modul baru dan kumpulan soal latihan yang terbatas untuk persiapan.",
+          "solution": "Upload modul PDF apa saja dan dapatkan kuis yang disesuaikan untuk menguji diri dan memperkuat materi baru — tidak peduli seberapa baru kurikulumnya."
+        },
+        {
+          "name": "Guru & Pendidik",
+          "problem": "Membuat soal kuis berkualitas untuk setiap unit pembelajaran membutuhkan waktu lama dan berulang bagi pendidik yang sibuk.",
+          "solution": "Buat set lengkap pertanyaan dari modul dalam hitungan detik, lalu edit sesuai kebutuhan kelas sebelum dibagikan ke siswa."
+        }
+      ]
+    },
+    "features": {
+      "title1": "Fitur",
+      "title2": "Utama",
+      "desc": "Semua yang Anda butuhkan untuk belajar lebih cerdas ada di sini.",
+      "items": [
+        {
+          "name": "Upload Modul PDF",
+          "desc": "Drag & drop PDF hingga 20MB, diproses instan oleh AI"
+        },
+        {
+          "name": "Ringkasan AI Otomatis",
+          "desc": "Ringkasan kontekstual dihasilkan dalam hitungan detik"
+        },
+        {
+          "name": "Pembuatan Quiz Cerdas",
+          "desc": "Kuis pilihan ganda yang dipersonalisasi berdasarkan modul Anda"
+        },
+        {
+          "name": "Lacak Kemajuan Anda",
+          "desc": "Riwayat quiz, skor, dan statistik belajar Anda"
+        }
+      ]
+    },
+    "marquee": ["Upload PDF", "Ringkasan AI", "Buat Quiz", "Analisis Skor", "Belajar Efisien", "Lacak Kemajuan"],
+    "testimonials": {
+      "title1": "Apa Kata",
+      "title2": "Pengguna Kami",
+      "items": [
+        {
+          "name": "Rina Amalia",
+          "role": "Mahasiswi Kedokteran",
+          "quote": "Ringkasan AI-nya sangat akurat. 50 halaman materi jadi poin-poin penting dalam 2 menit."
+        },
+        {
+          "name": "Budi Santoso",
+          "role": "Siswa SMA",
+          "quote": "Soal quiz benar-benar berdasarkan isi modul. Nilai ujian saya melonjak setelah pakai Pretest AI."
+        },
+        {
+          "name": "Siti Rahayu",
+          "role": "Mahasiswi Hukum",
+          "quote": "Upload sekali, generate quiz berkali-kali. Penghemat waktu yang luar biasa untuk persiapan ujian."
+        },
+        {
+          "name": "Dimas Pratama",
+          "role": "Guru SMA",
+          "quote": "Saya perkenalkan ke siswa-siswa saya. Mereka jauh lebih aktif belajar mandiri berkat fitur quiz-nya."
+        },
+        {
+          "name": "Ayu Lestari",
+          "role": "Calon ASN",
+          "quote": "Sangat membantu untuk belajar materi TWK dan TIU. Ringkasannya tepat sasaran."
+        },
+        {
+          "name": "Fahri Ramadhan",
+          "role": "Mahasiswa Teknik",
+          "quote": "Fitur generate 20 soal langsung dari PDF kuliah? Benar-benar game changer."
+        }
+      ]
+    },
+    "cta": {
+      "title1": "Siap Mulai Belajar",
+      "title2": "Lebih Cerdas?",
+      "desc": "Bergabung dengan ribuan siswa yang telah meningkatkan nilai mereka dengan Pretest AI.",
+      "emailPlaceholder": "Masukkan email Anda...",
+      "signUp": "Daftar Sekarang",
+      "freeNote": "Gratis. Tidak perlu kartu kredit."
+    },
+    "footer": {
+      "tagline": "Platform belajar berbasis AI.",
+      "features": "Fitur",
+      "howItWorks": "Cara Kerja",
+      "login": "Masuk",
+      "signUp": "Daftar",
+      "copyright": "© 2025 Pretest AI. Seluruh hak dilindungi."
+    }
+  },
+  "DashboardPage": {
+    "loading": "Mempersiapkan dashboard Anda...",
+    "statTotalModules": "Total Modul",
+    "statTotalModulesDesc": "Materi belajar yang diupload",
+    "statCompletedQuizzes": "Quiz Selesai",
+    "statCompletedQuizzesDesc": "Quiz latihan yang diselesaikan",
+    "statAvgScore": "Skor Rata-rata",
+    "statAvgScoreDesc": "Skor kumulatif di semua quiz",
+    "statAdminAccess": "Akses Admin",
+    "statAdminAccessValue": "Tanpa Batas",
+    "statAdminAccessDesc": "Tidak ada batasan kuota",
+    "recentModules": "Modul Terbaru",
+    "recentQuizzes": "Quiz Terbaru",
+    "viewAll": "Lihat Semua",
+    "noModules": "Belum ada modul yang diupload",
+    "noQuizzes": "Belum ada riwayat quiz",
+    "moduleReady": "Siap",
+    "moduleProcessing": "Diproses",
+    "quizQuestions": "Pertanyaan",
+    "score": "Skor"
+  },
+  "ModulesPage": {
+    "title": "Koleksi Modul",
+    "subtitle": "Kelola semua materi belajar Anda di sini",
+    "uploadButton": "+ Upload Modul",
+    "uploadModalTitle": "Upload Modul Baru",
+    "uploadTips": "Pastikan PDF Anda memiliki teks yang dapat dibaca (bukan hasil scan gambar) agar AI dapat memberikan ringkasan yang lebih akurat dan berkualitas.",
+    "uploadTipsLabel": "Tips:",
+    "loading": "Memuat daftar modul..."
+  },
+  "ModuleDetail": {
+    "backToCollection": "Kembali ke Koleksi",
+    "loading": "Memuat detail modul...",
+    "notFound": "Modul tidak ditemukan",
+    "backButton": "Kembali ke Koleksi",
+    "statusReady": "Ringkasan Tersedia",
+    "statusFailed": "Peringkasan Gagal",
+    "statusProcessing": "Diproses oleh AI",
+    "openPdf": "Buka File PDF",
+    "openPdfDesc": "Lihat dokumen asli",
+    "openLink": "Buka Link",
+    "aiSummary": "Ringkasan AI",
+    "aiSummaryDesc": "Lihat ringkasan cerdas yang dihasilkan AI",
+    "aiSummaryError": "Terjadi kesalahan saat merangkum materi.",
+    "viewSummary": "Lihat Ringkasan",
+    "tryAgain": "Coba Lagi",
+    "generateQuiz": "Buat Quiz",
+    "generateQuizDesc": "Uji pemahaman Anda dengan soal latihan",
+    "createQuiz": "Buat Quiz",
+    "dangerZone": "Zona Berbahaya",
+    "dangerZoneDesc": "Hapus permanen modul ini dan semua data terkaitnya",
+    "deleteModule": "Hapus Modul",
+    "deleteModalTitle": "Hapus Modul Secara Permanen",
+    "deleteConfirm": "Apakah Anda yakin ingin menghapus modul",
+    "deleteConfirm2": "? Semua ringkasan dan riwayat quiz yang terkait akan dihapus secara permanen.",
+    "cancel": "Batal",
+    "deleteNow": "Ya, Hapus Sekarang",
+    "toastDeleted": "Modul berhasil dihapus",
+    "toastDeleteFailed": "Gagal menghapus modul",
+    "toastRetryStarted": "Proses peringkasan dimulai ulang",
+    "toastRetryFailed": "Gagal memulai ulang proses"
+  },
+  "ModuleSummaryPage": {
+    "loading": "Memuat ringkasan...",
+    "notFound": "Modul tidak ditemukan",
+    "backToCollection": "Kembali ke Koleksi",
+    "backToDetail": "Kembali ke Detail Modul",
+    "aiProcessing": "AI Sedang Meringkas...",
+    "aiProcessingDesc": "Mohon tunggu! AI kami sedang menganalisis modul Anda untuk membuat ringkasan terbaik. Halaman ini akan diperbarui otomatis setelah selesai.",
+    "cancelBack": "Batalkan & Kembali ke Detail",
+    "summaryPrefix": "Ringkasan:",
+    "summaryDesc": "Ringkasan cerdas yang dihasilkan AI dari dokumen PDF Anda.",
+    "quoteText": "\"Memahami materi adalah kunci keberhasilan quiz.\"",
+    "continueQuiz": "Lanjut Buat Quiz"
+  },
+  "QuizPage": {
+    "loading": "Memuat riwayat quiz...",
+    "title": "Riwayat Quiz",
+    "subtitle": "Latih pemahaman Anda dengan soal-soal berbasis AI.",
+    "createNewQuiz": "+ Buat Quiz Baru dari Modul"
+  },
+  "QuizSession": {
+    "notFoundTitle": "Sesi Quiz Berakhir",
+    "notFoundDesc": "Sesi quiz tidak ditemukan karena halaman di-refresh atau sesi telah berakhir. Batalkan quiz ini untuk mengembalikan kuota Anda.",
+    "backToHistory": "Kembali ke Riwayat",
+    "cancelReturnQuota": "Batalkan & Kembalikan Kuota",
+    "exit": "Keluar",
+    "previous": "← Sebelumnya",
+    "next": "Selanjutnya →",
+    "submitQuiz": "Kirim Quiz",
+    "submitModalTitle": "Kirim Jawaban?",
+    "submitModalDesc": "Apakah Anda yakin ingin mengirimkan jawaban sekarang? Anda tidak dapat mengubah jawaban setelah pengiriman.",
+    "cancel": "Batal",
+    "yesSubmit": "Ya, Kirim",
+    "toastCancelled": "Quiz dibatalkan dan kuota dikembalikan",
+    "toastCancelFailed": "Gagal membatalkan quiz",
+    "toastSubmitted": "Quiz berhasil dikirim!",
+    "toastSubmitFailed": "Gagal mengirim jawaban"
+  },
+  "QuizResultPage": {
+    "loading": "Memuat hasil quiz...",
+    "notFound": "Hasil quiz tidak ditemukan.",
+    "back": "Kembali",
+    "finalScore": "Skor Akhir Anda",
+    "outOf": "dari 100",
+    "passed": "Lulus",
+    "tryAgain": "Coba Lagi",
+    "retryQuiz": "Ulangi Quiz",
+    "downloadQuiz": "Unduh Quiz",
+    "backToModules": "Kembali ke Modul",
+    "totalQuestions": "Total Pertanyaan",
+    "correct": "Benar",
+    "incorrect": "Salah",
+    "exportModalTitle": "Unduh Quiz",
+    "editQuiz": "Edit Quiz",
+    "editQuizDesc": "Edit konten sebelum mengunduh",
+    "downloadPdf": "Unduh sebagai PDF",
+    "downloadPdfDesc": "Buat dan unduh langsung",
+    "cancel": "Batal",
+    "toastRetrying": "Memulai ulang quiz...",
+    "toastRetryFailed": "Gagal mengulang quiz",
+    "toastNoQuestions": "Tidak ada soal yang ditemukan."
+  },
+  "QuizEdit": {
+    "title": "Edit Quiz",
+    "subtitle": "Edit konten di bawah ini, lalu unduh sebagai PDF.",
+    "downloadPdf": "Unduh sebagai PDF",
+    "documentTitle": "Judul Dokumen",
+    "titlePlaceholder": "Judul quiz...",
+    "formatGuide": "Panduan Format Markdown",
+    "formatQuestion": "— nomor dan teks pertanyaan",
+    "formatOption": "— pilihan jawaban (A–E)",
+    "cancel": "Batal"
+  },
+  "ProfilePage": {
+    "title": "Profil",
+    "subtitle": "Kelola informasi akun Anda.",
+    "accountInfo": "Info Akun",
+    "nameLabel": "Nama",
+    "emailLabel": "Email Saat Ini",
+    "roleLabel": "Peran",
+    "verified": "Terverifikasi",
+    "updateEmail": "Perbarui Email",
+    "updateEmailDesc": "OTP akan dikirim ke alamat email baru Anda untuk verifikasi.",
+    "newEmailLabel": "Alamat Email Baru",
+    "sendOtp": "Kirim OTP",
+    "otpSentTo": "OTP dikirim ke",
+    "enterOtp": "Masukkan OTP 6 digit",
+    "verifyUpdate": "Verifikasi & Perbarui Email",
+    "changeEmail": "Ganti alamat email",
+    "resendOtp": "Kirim Ulang OTP",
+    "sending": "Mengirim...",
+    "errorEmailRequired": "Email baru wajib diisi.",
+    "errorEmailInvalid": "Masukkan alamat email yang valid.",
+    "errorEmailSame": "Email baru harus berbeda dari email saat ini.",
+    "toastOtpSent": "OTP dikirim ke",
+    "toastOtpResent": "OTP dikirim ulang ke",
+    "toastEmailUpdated": "Email berhasil diperbarui.",
+    "toastOtpFailed": "Gagal mengirim OTP. Silakan coba lagi.",
+    "toastOtpInvalid": "OTP tidak valid atau sudah kedaluwarsa.",
+    "toastResendFailed": "Gagal mengirim ulang OTP.",
+    "toastOtpIncomplete": "Masukkan 6 digit OTP lengkap."
+  },
+  "ReviewPage": {
+    "title": "Ulasan",
+    "subtitle": "Bagikan pengalaman Anda dan baca apa yang dikatakan pengguna lain tentang Pretest AI",
+    "yourReview": "Ulasan Anda",
+    "allReviews": "Semua Ulasan"
+  },
+  "InfoPage": {
+    "heroBadge": "Pembelajaran Berbasis AI",
+    "heroTitle1": "Ubah PDF Apa Saja Menjadi",
+    "heroTitle2": "Set Belajar Lengkap",
+    "heroDesc": "Pretest AI membaca materi belajar Anda dan langsung menghasilkan ringkasan dan quiz. Belajar lebih cerdas, lacak kemajuan, dan jangan pernah kehabisan soal latihan.",
+    "getQuota": "Dapatkan Kuota Sekarang",
+    "goToDashboard": "Ke Dashboard",
+    "aiModelsBadge": "Didukung Berbagai Model AI",
+    "aiModelsDesc": "Kami menggunakan model terbaik yang tersedia agar ringkasan dan quiz Anda selalu akurat dan mendalam.",
+    "howItWorksBadge": "Cara Kerja",
+    "howItWorksTitle": "Dari PDF ke Quiz dalam Hitungan Menit",
+    "howItWorksDesc": "Alur kerja lima langkah yang dirancang untuk pelajar dan pendidik.",
+    "stepLabel": "Langkah",
+    "whoForBadge": "Untuk Siapa",
+    "whoForTitle": "Dirancang untuk Pelajar dan Pendidik",
+    "challengeLabel": "Tantangan",
+    "howHelpsLabel": "Bagaimana Pretest AI Membantu",
+    "pricingBadge": "Harga",
+    "pricingTitle": "Harga Sederhana Berbasis Token",
+    "pricingDesc": "Bayar hanya yang Anda gunakan. Setiap kuota mencakup satu pembuatan quiz AI dan satu peringkasan.",
+    "mostPopular": "Paling Populer",
+    "buyPlan": "Beli",
+    "ctaTitle": "Siap belajar lebih cerdas?",
+    "ctaDesc": "Dapatkan kuota Anda dan mulai buat quiz dari materi belajar Anda sendiri dalam satu menit.",
+    "steps": [
+      {
+        "title": "Upload Modul PDF",
+        "description": "Upload materi belajar Anda dalam format PDF. Mendukung buku teks, slide kuliah, dokumen kurikulum, dan lainnya."
+      },
+      {
+        "title": "AI Membuat Ringkasan & Quiz",
+        "description": "AI kami membaca dan memahami dokumen Anda, lalu secara otomatis menghasilkan ringkasan singkat dan soal kuis."
+      },
+      {
+        "title": "Tinjau & Edit Konten",
+        "description": "Tidak puas dengan pertanyaan atau ringkasan? Anda bisa mengedit konten yang dihasilkan sebelum memulai sesi."
+      },
+      {
+        "title": "Kerjakan Quiz Interaktif",
+        "description": "Jawab pertanyaan dalam sesi interaktif dengan umpan balik langsung setelah setiap respons."
+      },
+      {
+        "title": "Lacak Kemajuan Anda",
+        "description": "Tinjau riwayat quiz, skor, dan peningkatan dari waktu ke waktu di dashboard pribadi Anda."
+      }
+    ],
+    "audiences": [
+      {
+        "name": "Siswa & Pelajar",
+        "problem": "Kurikulum sering berubah, meninggalkan siswa dengan modul baru dan soal latihan yang terbatas untuk persiapan.",
+        "solution": "Upload modul PDF apa saja dan dapatkan quiz yang disesuaikan untuk menguji diri dan memperkuat materi baru — tidak peduli seberapa baru."
+      },
+      {
+        "name": "Guru & Pendidik",
+        "problem": "Membuat soal kuis berkualitas untuk setiap unit pembelajaran membutuhkan waktu lama dan berulang.",
+        "solution": "Buat set lengkap pertanyaan dari modul dalam hitungan detik, lalu edit sesuai kebutuhan kelas sebelum dibagikan."
+      }
+    ],
+    "pricing": [
+      {
+        "name": "Starter",
+        "price": "Rp 10.000",
+        "description": "Ideal untuk siswa yang menjelajahi subjek atau modul baru.",
+        "features": [
+          "4x Pembuatan Quiz AI",
+          "4x Peringkasan AI",
+          "Sesi quiz interaktif",
+          "Pelacakan kemajuan",
+          "Edit konten yang dihasilkan"
+        ]
+      },
+      {
+        "name": "Standard",
+        "price": "Rp 20.000",
+        "description": "Terbaik untuk guru atau pengguna aktif dengan banyak materi.",
+        "features": [
+          "10x Pembuatan Quiz AI",
+          "10x Peringkasan AI",
+          "Sesi quiz interaktif",
+          "Pelacakan kemajuan",
+          "Edit konten yang dihasilkan"
+        ]
+      }
+    ]
+  },
+  "WelcomeBanner": {
+    "greetingMorning": "Selamat pagi",
+    "greetingMidday": "Selamat siang",
+    "greetingAfternoon": "Selamat sore",
+    "greetingEvening": "Selamat malam",
+    "subtitle": "Senang melihatmu kembali. Mari lanjutkan perjalanan belajarmu hari ini dan taklukkan tantangan baru!",
+    "statusActive": "Status: Aktif",
+    "adminUnlimited": "Admin — Akses Tanpa Batas",
+    "quizRemaining": "Quiz: {count} tersisa",
+    "summarizeRemaining": "Ringkas: {count} tersisa",
+    "buyQuota": "Beli Kuota",
+    "startLearning": "Mulai Belajar"
+  },
+  "ModuleCard": {
+    "statusReady": "Ringkas",
+    "statusFailed": "Gagal",
+    "statusProcessing": "Proses",
+    "failedMessage": "Gagal merangkum. Silakan coba lagi.",
+    "detail": "Detail",
+    "retry": "Coba Lagi",
+    "deleteModalTitle": "Hapus Modul",
+    "deleteConfirm": "Apakah Anda yakin ingin menghapus modul",
+    "deleteConfirm2": "? Tindakan ini tidak dapat dibatalkan.",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "toastDeleted": "Modul berhasil dihapus",
+    "toastDeleteFailed": "Gagal menghapus modul",
+    "toastRetryStarted": "Proses ringkasan dimulai ulang",
+    "toastRetryFailed": "Gagal memulai ulang proses"
+  },
+  "ModuleEmpty": {
+    "title": "Belum ada modul diupload",
+    "desc": "Upload materi belajar Anda dalam format PDF untuk dirangkum secara otomatis oleh AI dan generate quiz latihan.",
+    "uploadButton": "+ Upload Modul",
+    "uploadModalTitle": "Upload Modul Baru",
+    "tips": "Pastikan PDF Anda memiliki teks yang dapat dibaca (bukan hasil scan gambar) agar AI dapat memberikan rangkuman yang lebih akurat dan berkualitas.",
+    "tipsLabel": "Tips:"
+  },
+  "UploadForm": {
+    "titleLabel": "Judul Modul",
+    "titlePlaceholder": "Masukkan judul modul (contoh: Biologi Sel Bab 1)",
+    "fileLabel": "File PDF",
+    "dropzoneText": "Klik atau drop file PDF untuk upload",
+    "dropzoneSubtext": "Format: PDF | Maks: 20MB",
+    "changeFile": "Ganti File",
+    "uploadButton": "Upload Modul",
+    "toastFileSizeError": "Maksimum ukuran file adalah 20MB",
+    "toastFileTypeError": "Hanya file PDF yang diperbolehkan",
+    "toastUploadSuccess": "Modul berhasil diupload dan sedang diproses",
+    "toastUploadError": "Terjadi kesalahan saat mengupload modul"
+  },
+  "QuizEmpty": {
+    "title": "Belum Ada Riwayat Quiz",
+    "desc": "Anda belum pernah mengerjakan quiz apapun. Pilih salah satu modul Anda dan mulai uji pemahaman Anda sekarang!",
+    "selectModule": "Pilih Modul"
+  },
+  "GenerateQuizModal": {
+    "title": "Buat Quiz Baru",
+    "selectedModule": "Modul Terpilih",
+    "selectQuestions": "Pilih Jumlah Pertanyaan",
+    "aiNote": "* AI akan men-generate soal berdasarkan ringkasan materi Anda.",
+    "cancel": "Batal",
+    "start": "Mulai Quiz",
+    "toastSuccess": "Quiz berhasil dibuat! Memulai sesi...",
+    "toastError": "Gagal membuat quiz"
+  },
+  "QuizCard": {
+    "statusCompleted": "Selesai",
+    "statusPending": "Pending",
+    "questions": "Pertanyaan",
+    "score": "Skor",
+    "result": "Hasil",
+    "continue": "Lanjutkan"
+  },
+  "QuizQuestion": {
+    "progress": "Pertanyaan {current} dari {total}"
+  },
+  "QuizResultComponent": {
+    "reviewTitle": "Tinjauan Jawaban",
+    "yourAnswer": "(Pilihanmu)",
+    "correct": "(Benar)"
+  },
+  "ReviewPage": {
+    "title": "Ulasan",
+    "subtitle": "Bagikan pengalaman Anda dan baca apa yang dikatakan pengguna lain tentang Pretest AI",
+    "yourReview": "Ulasan Anda",
+    "allReviews": "Semua Ulasan"
+  },
+  "ReviewForm": {
+    "title": "Ulasan Pelanggan",
+    "subtitle": "Ulasan pelanggan adalah evaluasi dan pendapat yang dibagikan oleh pengguna mengenai pengalaman mereka dengan platform kami.",
+    "positionLabel": "Posisi/Profesi Anda (Wajib)",
+    "positionPlaceholder": "mis. Software Engineer, Mahasiswa, Guru",
+    "ratingLabel": "Rating Anda",
+    "reviewLabel": "Ada pemikiran yang ingin Anda bagikan?",
+    "reviewPlaceholder": "Masukan Anda (Wajib)",
+    "submit": "Kirim",
+    "update": "Perbarui Ulasan",
+    "toastCreated": "Terima kasih atas ulasan Anda!",
+    "toastUpdated": "Ulasan berhasil diperbarui!",
+    "toastCreateFailed": "Gagal mengirim ulasan. Silakan coba lagi.",
+    "toastUpdateFailed": "Gagal memperbarui ulasan. Silakan coba lagi."
+  },
+  "ReviewCard": {
+    "edit": "Edit",
+    "delete": "Hapus",
+    "deleting": "Menghapus...",
+    "deleteConfirm": "Apakah Anda yakin ingin menghapus ulasan ini?",
+    "toastDeleted": "Ulasan dihapus.",
+    "toastDeleteFailed": "Gagal menghapus ulasan."
+  }
+}

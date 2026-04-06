@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/shared/Card";
 import type { QuizQuestion as IQuizQuestion } from "@/types/quiz.types";
 
@@ -21,6 +21,7 @@ export function QuizQuestion({
   questionNumber,
   totalQuestions,
 }: QuizQuestionProps) {
+  const t = useTranslations("QuizQuestion");
   const progress = (questionNumber / totalQuestions) * 100;
 
   return (
@@ -29,7 +30,7 @@ export function QuizQuestion({
       <div className="space-y-3">
         <div className="flex items-center justify-between text-sm font-bold">
           <span className="text-gray-900 uppercase tracking-wider">
-            Pertanyaan {questionNumber} dari {totalQuestions}
+            {t("progress", { current: questionNumber, total: totalQuestions })}
           </span>
           <span className="text-secondary">{Math.round(progress)}%</span>
         </div>
@@ -66,7 +67,7 @@ export function QuizQuestion({
                 `}>
                 <div
                   className={`
-                  w-8 h-8 rounded-xl flex items-center justify-center font-black flex-shrink-0 transition-colors
+                  w-8 h-8 rounded-xl flex items-center justify-center font-black shrink-0 transition-colors
                   ${isSelected ? "bg-secondary text-white" : "bg-white text-gray-400 border border-gray-100 group-hover:text-secondary group-hover:border-secondary"}
                 `}>
                   {label}

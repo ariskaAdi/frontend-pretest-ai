@@ -5,6 +5,7 @@ import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { Trophy, RotateCcw, Download, Pencil, FileDown, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   useQuizResultQuery,
   useRetryQuizMutation,
@@ -25,6 +26,7 @@ export default function QuizResultPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const t = useTranslations("QuizResultPage");
 
   const [isExportModalOpen, setIsExportModalOpen] = React.useState(false);
 
@@ -38,11 +40,11 @@ export default function QuizResultPage() {
     retryQuiz(id, {
       onSuccess: (res) => {
         const newQuiz = res.data.data;
-        toast.success("Restarting quiz...");
+        toast.success(t("toastRetrying"));
         router.push(`/quiz/${newQuiz.id}`);
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || "Failed to retry quiz");
+        toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });
   };
@@ -55,14 +57,14 @@ export default function QuizResultPage() {
 
   const handleDownloadPdf = () => {
     const questions = getQuestions();
-    if (!questions.length) { toast.error("No questions found."); return; }
+    if (!questions.length) { toast.error(t("toastNoQuestions")); return; }
     generateQuizPdf(displayData.module_title ?? "Quiz", questions);
     setIsExportModalOpen(false);
   };
 
   const handleEditQuiz = () => {
     const questions = getQuestions();
-    if (!questions.length) { toast.error("No questions found."); return; }
+    if (!questions.length) { toast.error(t("toastNoQuestions")); return; }
     const md = questionsToMarkdown(displayData.module_title ?? "Quiz", questions);
     sessionStorage.setItem("quiz_edit_content", md);
     sessionStorage.setItem("quiz_edit_title", displayData.module_title ?? "Quiz");
@@ -74,9 +76,7 @@ export default function QuizResultPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
         <Spinner size="lg" className="mb-4" />
-        <p className="text-gray-500 font-medium animate-pulse">
-          Loading quiz results...
-        </p>
+        <p className="text-gray-500 font-medium animate-pulse">{t("loading")}</p>
       </div>
     );
   }
@@ -84,10 +84,8 @@ export default function QuizResultPage() {
   if (!displayData) {
     return (
       <div className="text-center py-20">
-        <p className="text-gray-500">Quiz results not found.</p>
-        <Button onClick={() => router.push("/quiz")} className="mt-4">
-          Back
-        </Button>
+        <p className="text-gray-500">{t("notFound")}</p>
+        <Button onClick={() => router.push("/quiz")} className="mt-4">{t("back")}</Button>
       </div>
     );
   }
@@ -103,23 +101,21 @@ export default function QuizResultPage() {
 
         <div className="relative z-10">
           <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-4">
-            Your Final Score
+            {t("finalScore")}
           </p>
           <div className="flex flex-col items-center justify-center mb-6">
-            <span
-              className={`text-8xl font-black ${isPassed ? "text-success" : "text-danger"}`}>
+            <span className={`text-8xl font-black ${isPassed ? "text-success" : "text-danger"}`}>
               {displayData.score}
             </span>
-            <span className="text-gray-300 font-bold">out of 100</span>
+            <span className="text-gray-300 font-bold">{t("outOf")}</span>
           </div>
 
-          <div
-            className={`inline-flex items-center gap-2 px-6 py-2 rounded-2xl font-black text-sm uppercase tracking-wider mb-8
+          <div className={`inline-flex items-center gap-2 px-6 py-2 rounded-2xl font-black text-sm uppercase tracking-wider mb-8
             ${isPassed ? "bg-success/10 text-success" : "bg-danger/10 text-danger"}`}>
             {isPassed ? (
-              <><Trophy size={16} /> Passed</>
+              <><Trophy size={16} /> {t("passed")}</>
             ) : (
-              <><RotateCcw size={16} /> Try Again</>
+              <><RotateCcw size={16} /> {t("tryAgain")}</>
             )}
           </div>
 
@@ -128,19 +124,19 @@ export default function QuizResultPage() {
               onClick={handleRetry}
               className="flex-1 rounded-2xl font-bold py-6 text-base shadow-xl shadow-primary/20 flex items-center justify-center gap-2"
               loading={isRetrying}>
-              <RotateCcw size={20} /> Retry Quiz
+              <RotateCcw size={20} /> {t("retryQuiz")}
             </Button>
             <Button
               variant="ghost"
               onClick={() => setIsExportModalOpen(true)}
               className="flex-1 rounded-2xl font-bold py-6 text-base flex items-center justify-center gap-2">
-              <Download size={18} /> Download Quiz
+              <Download size={18} /> {t("downloadQuiz")}
             </Button>
             <Button
               variant="ghost"
               onClick={() => router.push("/modules")}
               className="flex-1 rounded-2xl font-bold py-6 text-base">
-              Back to Modules
+              {t("backToModules")}
             </Button>
           </div>
         </div>
@@ -149,17 +145,17 @@ export default function QuizResultPage() {
       {/* Summary Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center">
-          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Total Questions</p>
+          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">{t("totalQuestions")}</p>
           <p className="text-2xl font-black text-gray-900">{displayData.num_questions}</p>
         </div>
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center">
-          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Correct</p>
+          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">{t("correct")}</p>
           <p className="text-2xl font-black text-success">
             {displayData.questions.filter((q: any) => q.is_correct).length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-3xl border border-gray-50 shadow-sm text-center col-span-2 md:col-span-1">
-          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Incorrect</p>
+          <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">{t("incorrect")}</p>
           <p className="text-2xl font-black text-danger">
             {displayData.questions.filter((q: any) => !q.is_correct).length}
           </p>
@@ -173,7 +169,7 @@ export default function QuizResultPage() {
       <Modal
         open={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
-        title="Download Quiz"
+        title={t("exportModalTitle")}
         size="sm">
         <div className="flex flex-col gap-3 py-2">
           <button
@@ -183,8 +179,8 @@ export default function QuizResultPage() {
               <Pencil size={18} />
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">Edit Quiz</p>
-              <p className="text-xs text-gray-400">Edit content before downloading</p>
+              <p className="font-bold text-gray-900 text-sm">{t("editQuiz")}</p>
+              <p className="text-xs text-gray-400">{t("editQuizDesc")}</p>
             </div>
           </button>
 
@@ -195,8 +191,8 @@ export default function QuizResultPage() {
               <FileDown size={18} />
             </div>
             <div>
-              <p className="font-bold text-gray-900 text-sm">Download as PDF</p>
-              <p className="text-xs text-gray-400">Generate and download immediately</p>
+              <p className="font-bold text-gray-900 text-sm">{t("downloadPdf")}</p>
+              <p className="text-xs text-gray-400">{t("downloadPdfDesc")}</p>
             </div>
           </button>
 
@@ -207,7 +203,7 @@ export default function QuizResultPage() {
               <X size={18} />
             </div>
             <div>
-              <p className="font-bold text-red-500 text-sm">Cancel</p>
+              <p className="font-bold text-red-500 text-sm">{t("cancel")}</p>
             </div>
           </button>
         </div>

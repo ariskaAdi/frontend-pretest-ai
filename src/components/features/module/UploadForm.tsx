@@ -4,6 +4,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { FileText, FolderOpen } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useUploadModuleMutation } from '@/queries/useModuleQuery'
 import { Button } from '@/components/shared/Button'
 import { Input } from '@/components/shared/Input'
@@ -35,10 +36,11 @@ interface UploadFormProps {
 }
 
 export function UploadForm({ onSuccess }: UploadFormProps) {
+  const t = useTranslations('UploadForm')
   const router = useRouter()
   const { toast } = useToast()
   const { mutate: uploadModule, isPending } = useUploadModuleMutation()
-  
+
   const {
     register,
     handleSubmit,
@@ -69,13 +71,12 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
     const droppedFile = e.dataTransfer.files[0]
     if (droppedFile && droppedFile.type === 'application/pdf') {
       if (droppedFile.size > 20 * 1024 * 1024) {
-        toast.error('Maksimum ukuran file adalah 20MB')
+        toast.error(t('toastFileSizeError'))
         return
       }
       setValue("file", droppedFile, { shouldValidate: true })
     } else {
-      toast.error('Hanya file PDF yang diperbolehkan')
-      // Let validation fail on the form 
+      toast.error(t('toastFileTypeError'))
       setValue("file", droppedFile, { shouldValidate: true })
     }
   }
@@ -84,7 +85,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
       if (selectedFile.size > 20 * 1024 * 1024) {
-        toast.error('Maksimum ukuran file adalah 20MB')
+        toast.error(t('toastFileSizeError'))
         return
       }
       setValue("file", selectedFile, { shouldValidate: true })
@@ -98,13 +99,13 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
     uploadModule(formData, {
       onSuccess: () => {
-        toast.success('Modul berhasil diupload dan sedang diproses')
+        toast.success(t('toastUploadSuccess'))
         reset()
         onSuccess?.()
         router.push('/modules')
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || 'Terjadi kesalahan saat mengupload modul')
+        toast.error(error.response?.data?.error || t('toastUploadError'))
       }
     })
   }
@@ -113,11 +114,11 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2">
         <label htmlFor="title" className="text-sm font-bold text-gray-700 ml-1">
-          Judul Modul
+          {t('titleLabel')}
         </label>
         <Input
           id="title"
-          placeholder="Masukkan judul modul (contoh: Biologi Sel Bab 1)"
+          placeholder={t('titlePlaceholder')}
           {...register("title")}
           className="rounded-2xl h-12"
         />
@@ -128,7 +129,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
 
       <div className="space-y-2">
         <label className="text-sm font-bold text-gray-700 ml-1">
-          File PDF
+          {t('fileLabel')}
         </label>
         <div
           onDragOver={handleDragOver}
@@ -148,7 +149,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
             accept=".pdf"
             className="hidden"
           />
-          
+
           <div className={cn(
             "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110",
             file ? "bg-primary text-white" : "bg-gray-100 text-gray-400 group-hover:bg-primary-light group-hover:text-primary"
@@ -161,7 +162,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
               <>
                 <p className="font-bold text-gray-900 mb-1">{file.name}</p>
                 <p className="text-xs text-gray-400">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-                <button 
+                <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation()
@@ -169,15 +170,15 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
                   }}
                   className="mt-4 text-xs font-bold text-danger hover:underline"
                 >
-                  Ganti File
+                  {t('changeFile')}
                 </button>
               </>
             ) : (
               <>
                 <p className="font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
-                  Klik atau drop file PDF untuk upload
+                  {t('dropzoneText')}
                 </p>
-                <p className="text-xs text-gray-400">Format: PDF | Maks: 20MB</p>
+                <p className="text-xs text-gray-400">{t('dropzoneSubtext')}</p>
               </>
             )}
           </div>
@@ -188,14 +189,14 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
       </div>
 
       <div className="pt-4">
-        <Button 
-          type="submit" 
-          size="lg" 
+        <Button
+          type="submit"
+          size="lg"
           className="w-full h-12 rounded-2xl shadow-md shadow-primary/20 font-bold"
           disabled={isPending}
           loading={isPending}
         >
-          Upload Modul
+          {t('uploadButton')}
         </Button>
       </div>
     </form>

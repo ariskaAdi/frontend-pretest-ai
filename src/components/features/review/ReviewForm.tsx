@@ -1,9 +1,9 @@
 'use client'
 
-import * as React from 'react'
 import { z } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useTranslations } from 'next-intl'
 import { Input, Textarea, Button } from '@/components/shared'
 import { useToast } from '@/components/shared/Toast'
 import { useCreateReviewMutation, useUpdateReviewMutation } from '@/queries/useReviewQuery'
@@ -26,12 +26,12 @@ const reviewSchema = z.object({
 type ReviewFormValues = z.infer<typeof reviewSchema>
 
 interface ReviewFormProps {
-  /** When provided, the form operates in edit mode */
   editTarget?: Review
   onSuccess?: () => void
 }
 
 export function ReviewForm({ editTarget, onSuccess }: ReviewFormProps) {
+  const t = useTranslations('ReviewForm')
   const { toast } = useToast()
   const isEditMode = !!editTarget
 
@@ -61,47 +61,41 @@ export function ReviewForm({ editTarget, onSuccess }: ReviewFormProps) {
         { id: editTarget.id, payload: values },
         {
           onSuccess: () => {
-            toast.success('Review updated successfully!')
+            toast.success(t('toastUpdated'))
             onSuccess?.()
           },
-          onError: () => toast.error('Failed to update review. Please try again.'),
+          onError: () => toast.error(t('toastUpdateFailed')),
         },
       )
     } else {
       createMutation.mutate(values, {
         onSuccess: () => {
-          toast.success('Thank you for your review!')
+          toast.success(t('toastCreated'))
           reset({ position: '', review: '', rating: 0 })
           onSuccess?.()
         },
-        onError: () => toast.error('Failed to submit review. Please try again.'),
+        onError: () => toast.error(t('toastCreateFailed')),
       })
     }
   }
 
   return (
     <div className={`bg-white rounded-2xl border border-gray-100 p-8 w-full mx-auto ${isEditMode ? "max-w-full shadow-none" : "max-w-4xl shadow-lg"}`}>
-      {/* Header */}
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-black text-gray-900">Customer Review</h2>
-        <p className="text-gray-400 text-sm mt-2 leading-relaxed">
-          Customer reviews are evaluations and opinions shared by users regarding
-          their experiences with our platform.
-        </p>
+        <h2 className="text-2xl font-black text-gray-900">{t('title')}</h2>
+        <p className="text-gray-400 text-sm mt-2 leading-relaxed">{t('subtitle')}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-        {/* Position */}
         <Input
-          label="Your Position (Required)"
-          placeholder="e.g. Software Engineer, Student, Teacher"
+          label={t('positionLabel')}
+          placeholder={t('positionPlaceholder')}
           {...register('position')}
           error={errors.position?.message}
         />
 
-        {/* Emoji Rating */}
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium text-gray-700">Your Rating</span>
+          <span className="text-sm font-medium text-gray-700">{t('ratingLabel')}</span>
           <Controller
             name="rating"
             control={control}
@@ -134,24 +128,17 @@ export function ReviewForm({ editTarget, onSuccess }: ReviewFormProps) {
           )}
         </div>
 
-        {/* Review Textarea */}
         <Textarea
-          label="Do you have any thoughts you'd like to share?"
+          label={t('reviewLabel')}
           className='text-black'
-          placeholder="Your feedback (Required)"
+          placeholder={t('reviewPlaceholder')}
           rows={4}
           {...register('review')}
           error={errors.review?.message}
         />
 
-        {/* Submit */}
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          loading={isPending}
-          className="w-full rounded-xl mt-1">
-          {isEditMode ? 'Update Review' : 'Submit'}
+        <Button type="submit" variant="primary" size="lg" loading={isPending} className="w-full rounded-xl mt-1">
+          {isEditMode ? t('update') : t('submit')}
         </Button>
       </form>
     </div>

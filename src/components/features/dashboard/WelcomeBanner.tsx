@@ -8,20 +8,22 @@ import {
   FileText,
   CreditCard,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useGetMeQuery } from "@/queries/useUserQuery";
 import { cn } from "@/lib/utils";
 
 export function WelcomeBanner() {
+  const t = useTranslations("WelcomeBanner");
   const { data: user } = useGetMeQuery();
-  const [greeting, setGreeting] = React.useState("Selamat siang");
+  const [greeting, setGreeting] = React.useState(t("greetingMidday"));
 
   React.useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 11) setGreeting("Selamat pagi");
-    else if (hour < 15) setGreeting("Selamat siang");
-    else if (hour < 19) setGreeting("Selamat sore");
-    else setGreeting("Selamat malam");
-  }, []);
+    if (hour < 11) setGreeting(t("greetingMorning"));
+    else if (hour < 15) setGreeting(t("greetingMidday"));
+    else if (hour < 19) setGreeting(t("greetingAfternoon"));
+    else setGreeting(t("greetingEvening"));
+  }, [t]);
 
   if (!user) return null;
 
@@ -50,27 +52,25 @@ export function WelcomeBanner() {
             />
           </h2>
           <p className="text-primary-light/90 text-lg font-medium leading-relaxed">
-            Senang melihatmu kembali. Mari lanjutkan perjalanan belajarmu hari
-            ini dan taklukkan tantangan baru!
+            {t("subtitle")}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-4">
             <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-2 border border-white/10 group/item hover:bg-white/20 transition-colors">
               <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               <span className="text-sm font-semibold text-white">
-                Status: Aktif
+                {t("statusActive")}
               </span>
             </div>
             {user.role === "admin" ? (
               <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-2 border border-white/10 group/item hover:bg-white/20 transition-colors">
                 <Shield size={14} className="text-white" />
                 <span className="text-sm font-semibold text-white">
-                  Admin — Unlimited Access
+                  {t("adminUnlimited")}
                 </span>
               </div>
             ) : (
               <>
-                {/* Badge: Sisa Quiz Quota */}
                 <div
                   className={cn(
                     "backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-2 border transition-colors",
@@ -80,11 +80,10 @@ export function WelcomeBanner() {
                   )}>
                   <Clipboard size={14} className="text-white" />
                   <span className="text-sm font-semibold text-white">
-                    Quiz: {user.quiz_quota} tersisa
+                    {t("quizRemaining", { count: user.quiz_quota })}
                   </span>
                 </div>
 
-                {/* Badge: Sisa Summarize Quota */}
                 <div
                   className={cn(
                     "backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-2 border transition-colors",
@@ -94,7 +93,7 @@ export function WelcomeBanner() {
                   )}>
                   <FileText size={14} className="text-white" />
                   <span className="text-sm font-semibold text-white">
-                    Ringkas: {user.summarize_quota} tersisa
+                    {t("summarizeRemaining", { count: user.summarize_quota })}
                   </span>
                 </div>
               </>
@@ -111,11 +110,11 @@ export function WelcomeBanner() {
                 rel="noopener noreferrer"
                 className="bg-warning text-white font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2">
                 <CreditCard size={18} />
-                Beli Quota
+                {t("buyQuota")}
               </a>
             )}
-          <button className="bg-white text-primary border-2 border-white  font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
-            Mulai Belajar
+          <button className="bg-white text-primary border-2 border-white font-bold px-6 py-3 rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+            {t("startLearning")}
           </button>
         </div>
       </div>

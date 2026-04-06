@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { FileText, Trash2, RotateCcw } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/shared/Card";
 import { Badge } from "@/components/shared/Badge";
 import { Button } from "@/components/shared/Button";
@@ -19,20 +20,20 @@ interface ModuleCardProps {
 }
 
 export function ModuleCard({ module }: ModuleCardProps) {
+  const t = useTranslations("ModuleCard");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
   const { mutate: deleteModule, isPending } = useDeleteModuleMutation();
-  const { mutate: retrySummarize, isPending: isRetrying } =
-    useRetrySummarizeMutation();
+  const { mutate: retrySummarize, isPending: isRetrying } = useRetrySummarizeMutation();
   const { toast } = useToast();
 
   const handleDelete = () => {
     deleteModule(module.id, {
       onSuccess: () => {
-        toast.success("Modul berhasil dihapus");
+        toast.success(t("toastDeleted"));
         setIsDeleteModalOpen(false);
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || "Gagal menghapus modul");
+        toast.error(error.response?.data?.error || t("toastDeleteFailed"));
       },
     });
   };
@@ -42,12 +43,10 @@ export function ModuleCard({ module }: ModuleCardProps) {
     e.stopPropagation();
     retrySummarize(module.id, {
       onSuccess: () => {
-        toast.success("Proses summarize dimulai ulang");
+        toast.success(t("toastRetryStarted"));
       },
       onError: (error: any) => {
-        toast.error(
-          error.response?.data?.error || "Gagal memulai ulang proses",
-        );
+        toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });
   };
@@ -69,10 +68,10 @@ export function ModuleCard({ module }: ModuleCardProps) {
             }
             className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold">
             {module.is_summarized
-              ? "Ringkas"
+              ? t("statusReady")
               : module.summarize_failed
-                ? "Gagal"
-                : "Proses"}
+                ? t("statusFailed")
+                : t("statusProcessing")}
           </Badge>
         </div>
 
@@ -90,17 +89,15 @@ export function ModuleCard({ module }: ModuleCardProps) {
           {module.summarize_failed && (
             <p className="text-[10px] text-danger mt-2 font-medium flex items-center gap-1 animate-pulse">
               <span className="w-1.5 h-1.5 rounded-full bg-danger"></span>
-              Gagal merangkum. Silakan coba lagi.
+              {t("failedMessage")}
             </p>
           )}
         </div>
 
         <div className="flex items-center gap-2 mt-auto">
           <Link href={`/modules/${module.id}`} className="flex-1">
-            <Button
-              className="w-full text-sm font-bold rounded-xl py-2.5"
-              variant="ghost">
-              Detail
+            <Button className="w-full text-sm font-bold rounded-xl py-2.5" variant="ghost">
+              {t("detail")}
             </Button>
           </Link>
           {module.summarize_failed && (
@@ -110,13 +107,13 @@ export function ModuleCard({ module }: ModuleCardProps) {
               className="px-3 rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-[10px] flex items-center gap-1.5"
               onClick={handleRetry}
               loading={isRetrying}>
-              <RotateCcw size={12} /> Retry
+              <RotateCcw size={12} /> {t("retry")}
             </Button>
           )}
           <button
             onClick={() => setIsDeleteModalOpen(true)}
             className="p-2.5 text-gray-400 hover:text-danger hover:bg-danger-light rounded-xl transition-all duration-200"
-            aria-label="Hapus modul">
+            aria-label={t("deleteModalTitle")}>
             <Trash2 size={20} />
           </button>
         </div>
@@ -125,28 +122,19 @@ export function ModuleCard({ module }: ModuleCardProps) {
       <Modal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Hapus Modul">
+        title={t("deleteModalTitle")}>
         <div className="p-1">
           <p className="text-sm text-gray-600 mb-6">
-            Apakah Anda yakin ingin menghapus modul{" "}
-            <span className="font-bold text-gray-900">
-              &quot;{module.title}&quot;
-            </span>
-            ? Tindakan ini tidak dapat dibatalkan.
+            {t("deleteConfirm")}{" "}
+            <span className="font-bold text-gray-900">&quot;{module.title}&quot;</span>
+            {t("deleteConfirm2")}
           </p>
           <div className="flex gap-3 justify-end">
-            <Button
-              variant="ghost"
-              onClick={() => setIsDeleteModalOpen(false)}
-              className="px-6">
-              Batal
+            <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)} className="px-6">
+              {t("cancel")}
             </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              loading={isPending}
-              className="px-6 shadow-sm shadow-danger/20">
-              Hapus
+            <Button variant="danger" onClick={handleDelete} loading={isPending} className="px-6 shadow-sm shadow-danger/20">
+              {t("delete")}
             </Button>
           </div>
         </div>

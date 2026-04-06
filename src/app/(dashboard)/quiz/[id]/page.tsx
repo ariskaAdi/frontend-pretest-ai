@@ -4,6 +4,7 @@ import * as React from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { QuizQuestion } from '@/components/features/quiz'
 import { Button } from '@/components/shared/Button'
 import { Modal } from '@/components/shared/Modal'
@@ -18,8 +19,8 @@ export default function QuizSessionPage() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { toast } = useToast()
+  const t = useTranslations('QuizSession')
 
-  // Ambil dari cache (setQueryData di useGenerateQuizMutation), fallback ke sessionStorage
   const cached = queryClient.getQueryData(['quiz', 'session', id]) as QuizResponse | undefined
   const [quiz, setQuiz] = React.useState<QuizResponse | null>(() => {
     if (cached) return cached
@@ -31,13 +32,12 @@ export default function QuizSessionPage() {
     }
   })
 
-  // Simpan ke sessionStorage setiap kali quiz tersedia dari cache
   React.useEffect(() => {
     if (cached) {
       try {
         sessionStorage.setItem(quizSessionKey(id), JSON.stringify(cached))
       } catch {
-        // sessionStorage penuh atau tidak tersedia — abaikan
+        // sessionStorage full or unavailable
       }
       setQuiz(cached)
     }
@@ -50,18 +50,16 @@ export default function QuizSessionPage() {
   const { mutate: submitQuiz, isPending: isSubmitting } = useSubmitQuizMutation()
   const { mutate: cancelQuiz, isPending: isCancelling } = useCancelQuizMutation()
 
-  // Guard: quiz tidak ditemukan di cache maupun sessionStorage
   if (!quiz) {
     const handleCancel = () => {
       cancelQuiz(id, {
         onSuccess: () => {
-          toast.success('Quiz cancelled and quota returned')
+          toast.success(t('toastCancelled'))
           router.push('/quiz')
         },
         onError: (error: any) => {
           const msg = error.response?.data?.error
-          // Jika quiz sudah selesai/dibatalkan sebelumnya, tetap arahkan ke riwayat
-          toast.error(msg || 'Failed to cancel quiz')
+          toast.error(msg || t('toastCancelFailed'))
           router.push('/quiz')
         },
       })
@@ -72,25 +70,14 @@ export default function QuizSessionPage() {
         <div className="w-20 h-20 rounded-full bg-danger/10 text-danger flex items-center justify-center mb-6">
           <AlertTriangle size={40} />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Quiz Session Ended</h2>
-        <p className="text-gray-500 max-w-md mb-8">
-          Quiz session not found because the page was refreshed or the session has ended.
-          Cancel this quiz to return your quota.
-        </p>
+        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('notFoundTitle')}</h2>
+        <p className="text-gray-500 max-w-md mb-8">{t('notFoundDesc')}</p>
         <div className="flex gap-3">
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/quiz')}
-            className="rounded-xl px-6"
-          >
-            Back to History
+          <Button variant="ghost" onClick={() => router.push('/quiz')} className="rounded-xl px-6">
+            {t('backToHistory')}
           </Button>
-          <Button
-            onClick={handleCancel}
-            loading={isCancelling}
-            className="rounded-xl px-6"
-          >
-            Cancel & Return Quota
+          <Button onClick={handleCancel} loading={isCancelling} className="rounded-xl px-6">
+            {t('cancelReturnQuota')}
           </Button>
         </div>
       </div>
@@ -102,10 +89,7 @@ export default function QuizSessionPage() {
   const allAnswered = quiz.questions.every(q => answers[q.id] !== undefined)
 
   const handleSelect = (answer: 'A' | 'B' | 'C' | 'D') => {
-    setAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: answer
-    }))
+    setAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }))
   }
 
   const handleSubmit = () => {
@@ -118,12 +102,12 @@ export default function QuizSessionPage() {
       { quizId: id, data: { answers: formattedAnswers } },
       {
         onSuccess: () => {
-          try { sessionStorage.removeItem(quizSessionKey(id)) } catch { /* abaikan */ }
-          toast.success('Quiz submitted successfully!')
+          try { sessionStorage.removeItem(quizSessionKey(id)) } catch { /* ignore */ }
+          toast.success(t('toastSubmitted'))
           router.push(`/quiz/${id}/result`)
         },
         onError: (error: any) => {
-          toast.error(error.response?.data?.error || 'Failed to submit answers')
+          toast.error(error.response?.data?.error || t('toastSubmitFailed'))
         }
       }
     )
@@ -141,7 +125,7 @@ export default function QuizSessionPage() {
           className="text-danger hover:bg-danger/5 font-bold"
           onClick={() => router.push('/quiz')}
         >
-          Exit
+          {t('exit')}
         </Button>
       </div>
 
@@ -162,7 +146,7 @@ export default function QuizSessionPage() {
             onClick={() => setCurrentPage(prev => prev - 1)}
             className="rounded-xl px-6 font-bold"
           >
-            ← Previous
+            {t('previous')}
           </Button>
 
           {isLastQuestion ? (
@@ -171,14 +155,14 @@ export default function QuizSessionPage() {
               onClick={() => setIsSubmitModalOpen(true)}
               disabled={!allAnswered}
             >
-              Submit Quiz
+              {t('submitQuiz')}
             </Button>
           ) : (
             <Button
               className="rounded-xl px-8 font-bold"
               onClick={() => setCurrentPage(prev => prev + 1)}
             >
-              Next →
+              {t('next')}
             </Button>
           )}
         </div>
@@ -188,26 +172,16 @@ export default function QuizSessionPage() {
       <Modal
         open={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
-        title="Submit Answers?"
+        title={t('submitModalTitle')}
       >
         <div className="space-y-6 pt-2">
-          <p className="text-gray-500 leading-relaxed">
-            Are you sure you want to submit your answers now? You cannot change your answers after submission.
-          </p>
+          <p className="text-gray-500 leading-relaxed">{t('submitModalDesc')}</p>
           <div className="flex gap-3">
-            <Button
-              variant="ghost"
-              className="flex-1 rounded-xl"
-              onClick={() => setIsSubmitModalOpen(false)}
-            >
-              Cancel
+            <Button variant="ghost" className="flex-1 rounded-xl" onClick={() => setIsSubmitModalOpen(false)}>
+              {t('cancel')}
             </Button>
-            <Button
-              className="flex-1 rounded-xl font-bold"
-              onClick={handleSubmit}
-              loading={isSubmitting}
-            >
-              Yes, Submit
+            <Button className="flex-1 rounded-xl font-bold" onClick={handleSubmit} loading={isSubmitting}>
+              {t('yesSubmit')}
             </Button>
           </div>
         </div>

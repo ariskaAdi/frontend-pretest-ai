@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Mail, User, Shield, CheckCircle2, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Card } from "@/components/shared/Card";
 import { Input } from "@/components/shared/Input";
 import { Button } from "@/components/shared/Button";
@@ -16,6 +17,7 @@ import { cn } from "@/lib/utils";
 type Step = "idle" | "otp";
 
 export default function ProfilePage() {
+  const t = useTranslations("ProfilePage");
   const { data: user } = useGetMeQuery();
   const { toast } = useToast();
 
@@ -28,29 +30,19 @@ export default function ProfilePage() {
   const requestMutation = useRequestEmailUpdateMutation();
   const verifyMutation = useVerifyEmailUpdateMutation();
 
-  // ── Step 1: request OTP ────────────────────────────────────────────────
-  const handleRequestOTP = (e: React.FormEvent) => {
+  const handleRequestOTP = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError("");
 
-    if (!newEmail.trim()) {
-      setEmailError("New email is required.");
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
-      setEmailError("Please enter a valid email address.");
-      return;
-    }
-    if (newEmail === user?.email) {
-      setEmailError("New email must be different from your current email.");
-      return;
-    }
+    if (!newEmail.trim()) { setEmailError(t("errorEmailRequired")); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) { setEmailError(t("errorEmailInvalid")); return; }
+    if (newEmail === user?.email) { setEmailError(t("errorEmailSame")); return; }
 
     requestMutation.mutate(
       { new_email: newEmail },
       {
         onSuccess: () => {
-          toast.success(`OTP sent to ${newEmail}`);
+          toast.success(`${t("toastOtpSent")} ${newEmail}`);
           setStep("otp");
           setDigits(Array(6).fill(""));
           setTimeout(() => inputRefs.current[0]?.focus(), 100);
@@ -58,21 +50,20 @@ export default function ProfilePage() {
         onError: (err: unknown) => {
           const msg =
             (err as { response?: { data?: { message?: string } } })?.response
-              ?.data?.message ?? "Failed to send OTP. Please try again.";
+              ?.data?.message ?? t("toastOtpFailed");
           toast.error(msg);
         },
       },
     );
   };
 
-  // ── Step 2: verify OTP ─────────────────────────────────────────────────
   const submitOTP = React.useCallback(
     (otp: string) => {
       verifyMutation.mutate(
         { new_email: newEmail, otp },
         {
           onSuccess: () => {
-            toast.success("Email updated successfully.");
+            toast.success(t("toastEmailUpdated"));
             setStep("idle");
             setNewEmail("");
             setDigits(Array(6).fill(""));
@@ -80,13 +71,13 @@ export default function ProfilePage() {
           onError: (err: unknown) => {
             const msg =
               (err as { response?: { data?: { message?: string } } })?.response
-                ?.data?.message ?? "Invalid or expired OTP.";
+                ?.data?.message ?? t("toastOtpInvalid");
             toast.error(msg);
           },
         },
       );
     },
-    [newEmail, verifyMutation, toast],
+    [newEmail, verifyMutation, toast, t],
   );
 
   const handleDigitChange = (index: number, value: string) => {
@@ -99,10 +90,7 @@ export default function ProfilePage() {
     if (digit && index === 5 && next.every((d) => d)) submitOTP(next.join(""));
   };
 
-  const handleKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && !digits[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -119,13 +107,10 @@ export default function ProfilePage() {
     if (pasted.length === 6) submitOTP(pasted);
   };
 
-  const handleVerifySubmit = (e: React.FormEvent) => {
+  const handleVerifySubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const otp = digits.join("");
-    if (otp.length < 6) {
-      toast.warning("Please enter the full 6-digit OTP.");
-      return;
-    }
+    if (otp.length < 6) { toast.warning(t("toastOtpIncomplete")); return; }
     submitOTP(otp);
   };
 
@@ -134,11 +119,11 @@ export default function ProfilePage() {
       { new_email: newEmail },
       {
         onSuccess: () => {
-          toast.success(`OTP resent to ${newEmail}`);
+          toast.success(`${t("toastOtpResent")} ${newEmail}`);
           setDigits(Array(6).fill(""));
           setTimeout(() => inputRefs.current[0]?.focus(), 100);
         },
-        onError: () => toast.error("Failed to resend OTP."),
+        onError: () => toast.error(t("toastResendFailed")),
       },
     );
   };
@@ -148,16 +133,14 @@ export default function ProfilePage() {
   return (
     <div className="max-w-full mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out">
       <div>
-        <h1 className="text-2xl font-extrabold text-gray-900">Profile</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Manage your account information.
-        </p>
+        <h1 className="text-2xl font-extrabold text-gray-900">{t("title")}</h1>
+        <p className="text-sm text-gray-500 mt-1">{t("subtitle")}</p>
       </div>
 
       {/* Account Info */}
       <Card className="p-6 border-none shadow-sm space-y-4">
         <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
-          Account Info
+          {t("accountInfo")}
         </h2>
         <div className="space-y-3">
           <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
@@ -165,7 +148,7 @@ export default function ProfilePage() {
               <User size={16} />
             </div>
             <div>
-              <p className="text-xs text-gray-400 font-medium">Name</p>
+              <p className="text-xs text-gray-400 font-medium">{t("nameLabel")}</p>
               <p className="text-sm font-bold text-gray-900">{user.name}</p>
             </div>
           </div>
@@ -175,15 +158,13 @@ export default function ProfilePage() {
               <Mail size={16} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs text-gray-400 font-medium">Current Email</p>
-              <p className="text-sm font-bold text-gray-900 truncate">
-                {user.email}
-              </p>
+              <p className="text-xs text-gray-400 font-medium">{t("emailLabel")}</p>
+              <p className="text-sm font-bold text-gray-900 truncate">{user.email}</p>
             </div>
             {user.is_verified && (
               <span className="inline-flex items-center gap-1.5 text-xs font-bold text-success bg-success/10 px-2.5 py-1 rounded-full shrink-0">
                 <CheckCircle2 size={12} />
-                Verified
+                {t("verified")}
               </span>
             )}
           </div>
@@ -193,10 +174,8 @@ export default function ProfilePage() {
               <Shield size={16} />
             </div>
             <div>
-              <p className="text-xs text-gray-400 font-medium">Role</p>
-              <p className="text-sm font-bold text-gray-900 capitalize">
-                {user.role}
-              </p>
+              <p className="text-xs text-gray-400 font-medium">{t("roleLabel")}</p>
+              <p className="text-sm font-bold text-gray-900 capitalize">{user.role}</p>
             </div>
           </div>
         </div>
@@ -206,29 +185,20 @@ export default function ProfilePage() {
       <Card className="p-6 border-none shadow-sm space-y-5">
         <div>
           <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
-            Update Email
+            {t("updateEmail")}
           </h2>
-          <p className="text-xs text-gray-400 mt-1">
-            An OTP will be sent to your new email address for verification.
-          </p>
+          <p className="text-xs text-gray-400 mt-1">{t("updateEmailDesc")}</p>
         </div>
 
-        {/* Step 1 — Enter new email */}
-        <div
-          className={cn(
-            "transition-all duration-300",
-            step === "otp" && "opacity-40 pointer-events-none select-none",
-          )}>
+        {/* Step 1 */}
+        <div className={cn("transition-all duration-300", step === "otp" && "opacity-40 pointer-events-none select-none")}>
           <form onSubmit={handleRequestOTP} className="space-y-4">
             <Input
-              label="New Email Address"
+              label={t("newEmailLabel")}
               type="email"
               placeholder="new@example.com"
               value={newEmail}
-              onChange={(e) => {
-                setNewEmail(e.target.value);
-                setEmailError("");
-              }}
+              onChange={(e) => { setNewEmail(e.target.value); setEmailError(""); }}
               error={emailError}
               leftIcon={<Mail size={15} />}
               disabled={requestMutation.isPending || step === "otp"}
@@ -238,36 +208,30 @@ export default function ProfilePage() {
               variant="primary"
               loading={requestMutation.isPending}
               rightIcon={<ArrowRight size={15} />}
-              // className="w-full"
-              disabled={requestMutation.isPending || step === "otp"}
-              >
-              Send OTP
+              disabled={requestMutation.isPending || step === "otp"}>
+              {t("sendOtp")}
             </Button>
           </form>
         </div>
 
-        {/* Step 2 — Enter OTP */}
+        {/* Step 2 */}
         {step === "otp" && (
           <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="rounded-xl bg-primary/5 border border-primary/20 px-4 py-3">
               <p className="text-sm text-gray-700">
-                OTP sent to{" "}
+                {t("otpSentTo")}{" "}
                 <span className="font-bold text-primary">{newEmail}</span>
               </p>
             </div>
 
             <form onSubmit={handleVerifySubmit} className="space-y-5">
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-3">
-                  Enter the 6-digit OTP
-                </p>
+                <p className="text-sm font-medium text-gray-700 mb-3">{t("enterOtp")}</p>
                 <div className="flex gap-2 justify-between">
                   {digits.map((digit, i) => (
                     <input
                       key={i}
-                      ref={(el) => {
-                        inputRefs.current[i] = el;
-                      }}
+                      ref={(el) => { inputRefs.current[i] = el; }}
                       type="text"
                       inputMode="numeric"
                       maxLength={1}
@@ -286,31 +250,24 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                variant="primary"
-                loading={verifyMutation.isPending}
-                className="w-full">
-                Verify & Update Email
+              <Button type="submit" variant="primary" loading={verifyMutation.isPending} className="w-full">
+                {t("verifyUpdate")}
               </Button>
             </form>
 
             <div className="flex items-center justify-between pt-1">
               <button
                 type="button"
-                onClick={() => {
-                  setStep("idle");
-                  setDigits(Array(6).fill(""));
-                }}
+                onClick={() => { setStep("idle"); setDigits(Array(6).fill("")); }}
                 className="text-sm text-gray-400 hover:text-gray-700 transition-colors">
-                Change email address
+                {t("changeEmail")}
               </button>
               <button
                 type="button"
                 onClick={handleResend}
                 disabled={requestMutation.isPending}
                 className="text-sm text-primary font-medium hover:underline disabled:opacity-50">
-                {requestMutation.isPending ? "Sending..." : "Resend OTP"}
+                {requestMutation.isPending ? t("sending") : t("resendOtp")}
               </button>
             </div>
           </div>

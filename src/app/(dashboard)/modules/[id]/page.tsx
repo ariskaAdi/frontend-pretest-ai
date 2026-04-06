@@ -4,6 +4,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useModuleDetailQuery,
   useDeleteModuleMutation,
@@ -30,24 +31,23 @@ export default function ModuleDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
+  const t = useTranslations("ModuleDetail");
   const id = params.id as string;
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const { data: module, isLoading } = useModuleDetailQuery(id);
-  const { mutate: deleteModule, isPending: isDeleting } =
-    useDeleteModuleMutation();
-  const { mutate: retrySummarize, isPending: isRetrying } =
-    useRetrySummarizeMutation();
+  const { mutate: deleteModule, isPending: isDeleting } = useDeleteModuleMutation();
+  const { mutate: retrySummarize, isPending: isRetrying } = useRetrySummarizeMutation();
 
   const handleDelete = () => {
     deleteModule(id, {
       onSuccess: () => {
-        toast.success("Module deleted successfully");
+        toast.success(t("toastDeleted"));
         router.push("/modules");
       },
       onError: (error: any) => {
-        toast.error(error.response?.data?.error || "Failed to delete module");
+        toast.error(error.response?.data?.error || t("toastDeleteFailed"));
       },
     });
   };
@@ -55,12 +55,10 @@ export default function ModuleDetailPage() {
   const handleRetry = () => {
     retrySummarize(id, {
       onSuccess: () => {
-        toast.success("Summarize process restarted");
+        toast.success(t("toastRetryStarted"));
       },
       onError: (error: any) => {
-        toast.error(
-          error.response?.data?.error || "Failed to restart process",
-        );
+        toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });
   };
@@ -69,9 +67,7 @@ export default function ModuleDetailPage() {
     return (
       <div className="flex flex-col items-center justify-center py-40">
         <Spinner size="lg" className="mb-4" />
-        <p className="text-gray-500 font-medium animate-pulse">
-          Loading module details...
-        </p>
+        <p className="text-gray-500 font-medium animate-pulse">{t("loading")}</p>
       </div>
     );
   }
@@ -82,11 +78,9 @@ export default function ModuleDetailPage() {
         <div className="w-16 h-16 rounded-2xl bg-gray-50 text-gray-400 flex items-center justify-center mb-4">
           <Search size={32} />
         </div>
-        <h3 className="text-xl font-bold text-gray-900 mb-2">
-          Module not found
-        </h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{t("notFound")}</h3>
         <Link href="/modules">
-          <Button variant="ghost">Back to Collection</Button>
+          <Button variant="ghost">{t("backButton")}</Button>
         </Link>
       </div>
     );
@@ -98,20 +92,10 @@ export default function ModuleDetailPage() {
         <Link
           href="/modules"
           className="flex items-center gap-2 text-sm font-bold text-gray-400 hover:text-primary transition-colors w-fit group">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform group-hover:-translate-x-1">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:-translate-x-1">
             <path d="m15 18-6-6 6-6" />
           </svg>
-          Back to Collection
+          {t("backToCollection")}
         </Link>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -138,10 +122,10 @@ export default function ModuleDetailPage() {
                 }
                 className="px-3 py-1 text-[10px] uppercase tracking-wider font-bold">
                 {module.is_summarized
-                  ? "Summary Available"
+                  ? t("statusReady")
                   : module.summarize_failed
-                    ? "Summarization Failed"
-                    : "Processing by AI"}
+                    ? t("statusFailed")
+                    : t("statusProcessing")}
               </Badge>
             </div>
           </div>
@@ -149,48 +133,32 @@ export default function ModuleDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="p-6  shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
+        <Card className="p-6 shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
           <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold">
             <FileText size={32} strokeWidth={1.5} />
           </div>
-          <h4 className="font-bold text-gray-900 mb-1">Open PDF File</h4>
-          <p className="text-xs text-gray-400 mb-4">
-            View the original document
-          </p>
-          <a
-            href={module.file_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full">
-            <Button variant="ghost" className="w-full rounded-xl">
-              Open Link
-            </Button>
+          <h4 className="font-bold text-gray-900 mb-1">{t("openPdf")}</h4>
+          <p className="text-xs text-gray-400 mb-4">{t("openPdfDesc")}</p>
+          <a href={module.file_url} target="_blank" rel="noopener noreferrer" className="w-full">
+            <Button variant="ghost" className="w-full rounded-xl">{t("openLink")}</Button>
           </a>
         </Card>
 
-        <Card className="p-6  shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
-          <div
-            className={cn(
-              "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
-              module.is_summarized
-                ? "bg-amber-50 text-amber-600"
-                : "bg-gray-50 text-gray-400",
-            )}>
+        <Card className="p-6 shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
+          <div className={cn(
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
+            module.is_summarized ? "bg-amber-50 text-amber-600" : "bg-gray-50 text-gray-400",
+          )}>
             <PenLine size={32} strokeWidth={1.5} />
           </div>
-          <h4 className="font-bold text-gray-900 mb-1">AI Summary</h4>
+          <h4 className="font-bold text-gray-900 mb-1">{t("aiSummary")}</h4>
           <p className="text-xs text-gray-400 mb-4">
-            {module.summarize_failed
-              ? "An error occurred while summarizing the material."
-              : "View the AI-generated smart summary"}
+            {module.summarize_failed ? t("aiSummaryError") : t("aiSummaryDesc")}
           </p>
           <div className="w-full space-y-2">
             <Link href={`/modules/${module.id}/summary`} className="w-full">
-              <Button
-                variant="ghost"
-                className="w-full rounded-xl"
-                disabled={!module.is_summarized}>
-                View Summary
+              <Button variant="ghost" className="w-full rounded-xl" disabled={!module.is_summarized}>
+                {t("viewSummary")}
               </Button>
             </Link>
             {module.summarize_failed && (
@@ -199,31 +167,24 @@ export default function ModuleDetailPage() {
                 className="w-full rounded-xl border-danger/30 text-danger hover:bg-danger-light hover:text-danger font-bold text-xs flex items-center justify-center gap-2"
                 onClick={handleRetry}
                 loading={isRetrying}>
-                <RotateCcw size={14} /> Try Again
+                <RotateCcw size={14} /> {t("tryAgain")}
               </Button>
             )}
           </div>
         </Card>
 
-        <Card className="p-6  shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
-          <div
-            className={cn(
-              "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
-              module.is_summarized
-                ? "bg-success-light text-success"
-                : "bg-gray-50 text-gray-400",
-            )}>
+        <Card className="p-6 shadow-sm rounded-3xl bg-gray-50 border-dashed border-2 flex flex-col items-center text-center group cursor-pointer hover:shadow-md transition-all duration-300">
+          <div className={cn(
+            "w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform font-bold",
+            module.is_summarized ? "bg-success-light text-success" : "bg-gray-50 text-gray-400",
+          )}>
             <Target size={32} strokeWidth={1.5} />
           </div>
-          <h4 className="font-bold text-gray-900 mb-1">Generate Quiz</h4>
-          <p className="text-xs text-gray-400 mb-4">
-            Test your understanding with practice questions
-          </p>
+          <h4 className="font-bold text-gray-900 mb-1">{t("generateQuiz")}</h4>
+          <p className="text-xs text-gray-400 mb-4">{t("generateQuizDesc")}</p>
           <Link href={`/quiz?module_id=${module.id}`} className="w-full">
-            <Button
-              className="w-full rounded-xl font-bold"
-              disabled={!module.is_summarized}>
-              Create Quiz
+            <Button className="w-full rounded-xl font-bold" disabled={!module.is_summarized}>
+              {t("createQuiz")}
             </Button>
           </Link>
         </Card>
@@ -236,17 +197,15 @@ export default function ModuleDetailPage() {
               <AlertTriangle size={24} />
             </div>
             <div>
-              <h4 className="font-bold text-danger mb-1">Danger Zone</h4>
-              <p className="text-xs text-gray-500">
-                Permanently delete this module and all its related data
-              </p>
+              <h4 className="font-bold text-danger mb-1">{t("dangerZone")}</h4>
+              <p className="text-xs text-gray-500">{t("dangerZoneDesc")}</p>
             </div>
           </div>
           <Button
             variant="danger"
             className="px-8 rounded-2xl font-bold shadow-sm shadow-danger/10"
             onClick={() => setIsDeleteModalOpen(true)}>
-            Delete Module
+            {t("deleteModule")}
           </Button>
         </div>
       </div>
@@ -254,28 +213,19 @@ export default function ModuleDetailPage() {
       <Modal
         open={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Permanently Delete Module">
+        title={t("deleteModalTitle")}>
         <div className="p-1">
           <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-            Are you sure you want to delete the module{" "}
-            <span className="font-bold text-gray-900">
-              &quot;{module.title}&quot;
-            </span>
-            ? All summaries and quiz history related to this module will be permanently deleted.
+            {t("deleteConfirm")}{" "}
+            <span className="font-bold text-gray-900">&quot;{module.title}&quot;</span>
+            {t("deleteConfirm2")}
           </p>
           <div className="flex gap-3 justify-end">
-            <Button
-              variant="ghost"
-              onClick={() => setIsDeleteModalOpen(false)}
-              className="px-6">
-              Cancel
+            <Button variant="ghost" onClick={() => setIsDeleteModalOpen(false)} className="px-6">
+              {t("cancel")}
             </Button>
-            <Button
-              variant="danger"
-              onClick={handleDelete}
-              loading={isDeleting}
-              className="px-6 shadow-sm shadow-danger/20">
-              Yes, Delete Now
+            <Button variant="danger" onClick={handleDelete} loading={isDeleting} className="px-6 shadow-sm shadow-danger/20">
+              {t("deleteNow")}
             </Button>
           </div>
         </div>
