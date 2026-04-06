@@ -1,61 +1,78 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { LanguageSwitcher } from '@/components/shared/LanguageSwitcher'
-import { cn } from '@/lib/utils'
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import logo from "../../../../public/peretest-logo.webp";
+import { Button } from "@/components/shared";
 
-type SectionId = 'hero' | 'fitur' | 'tentang' | 'cara-kerja' | 'contacts'
+type SectionId = "hero" | "fitur" | "tentang" | "cara-kerja" | "contacts";
 
 const NAV_SECTIONS: { key: string; href: string; sectionId: SectionId }[] = [
-  { key: 'home',       href: '#hero',       sectionId: 'hero' },
-  { key: 'features',   href: '#fitur',      sectionId: 'fitur' },
-  { key: 'about',      href: '#tentang',    sectionId: 'tentang' },
-  { key: 'howItWorks', href: '#cara-kerja', sectionId: 'cara-kerja' },
-  { key: 'contact',    href: '#contacts',   sectionId: 'contacts' },
-]
+  { key: "home", href: "#hero", sectionId: "hero" },
+  { key: "features", href: "#fitur", sectionId: "fitur" },
+  { key: "about", href: "#tentang", sectionId: "tentang" },
+  { key: "howItWorks", href: "#cara-kerja", sectionId: "cara-kerja" },
+  { key: "contact", href: "#contacts", sectionId: "contacts" },
+];
 
 export function LandingNavbar() {
-  const t = useTranslations('LandingNavbar')
-  const [activeSection, setActiveSection] = useState<SectionId>('hero')
+  const t = useTranslations("LandingNavbar");
+  const [activeSection, setActiveSection] = useState<SectionId>("hero");
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = []
+    const observers: IntersectionObserver[] = [];
 
     NAV_SECTIONS.forEach(({ sectionId }) => {
-      const el = document.getElementById(sectionId)
-      if (!el) return
+      const el = document.getElementById(sectionId);
+      if (!el) return;
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting) setActiveSection(sectionId)
+          if (entry.isIntersecting) setActiveSection(sectionId);
         },
-        { rootMargin: '-30% 0px -60% 0px', threshold: 0 }
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
+        { rootMargin: "-30% 0px -60% 0px", threshold: 0 },
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
 
-    return () => observers.forEach(o => o.disconnect())
-  }, [])
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const id = href.replace('#', '')
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    e.preventDefault();
+    const id = href.replace("#", "");
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
         {/* Logo */}
-        <span className="text-xl font-black text-gray-900 tracking-tight select-none">
-          Pretest
-          <span className="text-[#AAFF00] bg-[#0D0D0D] px-1 rounded ml-0.5">
-            AI
-          </span>
-        </span>
+        <div className="flex gap-2 items-center">
+          <Image
+            src={logo}
+            alt="PretestAI"
+            width={40}
+            height={40}
+            className="rounded-full hidden sm:inline-block"
+          />
+          <div className="flex items-center select-none font-mono tracking-tighter">
+            <span className="text-xl font-black text-gray-900 uppercase">
+              Pretest
+            </span>
+            <span className="ml-1 bg-[#AAFF00] text-[#0D0D0D] text-lg font-black px-2 py-0.5 rounded-sm italic transform -skew-x-12 flex items-center justify-center">
+              AI
+            </span>
+          </div>
+        </div>
 
         {/* Nav links */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-500">
@@ -65,12 +82,11 @@ export function LandingNavbar() {
               href={href}
               onClick={(e) => handleNavClick(e, href)}
               className={cn(
-                'transition-colors hover:text-gray-900',
+                "transition-colors hover:text-gray-900",
                 activeSection === sectionId
-                  ? 'text-gray-900 border-b-2 border-gray-900 pb-0.5'
-                  : ''
-              )}
-            >
+                  ? "text-gray-900 border-b-2 border-gray-900 pb-0.5"
+                  : "",
+              )}>
               {t(key as Parameters<typeof t>[0])}
             </a>
           ))}
@@ -79,20 +95,18 @@ export function LandingNavbar() {
         {/* CTAs + Language Switcher */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <Link
-            href="/login"
-            className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-4 py-2"
-          >
-            {t('login')}
+          <Link href="/login">
+            <Button variant="ghost" size="sm">
+              {t("login")}
+            </Button>
           </Link>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center rounded-full bg-[#0D0D0D] text-white text-sm font-semibold px-5 py-2.5 hover:bg-[#222] transition-colors"
-          >
-            {t('startFree')}
+            className="items-center justify-center rounded-full bg-[#0D0D0D] text-white text-sm font-semibold px-5 py-2.5 hover:bg-[#222] transition-colors hidden md:inline-flex">
+            {t("startFree")}
           </Link>
         </div>
       </div>
     </header>
-  )
+  );
 }

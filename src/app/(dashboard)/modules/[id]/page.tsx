@@ -191,7 +191,7 @@ export default function ModuleDetailPage() {
       </div>
 
       <div className="pt-8 border-t border-gray-100">
-        <div className="flex items-center justify-between p-6 bg-danger-light/20 rounded-3xl border border-danger-light/50">
+        <div className="flex items-center justify-between p-6 bg-danger-light/20 rounded-3xl border border-red-300/30">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-danger shadow-sm">
               <AlertTriangle size={24} />

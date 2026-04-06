@@ -1,6 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Bot, FileText, ClipboardList, BarChart3, Sparkles, ArrowUpRight, FileUp, PenLine, ClipboardCheck, GraduationCap, BookOpen } from "lucide-react";
+import {
+  Bot,
+  FileText,
+  ClipboardList,
+  BarChart3,
+  Sparkles,
+  ArrowUpRight,
+  FileUp,
+  PenLine,
+  ClipboardCheck,
+  GraduationCap,
+  BookOpen,
+} from "lucide-react";
 import { LandingNavbar } from "@/components/layouts/LandingNavbar";
 import { getTranslations } from "next-intl/server";
 import picture from "../../public/pretest-ai.webp";
@@ -8,13 +20,20 @@ import picture from "../../public/pretest-ai.webp";
 export default async function Home() {
   const t = await getTranslations("LandingPage");
 
-  const steps = (t.raw("about.steps") as Array<{ title: string; desc: string }>);
+  const steps = t.raw("about.steps") as Array<{ title: string; desc: string }>;
   const stepIcons = [FileUp, Bot, PenLine, ClipboardCheck, BarChart3];
 
-  const audiences = (t.raw("about.audiences") as Array<{ name: string; problem: string; solution: string }>);
+  const audiences = t.raw("about.audiences") as Array<{
+    name: string;
+    problem: string;
+    solution: string;
+  }>;
   const audienceIcons = [GraduationCap, BookOpen];
 
-  const features = (t.raw("features.items") as Array<{ name: string; desc: string }>);
+  const features = t.raw("features.items") as Array<{
+    name: string;
+    desc: string;
+  }>;
   const featureIcons = [
     <FileText key="ft" className="w-6 h-6 text-white" />,
     <Bot key="bt" className="w-6 h-6 text-white" />,
@@ -25,7 +44,11 @@ export default async function Home() {
 
   const marqueeItems = t.raw("marquee") as string[];
 
-  const testimonials = (t.raw("testimonials.items") as Array<{ name: string; role: string; quote: string }>);
+  const testimonials = t.raw("testimonials.items") as Array<{
+    name: string;
+    role: string;
+    quote: string;
+  }>;
 
   const statsBar = [
     { value: "10,000+", label: t("statsBar.activeStudents") },
@@ -42,7 +65,7 @@ export default async function Home() {
       <section id="hero" className="max-w-7xl mx-auto px-6 pt-14 pb-12">
         {/* Top row: headline + CTA button */}
         <div className="flex items-start justify-between gap-8 mb-5">
-          <h1 className="text-6xl md:text-8xl font-black text-gray-900 leading-none tracking-tighter uppercase">
+          <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-none tracking-tighter uppercase">
             {t("hero.headline1")}
             <br />
             {t("hero.headline2")}
@@ -81,9 +104,7 @@ export default async function Home() {
               <p className="text-white font-bold text-lg leading-snug">
                 {t("hero.cardTitle")}
               </p>
-              <p className="text-white/60 text-sm mt-1">
-                {t("hero.cardDesc")}
-              </p>
+              <p className="text-white/60 text-sm mt-1">{t("hero.cardDesc")}</p>
             </div>
             <Link
               href="/register"
@@ -181,8 +202,12 @@ export default async function Home() {
                       </span>
                     </div>
                     <div>
-                      <p className="text-white font-bold text-sm mb-1">{item.title}</p>
-                      <p className="text-gray-500 text-xs leading-relaxed">{item.desc}</p>
+                      <p className="text-white font-bold text-sm mb-1">
+                        {item.title}
+                      </p>
+                      <p className="text-gray-500 text-xs leading-relaxed">
+                        {item.desc}
+                      </p>
                     </div>
                   </div>
                 );
@@ -206,20 +231,26 @@ export default async function Home() {
                       <div className="w-10 h-10 rounded-xl bg-[#AAFF00]/10 flex items-center justify-center shrink-0">
                         <Icon className="w-5 h-5 text-[#AAFF00]" />
                       </div>
-                      <h3 className="text-white font-extrabold text-base">{uc.name}</h3>
+                      <h3 className="text-white font-extrabold text-base">
+                        {uc.name}
+                      </h3>
                     </div>
                     <div className="space-y-4">
                       <div>
                         <p className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-1">
                           {t("about.challengeLabel")}
                         </p>
-                        <p className="text-gray-400 text-sm leading-relaxed">{uc.problem}</p>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          {uc.problem}
+                        </p>
                       </div>
                       <div>
                         <p className="text-xs font-bold text-[#AAFF00] uppercase tracking-wider mb-1">
                           {t("about.howHelpsLabel")}
                         </p>
-                        <p className="text-gray-400 text-sm leading-relaxed">{uc.solution}</p>
+                        <p className="text-gray-400 text-sm leading-relaxed">
+                          {uc.solution}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -253,9 +284,15 @@ export default async function Home() {
                 <span className="text-[#AAFF00] font-mono text-sm w-8 shrink-0">
                   {featureNos[index]}
                 </span>
-                <span className="w-8 shrink-0 flex items-center">{featureIcons[index]}</span>
-                <span className="text-white font-bold text-lg flex-1">{feat.name}</span>
-                <span className="text-gray-400 text-sm hidden md:block flex-1">{feat.desc}</span>
+                <span className="w-8 shrink-0 flex items-center">
+                  {featureIcons[index]}
+                </span>
+                <span className="text-white font-bold text-lg flex-1">
+                  {feat.name}
+                </span>
+                <span className="text-gray-400 text-sm hidden md:block flex-1">
+                  {feat.desc}
+                </span>
                 <span className="text-[#AAFF00] text-lg">→</span>
               </div>
             ))}
@@ -306,7 +343,9 @@ export default async function Home() {
                 </p>
                 <div className="flex gap-0.5 mt-4">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className="text-[#AAFF00] text-xs">★</span>
+                    <span key={i} className="text-[#AAFF00] text-xs">
+                      ★
+                    </span>
                   ))}
                 </div>
               </div>
@@ -348,21 +387,31 @@ export default async function Home() {
             <div>
               <span className="text-xl font-bold text-white">
                 Pretest
-                <span className="text-[#AAFF00] bg-[#1a1a1a] px-1 rounded ml-0.5">AI</span>
+                <span className="text-[#AAFF00] bg-[#1a1a1a] px-1 rounded ml-0.5">
+                  AI
+                </span>
               </span>
-              <p className="text-gray-500 text-sm mt-1">{t("footer.tagline")}</p>
+              <p className="text-gray-500 text-sm mt-1">
+                {t("footer.tagline")}
+              </p>
             </div>
             <div className="flex flex-wrap gap-6 text-sm text-gray-400">
               <a href="#fitur" className="hover:text-white transition-colors">
                 {t("footer.features")}
               </a>
-              <a href="#cara-kerja" className="hover:text-white transition-colors">
+              <a
+                href="#cara-kerja"
+                className="hover:text-white transition-colors">
                 {t("footer.howItWorks")}
               </a>
-              <Link href="/login" className="hover:text-white transition-colors">
+              <Link
+                href="/login"
+                className="hover:text-white transition-colors">
                 {t("footer.login")}
               </Link>
-              <Link href="/register" className="hover:text-white transition-colors">
+              <Link
+                href="/register"
+                className="hover:text-white transition-colors">
                 {t("footer.signUp")}
               </Link>
             </div>
