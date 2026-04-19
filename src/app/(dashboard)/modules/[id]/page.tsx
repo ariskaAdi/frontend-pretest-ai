@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import type { APIError } from '@/types/api.types'
 
 import * as React from "react";
 import Link from "next/link";
@@ -46,7 +47,7 @@ export default function ModuleDetailPage() {
         toast.success(t("toastDeleted"));
         router.push("/modules");
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t("toastDeleteFailed"));
       },
     });
@@ -57,7 +58,7 @@ export default function ModuleDetailPage() {
       onSuccess: () => {
         toast.success(t("toastRetryStarted"));
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });

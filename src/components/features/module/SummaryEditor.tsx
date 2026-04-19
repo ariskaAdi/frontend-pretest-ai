@@ -1,4 +1,5 @@
 "use client";
+import type { APIError } from '@/types/api.types'
 
 import * as React from "react";
 import { z } from "zod";
@@ -52,7 +53,7 @@ export function SummaryEditor({
           toast.success("Summary berhasil diperbarui");
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (error: any) => {
+        onError: (error: APIError) => {
           toast.error(
             error.response?.data?.error || "Gagal memperbarui summary",
           );

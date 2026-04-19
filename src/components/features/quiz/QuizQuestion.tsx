@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Card } from "@/components/shared/Card";
+import { MathText } from "@/components/shared/MathText";
 import type { QuizQuestion as IQuizQuestion } from "@/types/quiz.types";
 
 interface QuizQuestionProps {
@@ -45,7 +46,7 @@ export function QuizQuestion({
       {/* Question Card */}
       <Card className="p-8 border-none shadow-sm rounded-3xl bg-white">
         <h3 className="text-xl font-bold text-gray-900 leading-relaxed mb-8">
-          {question.text}
+          <MathText text={question.text} />
         </h3>
 
         <div className="space-y-4">
@@ -58,7 +59,7 @@ export function QuizQuestion({
                 key={label}
                 onClick={() => onSelect(label)}
                 className={`
-                  w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 flex items-start gap-4 group
+                  w-full text-left p-5 rounded-2xl border-2 transition-all duration-200 flex items-start gap-4 group cursor-pointer
                   ${
                     isSelected
                       ? "border-secondary bg-primary-light ring-4 ring-secondary/5"
@@ -72,13 +73,10 @@ export function QuizQuestion({
                 `}>
                   {label}
                 </div>
-                <span
-                  className={`
-                  font-bold leading-relaxed pt-0.5 transition-colors
-                  ${isSelected ? "text-secondary" : "text-gray-600 group-hover:text-gray-900"}
-                `}>
-                  {option.replace(/^[A-D]\.\s*/, "")}
-                </span>
+                <MathText
+                  text={option.replace(/^[A-D]\.\s*/, "")}
+                  className={`font-bold leading-relaxed pt-0.5 transition-colors ${isSelected ? "text-secondary" : "text-gray-600 group-hover:text-gray-900"}`}
+                />
               </button>
             );
           })}

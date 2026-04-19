@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+import type { APIError } from '@/types/api.types'
 
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import { useTranslations } from "next-intl";
 import {
   useQuizResultQuery,
   useRetryQuizMutation,
+  useExplainQuizMutation,
 } from "@/queries/useQuizQuery";
 import { QuizResult } from "@/components/features/quiz";
 import { Card } from "@/components/shared/Card";
@@ -34,7 +36,19 @@ export default function QuizResultPage() {
   const { data: result, isLoading } = useQuizResultQuery(id);
   const displayData = (cachedResult || result) as any;
 
-  const { mutate: retryQuiz, isPending: isRetrying } = useRetryQuizMutation();
+  const { mutate: retryQuiz, isPending: isRetrying } = useRetryQuizMutation()
+  const { mutate: explainQuiz, isPending: isExplaining } = useExplainQuizMutation()
+
+  // Auto-trigger explanation generation once quiz result is loaded
+  React.useEffect(() => {
+    if (!displayData) return
+    const hasWrongAnswers = displayData.questions?.some((q: any) => !q.is_correct)
+    const hasExplanations = displayData.questions?.some((q: any) => q.explanation)
+    if (hasWrongAnswers && !hasExplanations) {
+      explainQuiz(id)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displayData?.id]);
 
   const handleRetry = () => {
     retryQuiz(id, {
@@ -43,7 +57,7 @@ export default function QuizResultPage() {
         toast.success(t("toastRetrying"));
         router.push(`/quiz/${newQuiz.id}`);
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });
@@ -163,7 +177,7 @@ export default function QuizResultPage() {
       </div>
 
       {/* Detail Review */}
-      <QuizResult questions={displayData.questions} />
+      <QuizResult questions={displayData.questions} isLoadingExplanation={isExplaining} />
 
       {/* Export Modal */}
       <Modal

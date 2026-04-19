@@ -234,7 +234,10 @@
     "loading": "Loading quiz history...",
     "title": "Quiz History",
     "subtitle": "Train your understanding with AI-powered questions.",
-    "createNewQuiz": "+ Create New Quiz From Module"
+    "createNewQuiz": "+ Create New Quiz From Module",
+    "activeQuizBannerTitle": "Quiz In Progress",
+    "continueQuiz": "Continue",
+    "questionsLabel": "Questions"
   },
   "QuizSession": {
     "notFoundTitle": "Quiz Session Ended",
@@ -252,7 +255,13 @@
     "toastCancelled": "Quiz cancelled and quota returned",
     "toastCancelFailed": "Failed to cancel quiz",
     "toastSubmitted": "Quiz submitted successfully!",
-    "toastSubmitFailed": "Failed to submit answers"
+    "toastSubmitFailed": "Failed to submit answers",
+    "answered": "answered",
+    "timeUpAutoSubmit": "Time's up! Quiz submitted automatically.",
+    "exitModalTitle": "Are you sure?",
+    "exitModalDesc": "If you close this tab, your quiz session will end. Quiz quota will not be automatically returned.",
+    "stayInQuiz": "Stay in Quiz",
+    "closeTab": "Close Tab"
   },
   "QuizResultPage": {
     "loading": "Loading quiz results...",
@@ -469,7 +478,9 @@
     "title": "Create New Quiz",
     "selectedModule": "Selected Module",
     "selectQuestions": "Select Number of Questions",
-    "aiNote": "* AI will generate questions based on your material summary.",
+    "selectDuration": "Select Time Limit",
+    "minutes": "min",
+    "aiNote": "* AI will generate questions based on your material summary. Quiz will open in a new tab.",
     "cancel": "Cancel",
     "start": "Start Quiz",
     "toastSuccess": "Quiz created successfully! Starting session...",
@@ -489,7 +500,9 @@
   "QuizResultComponent": {
     "reviewTitle": "Review Answers",
     "yourAnswer": "(Your Answer)",
-    "correct": "(Correct)"
+    "correct": "(Correct)",
+    "explanationLabel": "Explanation",
+    "explanationLoading": "Generating explanation..."
   },
   "ReviewForm": {
     "title": "Customer Review",

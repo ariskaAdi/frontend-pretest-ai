@@ -234,7 +234,10 @@
     "loading": "Memuat riwayat quiz...",
     "title": "Riwayat Quiz",
     "subtitle": "Latih pemahaman Anda dengan soal-soal berbasis AI.",
-    "createNewQuiz": "+ Buat Quiz Baru dari Modul"
+    "createNewQuiz": "+ Buat Quiz Baru dari Modul",
+    "activeQuizBannerTitle": "Quiz Sedang Berlangsung",
+    "continueQuiz": "Lanjutkan",
+    "questionsLabel": "Pertanyaan"
   },
   "QuizSession": {
     "notFoundTitle": "Sesi Quiz Berakhir",
@@ -252,7 +255,13 @@
     "toastCancelled": "Quiz dibatalkan dan kuota dikembalikan",
     "toastCancelFailed": "Gagal membatalkan quiz",
     "toastSubmitted": "Quiz berhasil dikirim!",
-    "toastSubmitFailed": "Gagal mengirim jawaban"
+    "toastSubmitFailed": "Gagal mengirim jawaban",
+    "answered": "terjawab",
+    "timeUpAutoSubmit": "Waktu habis! Quiz dikumpulkan secara otomatis.",
+    "exitModalTitle": "Apakah Anda yakin?",
+    "exitModalDesc": "Jika Anda menutup tab ini, sesi quiz akan berakhir. Kuota quiz tidak akan dikembalikan secara otomatis.",
+    "stayInQuiz": "Tetap di Quiz",
+    "closeTab": "Tutup Tab"
   },
   "QuizResultPage": {
     "loading": "Memuat hasil quiz...",
@@ -469,10 +478,12 @@
     "title": "Buat Quiz Baru",
     "selectedModule": "Modul Terpilih",
     "selectQuestions": "Pilih Jumlah Pertanyaan",
-    "aiNote": "* AI akan men-generate soal berdasarkan ringkasan materi Anda.",
+    "selectDuration": "Pilih Waktu Pengerjaan",
+    "minutes": "menit",
+    "aiNote": "* AI akan men-generate soal berdasarkan ringkasan materi Anda. Quiz akan terbuka di tab baru.",
     "cancel": "Batal",
     "start": "Mulai Quiz",
-    "toastSuccess": "Quiz berhasil dibuat! Memulai sesi...",
+    "toastSuccess": "Quiz berhasil dibuat! Membuka tab baru...",
     "toastError": "Gagal membuat quiz"
   },
   "QuizCard": {
@@ -489,7 +500,9 @@
   "QuizResultComponent": {
     "reviewTitle": "Tinjauan Jawaban",
     "yourAnswer": "(Pilihanmu)",
-    "correct": "(Benar)"
+    "correct": "(Benar)",
+    "explanationLabel": "Pembahasan",
+    "explanationLoading": "Sedang membuat pembahasan..."
   },
   "ReviewPage": {
     "title": "Ulasan",

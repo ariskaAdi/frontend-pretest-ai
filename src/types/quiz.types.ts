@@ -8,6 +8,7 @@ export interface QuizQuestionResult extends QuizQuestion {
   correct_answer: string // "A" | "B" | "C" | "D"
   user_answer: string
   is_correct: boolean
+  explanation?: string
 }
 
 export interface QuizResponse {
@@ -43,7 +44,7 @@ export interface QuizHistoryResponse {
 
 export interface GenerateQuizRequest {
   module_id: string
-  num_questions: 5 | 10 | 20
+  num_questions: 20 | 40 | 50
 }
 
 export interface SubmitAnswer {

@@ -14,6 +14,10 @@ export function QuizCard({ quiz }: QuizCardProps) {
   const t = useTranslations('QuizCard')
   const isCompleted = quiz.status === 'completed'
 
+  const handleContinue = () => {
+    window.open(`/take/${quiz.id}`, `quiz-${quiz.id}`)
+  }
+
   return (
     <Card className="group overflow-hidden border-none shadow-sm hover:shadow-md transition-all duration-300 rounded-3xl p-5 bg-white flex flex-col h-full animate-in fade-in slide-in-from-bottom-4">
       <div className="flex items-center justify-between mb-4">
@@ -53,15 +57,22 @@ export function QuizCard({ quiz }: QuizCardProps) {
           </p>
         </div>
 
-        <Link href={isCompleted ? `/quiz/${quiz.id}/result` : `/quiz/${quiz.id}`}>
+        {isCompleted ? (
+          <Link href={`/quiz/${quiz.id}/result`}>
+            <Button variant="ghost" size="sm" className="rounded-xl font-bold px-4">
+              {t('result')}
+            </Button>
+          </Link>
+        ) : (
           <Button
-            variant={isCompleted ? 'ghost' : 'primary'}
+            variant="primary"
             size="sm"
             className="rounded-xl font-bold px-4"
+            onClick={handleContinue}
           >
-            {isCompleted ? t('result') : t('continue')}
+            {t('continue')}
           </Button>
-        </Link>
+        )}
       </div>
     </Card>
   )

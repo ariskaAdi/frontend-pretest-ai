@@ -91,6 +91,16 @@ export function useCancelQuizMutation() {
   })
 }
 
+export function useExplainQuizMutation() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (quizId: string) => quizService.explain(quizId),
+    onSuccess: (res, quizId) => {
+      queryClient.setQueryData(QUIZ_KEYS.result(quizId), res.data.data)
+    },
+  })
+}
+
 export function useRetryQuizMutation() {
   const queryClient = useQueryClient()
   return useMutation({

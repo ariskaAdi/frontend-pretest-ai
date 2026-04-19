@@ -4,3 +4,11 @@ export interface APIResponse<T = unknown> {
   data: T
   error?: string
 }
+
+export interface APIError {
+  response?: {
+    status: number
+    data: APIResponse<null>
+  }
+  message: string
+}

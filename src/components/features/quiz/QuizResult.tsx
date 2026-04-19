@@ -1,14 +1,17 @@
 import { useTranslations } from 'next-intl'
+import { BookOpen } from 'lucide-react'
 import { Card } from '@/components/shared/Card'
+import { MathText } from '@/components/shared/MathText'
 import type { QuizQuestionResult } from '@/types/quiz.types'
 
 interface QuizResultProps {
   questions: QuizQuestionResult[]
+  isLoadingExplanation?: boolean
 }
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D'] as const
 
-export function QuizResult({ questions }: QuizResultProps) {
+export function QuizResult({ questions, isLoadingExplanation }: QuizResultProps) {
   const t = useTranslations('QuizResultComponent')
 
   return (
@@ -30,7 +33,7 @@ export function QuizResult({ questions }: QuizResultProps) {
                 <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black ${q.is_correct ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
                   {i + 1}
                 </div>
-                <h4 className="font-bold text-gray-900 leading-snug">{q.text}</h4>
+                <h4 className="font-bold text-gray-900 leading-snug"><MathText text={q.text} /></h4>
               </div>
               <div className={`shrink-0 ml-4 p-2 rounded-xl ${q.is_correct ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
                 {q.is_correct ? (
@@ -59,8 +62,8 @@ export function QuizResult({ questions }: QuizResultProps) {
                     <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black shrink-0 ${isCorrectAnswer ? 'bg-success text-white' : isUserAnswer && !q.is_correct ? 'bg-danger text-white' : 'bg-white text-gray-400 border border-gray-100'}`}>
                       {label}
                     </div>
-                    <span className="flex-1 line-clamp-2">
-                      {option.replace(/^[A-D]\.\s*/, '')}
+                    <span className="flex-1">
+                      <MathText text={option.replace(/^[A-D]\.\s*/, '')} />
                       {isUserAnswer && !q.is_correct && <span className="ml-2 opacity-60">{t('yourAnswer')}</span>}
                       {isCorrectAnswer && <span className="ml-2 opacity-60">{t('correct')}</span>}
                     </span>
@@ -69,6 +72,26 @@ export function QuizResult({ questions }: QuizResultProps) {
               })}
             </div>
           </Card>
+
+          {/* Explanation card — only for wrong answers */}
+          {!q.is_correct && (
+            <div className="mt-3 ml-2">
+              {isLoadingExplanation && !q.explanation ? (
+                <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-warning/5 border border-warning/20">
+                  <div className="w-4 h-4 border-2 border-warning border-t-transparent rounded-full animate-spin shrink-0" />
+                  <p className="text-xs text-warning font-medium">{t('explanationLoading')}</p>
+                </div>
+              ) : q.explanation ? (
+                <div className="flex items-start gap-3 px-5 py-4 rounded-2xl bg-primary/5 border border-primary/10">
+                  <BookOpen size={16} className="text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">{t('explanationLabel')}</p>
+                    <MathText text={q.explanation} className="text-xs text-gray-600 leading-relaxed" />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          )}
         </div>
       ))}
     </div>

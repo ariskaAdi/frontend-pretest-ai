@@ -29,4 +29,7 @@ export const quizService = {
 
   getHistoryByModule: (moduleId: string) =>
     api.get<APIResponse<QuizHistoryResponse[]>>(`/quiz/history/module/${moduleId}`),
+
+  explain: (quizId: string) =>
+    api.post<APIResponse<QuizResultResponse>>(`/quiz/${quizId}/explain`),
 }

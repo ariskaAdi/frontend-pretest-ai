@@ -1,4 +1,5 @@
 'use client'
+import type { APIError } from '@/types/api.types'
 
 import * as React from 'react'
 import { useParams, useRouter } from 'next/navigation'
@@ -57,7 +58,7 @@ export default function QuizSessionPage() {
           toast.success(t('toastCancelled'))
           router.push('/quiz')
         },
-        onError: (error: any) => {
+        onError: (error: APIError) => {
           const msg = error.response?.data?.error
           toast.error(msg || t('toastCancelFailed'))
           router.push('/quiz')
@@ -106,7 +107,7 @@ export default function QuizSessionPage() {
           toast.success(t('toastSubmitted'))
           router.push(`/quiz/${id}/result`)
         },
-        onError: (error: any) => {
+        onError: (error: APIError) => {
           toast.error(error.response?.data?.error || t('toastSubmitFailed'))
         }
       }

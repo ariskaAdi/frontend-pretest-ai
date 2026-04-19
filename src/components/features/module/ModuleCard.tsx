@@ -1,4 +1,5 @@
 "use client";
+import type { APIError } from '@/types/api.types'
 
 import * as React from "react";
 import Link from "next/link";
@@ -32,7 +33,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
         toast.success(t("toastDeleted"));
         setIsDeleteModalOpen(false);
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t("toastDeleteFailed"));
       },
     });
@@ -45,7 +46,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
       onSuccess: () => {
         toast.success(t("toastRetryStarted"));
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t("toastRetryFailed"));
       },
     });

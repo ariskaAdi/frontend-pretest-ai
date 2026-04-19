@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { ExternalLink } from 'lucide-react'
 import { useQuizHistoryQuery } from '@/queries/useQuizQuery'
 import { useModulesQuery } from '@/queries/useModuleQuery'
 import {
@@ -48,6 +49,8 @@ export default function QuizPage() {
     )
   }
 
+  const pendingQuizzes = quizzes?.filter(q => q.status === 'pending') ?? []
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -63,6 +66,34 @@ export default function QuizPage() {
           </Link>
         )}
       </div>
+
+      {/* Active quiz banner */}
+      {pendingQuizzes.length > 0 && (
+        <div className="rounded-2xl border border-warning/30 bg-warning/5 p-4 space-y-3">
+          <p className="text-sm font-bold text-warning uppercase tracking-wide">
+            {t('activeQuizBannerTitle')}
+          </p>
+          {pendingQuizzes.map(q => (
+            <div
+              key={q.id}
+              className="flex items-center justify-between gap-4 bg-white rounded-xl px-4 py-3 shadow-sm"
+            >
+              <div className="min-w-0">
+                <p className="font-bold text-gray-900 text-sm truncate">{q.module_title}</p>
+                <p className="text-xs text-gray-400">{q.num_questions} {t('questionsLabel')}</p>
+              </div>
+              <Button
+                size="sm"
+                className="rounded-xl font-bold shrink-0 flex items-center gap-1.5"
+                onClick={() => window.open(`/take/${q.id}`, `quiz-${q.id}`)}
+              >
+                <ExternalLink size={13} />
+                {t('continueQuiz')}
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {!quizzes || quizzes.length === 0 ? (
         <QuizEmpty />

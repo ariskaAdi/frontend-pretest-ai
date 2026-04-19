@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import logo from "../../../../public/peretest-logo.webp";
+import logo from "../../../../public/logo.webp";
 import { Button } from "@/components/shared";
 
 type SectionId = "hero" | "fitur" | "tentang" | "cara-kerja" | "contacts";
@@ -60,18 +60,11 @@ export function LandingNavbar() {
           <Image
             src={logo}
             alt="PretestAI"
-            width={40}
-            height={40}
-            className="rounded-full hidden sm:inline-block"
+            width={140}
+            height={90}
+            className=" hidden sm:inline-block"
           />
-          <div className="flex items-center select-none font-mono tracking-tighter">
-            <span className="text-xl font-black text-gray-900 uppercase">
-              Pretest
-            </span>
-            <span className="ml-1 bg-[#AAFF00] text-[#0D0D0D] text-lg font-black px-2 py-0.5 rounded-sm italic transform -skew-x-12 flex items-center justify-center">
-              AI
-            </span>
-          </div>
+          
         </div>
 
         {/* Nav links */}

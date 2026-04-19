@@ -1,7 +1,7 @@
 "use client";
+import type { APIError } from '@/types/api.types'
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Modal } from "@/components/shared/Modal";
 import { Button } from "@/components/shared/Button";
@@ -22,10 +22,10 @@ export function GenerateQuizModal({
   moduleId,
 }: GenerateQuizModalProps) {
   const t = useTranslations("GenerateQuizModal");
-  const [numQuestions, setNumQuestions] = React.useState<5 | 10 | 20>(5);
+  const [numQuestions, setNumQuestions] = React.useState<20 | 40 | 50>(20);
+  const [duration, setDuration] = React.useState<30 | 60>(30);
   const { mutate: generateQuiz, isPending } = useGenerateQuizMutation();
   const { toast } = useToast();
-  const router = useRouter();
 
   const handleStart = () => {
     generateQuiz(
@@ -33,14 +33,24 @@ export function GenerateQuizModal({
       {
         onSuccess: (res) => {
           const quiz = res.data.data;
+          try {
+            localStorage.setItem(`quiz-session-${quiz.id}`, JSON.stringify(quiz));
+            localStorage.setItem(
+              `quiz-timer-${quiz.id}`,
+              JSON.stringify({
+                durationMinutes: duration,
+                startTime: new Date().toISOString(),
+              })
+            );
+          } catch { /* localStorage unavailable */ }
           toast.success(t("toastSuccess"));
-          router.push(`/quiz/${quiz.id}`);
+          window.open(`/take/${quiz.id}`, `quiz-${quiz.id}`);
           onClose();
         },
-        onError: (error: any) => {
+        onError: (error: APIError) => {
           toast.error(error.response?.data?.error || t("toastError"));
         },
-      },
+      }
     );
   };
 
@@ -52,13 +62,14 @@ export function GenerateQuizModal({
           <p className="font-bold text-gray-900">{moduleTitle}</p>
         </div>
 
+        {/* Question count */}
         <div>
           <p className="text-sm text-gray-400 mb-4">{t("selectQuestions")}</p>
           <div className="grid grid-cols-3 gap-3">
-            {[5, 10, 20].map((num) => (
+            {([20, 40, 50] as const).map((num) => (
               <button
                 key={num}
-                onClick={() => setNumQuestions(num as any)}
+                onClick={() => setNumQuestions(num)}
                 className={`
                   py-4 rounded-2xl border-2 transition-all duration-200 font-bold text-lg
                   ${
@@ -66,27 +77,54 @@ export function GenerateQuizModal({
                       ? "border-primary bg-white text-primary shadow-sm"
                       : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200 hover:bg-white"
                   }
-                `}>
+                `}
+              >
                 {num}
               </button>
             ))}
           </div>
-          <p className="text-[10px] text-gray-400 mt-3 italic text-center">
-            {t("aiNote")}
-          </p>
         </div>
 
-        <div className="flex gap-3 pt-4">
+        {/* Duration */}
+        <div>
+          <p className="text-sm text-gray-400 mb-4">{t("selectDuration")}</p>
+          <div className="grid grid-cols-2 gap-3">
+            {([30, 60] as const).map((min) => (
+              <button
+                key={min}
+                onClick={() => setDuration(min)}
+                className={`
+                  py-4 rounded-2xl border-2 transition-all duration-200 font-bold text-lg
+                  ${
+                    duration === min
+                      ? "border-primary bg-white text-primary shadow-sm"
+                      : "border-gray-100 bg-gray-50 text-gray-400 hover:border-gray-200 hover:bg-white"
+                  }
+                `}
+              >
+                {min} {t("minutes")}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-[10px] text-gray-400 italic text-center">
+          {t("aiNote")}
+        </p>
+
+        <div className="flex gap-3 pt-2">
           <Button
             className="flex-1 rounded-xl text-red-600 border-none border-red-600 font-bold bg-white hover:bg-red-50"
             onClick={onClose}
-            disabled={isPending}>
+            disabled={isPending}
+          >
             {t("cancel")}
           </Button>
           <Button
             className="flex-1 rounded-xl font-bold"
             onClick={handleStart}
-            loading={isPending}>
+            loading={isPending}
+          >
             {t("start")}
           </Button>
         </div>

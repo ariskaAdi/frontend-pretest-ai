@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+import type { APIError } from '@/types/api.types'
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
@@ -104,7 +105,7 @@ export function UploadForm({ onSuccess }: UploadFormProps) {
         onSuccess?.()
         router.push('/modules')
       },
-      onError: (error: any) => {
+      onError: (error: APIError) => {
         toast.error(error.response?.data?.error || t('toastUploadError'))
       }
     })
