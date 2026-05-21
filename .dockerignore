@@ -1,0 +1,10 @@
+.git
+.github
+.gitignore
+.env*
+node_modules
+.next
+out
+coverage
+*.md
+prompt.txt

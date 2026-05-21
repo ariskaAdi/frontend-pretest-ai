@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Card } from "@/components/shared/Card";
 import { MathText } from "@/components/shared/MathText";
+import { QuizDiagram } from "@/components/features/quiz/QuizDiagram";
 import type { QuizQuestion as IQuizQuestion } from "@/types/quiz.types";
 
 interface QuizQuestionProps {
@@ -45,9 +46,13 @@ export function QuizQuestion({
 
       {/* Question Card */}
       <Card className="p-8 border-none shadow-sm rounded-3xl bg-white">
-        <h3 className="text-xl font-bold text-gray-900 leading-relaxed mb-8">
+        <h3 className="text-xl font-bold text-gray-900 leading-relaxed mb-6">
           <MathText text={question.text} />
         </h3>
+
+        {question.diagram && (
+          <QuizDiagram diagram={question.diagram} className="mb-6 max-w-sm mx-auto" />
+        )}
 
         <div className="space-y-4">
           {question.options.map((option, index) => {

@@ -33,6 +33,17 @@ export interface VerifyUpdateEmailRequest {
   otp: string
 }
 
+export interface RequestUpdatePasswordRequest {
+  current_password: string
+}
+
+export interface VerifyUpdatePasswordRequest {
+  current_password: string
+  new_password: string
+  confirm_password: string
+  otp: string
+}
+
 export interface LoginResponse {
   token: string
   user: User

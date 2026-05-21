@@ -14,7 +14,9 @@ import { useToast } from '@/components/shared/Toast'
 import type { QuizResponse, SubmitAnswer } from '@/types/quiz.types'
 
 const quizSessionKey = (id: string) => `quiz-session-${id}`
-const quizTimerKey = (id: string) => `quiz-timer-${id}`
+const quizTimerKey  = (id: string) => `quiz-timer-${id}`
+const quizAnswersKey = (id: string) => `quiz-answers-${id}`
+const quizPageKey   = (id: string) => `quiz-page-${id}`
 
 interface TimerConfig {
   durationMinutes: 30 | 60
@@ -31,6 +33,8 @@ export default function QuizStandalonePage() {
   const [isMounted, setIsMounted] = React.useState(false)
   const [quiz, setQuiz] = React.useState<QuizResponse | null>(null)
   const [timerConfig, setTimerConfig] = React.useState<TimerConfig | null>(null)
+  const [currentPage, setCurrentPage] = React.useState(0)
+  const [answers, setAnswers] = React.useState<Record<string, 'A' | 'B' | 'C' | 'D'>>({})
 
   React.useEffect(() => {
     try {
@@ -39,9 +43,15 @@ export default function QuizStandalonePage() {
 
       const timerStored = localStorage.getItem(quizTimerKey(id))
       if (timerStored) setTimerConfig(JSON.parse(timerStored) as TimerConfig)
+
+      const answersStored = localStorage.getItem(quizAnswersKey(id))
+      if (answersStored) setAnswers(JSON.parse(answersStored))
+
+      const pageStored = localStorage.getItem(quizPageKey(id))
+      if (pageStored) setCurrentPage(JSON.parse(pageStored))
     } catch { /* localStorage unavailable */ }
     setIsMounted(true)
-  }, [id])
+  }, [id, setAnswers, setCurrentPage])
 
   const endTime = React.useMemo(() => {
     if (!timerConfig) return null
@@ -49,8 +59,6 @@ export default function QuizStandalonePage() {
     return new Date(start + timerConfig.durationMinutes * 60 * 1000)
   }, [timerConfig])
 
-  const [currentPage, setCurrentPage] = React.useState(0)
-  const [answers, setAnswers] = React.useState<Record<string, 'A' | 'B' | 'C' | 'D'>>({})
   const [isSubmitModalOpen, setIsSubmitModalOpen] = React.useState(false)
   const [isExitModalOpen, setIsExitModalOpen] = React.useState(false)
   const [isSubmitted, setIsSubmitted] = React.useState(false)
@@ -69,10 +77,22 @@ export default function QuizStandalonePage() {
     return () => window.removeEventListener('beforeunload', handler)
   }, [quiz, isSubmitted])
 
+  React.useEffect(() => {
+    if (!isMounted) return
+    try { localStorage.setItem(quizAnswersKey(id), JSON.stringify(answers)) } catch { /* ignore */ }
+  }, [answers, id, isMounted])
+
+  React.useEffect(() => {
+    if (!isMounted) return
+    try { localStorage.setItem(quizPageKey(id), JSON.stringify(currentPage)) } catch { /* ignore */ }
+  }, [currentPage, id, isMounted])
+
   const clearStorage = React.useCallback(() => {
     try {
       localStorage.removeItem(quizSessionKey(id))
       localStorage.removeItem(quizTimerKey(id))
+      localStorage.removeItem(quizAnswersKey(id))
+      localStorage.removeItem(quizPageKey(id))
     } catch { /* ignore */ }
   }, [id])
 
@@ -166,7 +186,7 @@ export default function QuizStandalonePage() {
     <div className="min-h-screen bg-gray-50">
       {/* Sticky header — no sidebar offset */}
       <div className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-gray-100 px-4 py-3">
-        <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           <h2 className="text-base font-black text-gray-900 line-clamp-1 flex-1">
             {quiz.module_title}
           </h2>
@@ -187,7 +207,7 @@ export default function QuizStandalonePage() {
       </div>
 
       {/* Question content */}
-      <div className="max-w-3xl mx-auto px-4 pt-8 pb-28">
+      <div className="max-w-6xl mx-auto px-4 pt-8 pb-28">
         <QuizQuestion
           question={currentQuestion}
           questionNumber={currentPage + 1}

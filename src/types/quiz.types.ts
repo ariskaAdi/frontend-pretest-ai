@@ -1,7 +1,13 @@
+export interface QuizDiagram {
+  type: 'svg'
+  content: string
+}
+
 export interface QuizQuestion {
   id: string
   text: string
   options: string[] // ["A. ...", "B. ...", "C. ...", "D. ..."]
+  diagram?: QuizDiagram
 }
 
 export interface QuizQuestionResult extends QuizQuestion {

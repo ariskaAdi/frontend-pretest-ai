@@ -19,16 +19,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isAuthenticated } = useAuthStore();
   const { isCollapsed } = useSidebarStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [hydrated, setHydrated] = React.useState(false);
 
-  // Route Protection: Redirect if not authenticated
   React.useEffect(() => {
-    if (!isAuthenticated) {
+    setHydrated(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (hydrated && !isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+  }, [hydrated, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
-    return null; // Or a loading spinner
+  if (!hydrated || !isAuthenticated) {
+    return null;
   }
 
   return (

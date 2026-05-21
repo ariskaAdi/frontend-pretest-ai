@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl'
 import { BookOpen } from 'lucide-react'
 import { Card } from '@/components/shared/Card'
 import { MathText } from '@/components/shared/MathText'
+import { QuizDiagram } from '@/components/features/quiz/QuizDiagram'
 import type { QuizQuestionResult } from '@/types/quiz.types'
 
 interface QuizResultProps {
@@ -30,7 +31,7 @@ export function QuizResult({ questions, isLoadingExplanation }: QuizResultProps)
 
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black ${q.is_correct ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
+                <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shrink-0 ${q.is_correct ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'}`}>
                   {i + 1}
                 </div>
                 <h4 className="font-bold text-gray-900 leading-snug"><MathText text={q.text} /></h4>
@@ -43,6 +44,10 @@ export function QuizResult({ questions, isLoadingExplanation }: QuizResultProps)
                 )}
               </div>
             </div>
+
+            {q.diagram && (
+              <QuizDiagram diagram={q.diagram} className="mb-4 ml-11 max-w-xs" />
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-11">
               {q.options.map((option, index) => {

@@ -3,7 +3,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { userService } from '@/services/userService'
 import { useAuthStore } from '@/stores/authStore'
-import type { UpdateEmailRequest, VerifyUpdateEmailRequest } from '@/types/auth.types'
+import type {
+  UpdateEmailRequest,
+  VerifyUpdateEmailRequest,
+  RequestUpdatePasswordRequest,
+  VerifyUpdatePasswordRequest,
+} from '@/types/auth.types'
 
 export function useGetMeQuery() {
   const { isAuthenticated } = useAuthStore()
@@ -33,5 +38,17 @@ export function useVerifyEmailUpdateMutation() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user', 'me'] })
     },
+  })
+}
+
+export function useRequestPasswordUpdateMutation() {
+  return useMutation({
+    mutationFn: (data: RequestUpdatePasswordRequest) => userService.requestPasswordUpdate(data),
+  })
+}
+
+export function useVerifyPasswordUpdateMutation() {
+  return useMutation({
+    mutationFn: (data: VerifyUpdatePasswordRequest) => userService.verifyPasswordUpdate(data),
   })
 }

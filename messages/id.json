@@ -325,7 +325,19 @@
     "toastOtpFailed": "Gagal mengirim OTP. Silakan coba lagi.",
     "toastOtpInvalid": "OTP tidak valid atau sudah kedaluwarsa.",
     "toastResendFailed": "Gagal mengirim ulang OTP.",
-    "toastOtpIncomplete": "Masukkan 6 digit OTP lengkap."
+    "toastOtpIncomplete": "Masukkan 6 digit OTP lengkap.",
+    "updatePassword": "Perbarui Password",
+    "updatePasswordDesc": "OTP akan dikirim ke email Anda untuk konfirmasi.",
+    "currentPasswordLabel": "Password Saat Ini",
+    "newPasswordLabel": "Password Baru",
+    "confirmPasswordLabel": "Konfirmasi Password Baru",
+    "verifyUpdatePassword": "Verifikasi & Perbarui Password",
+    "changePassword": "Ganti password",
+    "toastPasswordOtpSent": "OTP dikirim ke email Anda.",
+    "toastPasswordUpdated": "Password berhasil diperbarui. Silakan login ulang.",
+    "errorCurrentPasswordRequired": "Password saat ini wajib diisi.",
+    "errorNewPasswordMin": "Password baru minimal 8 karakter.",
+    "errorPasswordMismatch": "Konfirmasi password tidak cocok."
   },
   "ReviewPage": {
     "title": "Ulasan",

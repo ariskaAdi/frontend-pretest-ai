@@ -325,7 +325,19 @@
     "toastOtpFailed": "Failed to send OTP. Please try again.",
     "toastOtpInvalid": "Invalid or expired OTP.",
     "toastResendFailed": "Failed to resend OTP.",
-    "toastOtpIncomplete": "Please enter the full 6-digit OTP."
+    "toastOtpIncomplete": "Please enter the full 6-digit OTP.",
+    "updatePassword": "Update Password",
+    "updatePasswordDesc": "An OTP will be sent to your email to confirm the change.",
+    "currentPasswordLabel": "Current Password",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "verifyUpdatePassword": "Verify & Update Password",
+    "changePassword": "Change password",
+    "toastPasswordOtpSent": "OTP sent to your email.",
+    "toastPasswordUpdated": "Password updated successfully. Please log in again.",
+    "errorCurrentPasswordRequired": "Current password is required.",
+    "errorNewPasswordMin": "New password must be at least 8 characters.",
+    "errorPasswordMismatch": "Passwords do not match."
   },
   "ReviewPage": {
     "title": "Reviews",
