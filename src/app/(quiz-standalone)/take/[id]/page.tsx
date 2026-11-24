@@ -10,6 +10,7 @@ import { Button } from '@/components/shared/Button'
 import { Modal } from '@/components/shared/Modal'
 import { CountdownTimer } from '@/components/shared/CountdownTimer'
 import { useSubmitQuizMutation, useCancelQuizMutation } from '@/queries/useQuizQuery'
+import { quizService } from '@/services/quizService'
 import { useToast } from '@/components/shared/Toast'
 import type { QuizResponse, SubmitAnswer } from '@/types/quiz.types'
 
@@ -37,9 +38,14 @@ export default function QuizStandalonePage() {
   const [answers, setAnswers] = React.useState<Record<string, 'A' | 'B' | 'C' | 'D'>>({})
 
   React.useEffect(() => {
+    let cancelled = false
+    let hasLocalQuiz = false
     try {
       const quizStored = localStorage.getItem(quizSessionKey(id))
-      if (quizStored) setQuiz(JSON.parse(quizStored) as QuizResponse)
+      if (quizStored) {
+        setQuiz(JSON.parse(quizStored) as QuizResponse)
+        hasLocalQuiz = true
+      }
 
       const timerStored = localStorage.getItem(quizTimerKey(id))
       if (timerStored) setTimerConfig(JSON.parse(timerStored) as TimerConfig)
@@ -50,7 +56,39 @@ export default function QuizStandalonePage() {
       const pageStored = localStorage.getItem(quizPageKey(id))
       if (pageStored) setCurrentPage(JSON.parse(pageStored))
     } catch { /* localStorage unavailable */ }
-    setIsMounted(true)
+
+    if (hasLocalQuiz) {
+      setIsMounted(true)
+      return
+    }
+
+    // localStorage kosong (dibuka di browser/perangkat lain, cache dibersihkan, dll):
+    // pulihkan soal dari server. Server hanya mengembalikan quiz pending tanpa kunci jawaban.
+    quizService
+      .getSession(id)
+      .then((res) => {
+        if (cancelled) return
+        const recovered = res.data.data
+        let timer: TimerConfig | null = null
+        try {
+          const timerStored = localStorage.getItem(quizTimerKey(id))
+          timer = timerStored ? (JSON.parse(timerStored) as TimerConfig) : null
+        } catch { /* ignore */ }
+        // Durasi asli tidak disimpan di server — mulai ulang timer dengan durasi 60 menit.
+        if (!timer) timer = { durationMinutes: 60, startTime: new Date().toISOString() }
+        try {
+          localStorage.setItem(quizSessionKey(id), JSON.stringify(recovered))
+          localStorage.setItem(quizTimerKey(id), JSON.stringify(timer))
+        } catch { /* ignore */ }
+        setQuiz(recovered)
+        setTimerConfig(timer)
+      })
+      .catch(() => { /* tetap tampilkan layar "sesi berakhir" */ })
+      .finally(() => {
+        if (!cancelled) setIsMounted(true)
+      })
+
+    return () => { cancelled = true }
   }, [id, setAnswers, setCurrentPage])
 
   const endTime = React.useMemo(() => {

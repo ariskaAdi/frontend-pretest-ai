@@ -24,6 +24,10 @@ export const quizService = {
   retry: (quizId: string) =>
     api.post<APIResponse<QuizResponse>>(`/quiz/${quizId}/retry`),
 
+  // Soal quiz pending tanpa kunci jawaban — untuk memulihkan sesi saat localStorage kosong
+  getSession: (quizId: string) =>
+    api.get<APIResponse<QuizResponse>>(`/quiz/${quizId}/session`),
+
   getResult: (quizId: string) =>
     api.get<APIResponse<QuizResultResponse>>(`/quiz/${quizId}/result`),
 
